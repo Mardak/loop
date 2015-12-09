@@ -143,29 +143,29 @@ describe("loop.store.ActiveRoomStore", function() {
 
     it("should set the failureReason to EXPIRED_OR_INVALID on server error: " +
       "invalid token", function() {
-        fakeError.errno = REST_ERRNOS.INVALID_TOKEN;
+      fakeError.errno = REST_ERRNOS.INVALID_TOKEN;
 
-        store.roomFailure(new sharedActions.RoomFailure({
-          error: fakeError,
-          failedJoinRequest: false
-        }));
+      store.roomFailure(new sharedActions.RoomFailure({
+        error: fakeError,
+        failedJoinRequest: false
+      }));
 
-        expect(store._storeState.roomState).eql(ROOM_STATES.FAILED);
-        expect(store._storeState.failureReason).eql(FAILURE_DETAILS.EXPIRED_OR_INVALID);
-      });
+      expect(store._storeState.roomState).eql(ROOM_STATES.FAILED);
+      expect(store._storeState.failureReason).eql(FAILURE_DETAILS.EXPIRED_OR_INVALID);
+    });
 
     it("should set the failureReason to EXPIRED_OR_INVALID on server error: " +
       "expired", function() {
-        fakeError.errno = REST_ERRNOS.EXPIRED;
+      fakeError.errno = REST_ERRNOS.EXPIRED;
 
-        store.roomFailure(new sharedActions.RoomFailure({
-          error: fakeError,
-          failedJoinRequest: false
-        }));
+      store.roomFailure(new sharedActions.RoomFailure({
+        error: fakeError,
+        failedJoinRequest: false
+      }));
 
-        expect(store._storeState.roomState).eql(ROOM_STATES.FAILED);
-        expect(store._storeState.failureReason).eql(FAILURE_DETAILS.EXPIRED_OR_INVALID);
-      });
+      expect(store._storeState.roomState).eql(ROOM_STATES.FAILED);
+      expect(store._storeState.failureReason).eql(FAILURE_DETAILS.EXPIRED_OR_INVALID);
+    });
 
     it("should reset the multiplexGum", function() {
       store.roomFailure(new sharedActions.RoomFailure({
@@ -911,14 +911,14 @@ describe("loop.store.ActiveRoomStore", function() {
         sinon.assert.calledOnce(window.dispatchEvent);
         sinon.assert.calledWithExactly(window.dispatchEvent, new window.CustomEvent(
           "WebChannelMessageToChrome", {
-          detail: {
-            id: "loop-link-clicker",
-            message: {
-              command: "openRoom",
-              roomToken: "fakeToken"
+            detail: {
+              id: "loop-link-clicker",
+              message: {
+                command: "openRoom",
+                roomToken: "fakeToken"
+              }
             }
-          }
-        }));
+          }));
       });
 
       it("should log an error if Firefox doesn't handle the room", function() {
@@ -1157,7 +1157,7 @@ describe("loop.store.ActiveRoomStore", function() {
         sinon.assert.calledOnce(requestStubs["Rooms:RefreshMembership"]);
         sinon.assert.calledWith(requestStubs["Rooms:RefreshMembership"],
           "fakeToken", "12563478");
-    });
+      });
 
     it("should call mozLoop.rooms.refreshMembership before the next expiresTime",
       function() {
@@ -1175,7 +1175,7 @@ describe("loop.store.ActiveRoomStore", function() {
         sinon.assert.calledTwice(requestStubs["Rooms:RefreshMembership"]);
         sinon.assert.calledWith(requestStubs["Rooms:RefreshMembership"],
           "fakeToken", "12563478");
-    });
+      });
 
     it("should dispatch `RoomFailure` if the refreshMembership call failed",
       function() {
@@ -1195,7 +1195,7 @@ describe("loop.store.ActiveRoomStore", function() {
             error: fakeError,
             failedJoinRequest: false
           }));
-    });
+      });
   });
 
   describe("#connectedToSdkServers", function() {

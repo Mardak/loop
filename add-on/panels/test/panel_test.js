@@ -103,14 +103,14 @@ describe("loop.panel", function() {
         }]
       },
       maxSize: 2,
-        participants: [{
+      participants: [{
         displayName: "Alexis",
-          account: "alexis@example.com",
-          roomConnectionId: "2a1787a6-4a73-43b5-ae3e-906ec1e763cb"
+        account: "alexis@example.com",
+        roomConnectionId: "2a1787a6-4a73-43b5-ae3e-906ec1e763cb"
       }, {
         displayName: "Adam",
         roomConnectionId: "781f012b-f1ea-4ce1-9105-7cfc36fb4ec7"
-    }],
+      }],
       ctime: 1405517418
     };
 
@@ -121,14 +121,14 @@ describe("loop.panel", function() {
         roomName: "Second Room Name"
       },
       maxSize: 2,
-        participants: [{
+      participants: [{
         displayName: "Bill",
-          account: "bill@example.com",
-          roomConnectionId: "2a1737a6-4a73-43b5-ae3e-906ec1e763cb"
+        account: "bill@example.com",
+        roomConnectionId: "2a1737a6-4a73-43b5-ae3e-906ec1e763cb"
       }, {
-          displayName: "Bob",
-            roomConnectionId: "781f212b-f1ea-4ce1-9105-7cfc36fb4ec7"
-        }],
+        displayName: "Bob",
+        roomConnectionId: "781f212b-f1ea-4ce1-9105-7cfc36fb4ec7"
+      }],
       ctime: 1405517417
     };
 
@@ -170,7 +170,7 @@ describe("loop.panel", function() {
         sinon.match(function(value) {
           return TestUtils.isCompositeComponentElement(value,
             loop.panel.PanelView);
-      }));
+        }));
     });
 
     it("should dispatch an loopPanelInitialized", function(done) {
@@ -279,33 +279,33 @@ describe("loop.panel", function() {
 
       it("should warn when user profile is different from {} or null",
          function() {
-          var warnstub = sandbox.stub(console, "warn");
+           var warnstub = sandbox.stub(console, "warn");
 
-          var view = TestUtils.renderIntoDocument(React.createElement(
+           var view = TestUtils.renderIntoDocument(React.createElement(
             loop.panel.AccountLink, {
               fxAEnabled: false,
               userProfile: []
             }
           ));
 
-          sinon.assert.calledOnce(warnstub);
-          sinon.assert.calledWithMatch(warnstub, "Required prop `userProfile` "
+           sinon.assert.calledOnce(warnstub);
+           sinon.assert.calledWithMatch(warnstub, "Required prop `userProfile` "
             + "was not correctly specified in `AccountLink`.");
-      });
+         });
 
       it("should not warn when user profile is an object",
          function() {
-          var warnstub = sandbox.stub(console, "warn");
+           var warnstub = sandbox.stub(console, "warn");
 
-          var view = TestUtils.renderIntoDocument(React.createElement(
+           var view = TestUtils.renderIntoDocument(React.createElement(
             loop.panel.AccountLink, {
               fxAEnabled: false,
               userProfile: {}
             }
           ));
 
-          sinon.assert.notCalled(warnstub);
-      });
+           sinon.assert.notCalled(warnstub);
+         });
     });
 
     describe("SettingsDropdown", function() {

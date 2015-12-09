@@ -7,29 +7,29 @@ loop.store = loop.store || {};
 
 loop.store.ROOM_STATES = {
     // The initial state of the room
-    INIT: "room-init",
+  INIT: "room-init",
     // The store is gathering the room data
-    GATHER: "room-gather",
+  GATHER: "room-gather",
     // The store has got the room data
-    READY: "room-ready",
+  READY: "room-ready",
     // Obtaining media from the user
-    MEDIA_WAIT: "room-media-wait",
+  MEDIA_WAIT: "room-media-wait",
     // Joining the room is taking place
-    JOINING: "room-joining",
+  JOINING: "room-joining",
     // The room is known to be joined on the loop-server
-    JOINED: "room-joined",
+  JOINED: "room-joined",
     // The room is connected to the sdk server.
-    SESSION_CONNECTED: "room-session-connected",
+  SESSION_CONNECTED: "room-session-connected",
     // There are participants in the room.
-    HAS_PARTICIPANTS: "room-has-participants",
+  HAS_PARTICIPANTS: "room-has-participants",
     // There was an issue with the room
-    FAILED: "room-failed",
+  FAILED: "room-failed",
     // The room is full
-    FULL: "room-full",
+  FULL: "room-full",
     // The room conversation has ended, displays the feedback view.
-    ENDED: "room-ended",
+  ENDED: "room-ended",
     // The window is closing
-    CLOSING: "room-closing"
+  CLOSING: "room-closing"
 };
 
 loop.store.ActiveRoomStore = (function() {
@@ -429,17 +429,17 @@ loop.store.ActiveRoomStore = (function() {
 
           crypto.decryptBytes(roomCryptoKey, result.context.value)
                 .then(function(decryptedResult) {
-            var realResult = JSON.parse(decryptedResult);
+                  var realResult = JSON.parse(decryptedResult);
 
-            roomInfoData.roomDescription = realResult.description;
-            roomInfoData.roomContextUrls = realResult.urls;
-            roomInfoData.roomName = realResult.roomName;
+                  roomInfoData.roomDescription = realResult.description;
+                  roomInfoData.roomContextUrls = realResult.urls;
+                  roomInfoData.roomName = realResult.roomName;
 
-            resolve(roomInfoData);
-          }, function(error) {
-            roomInfoData.roomInfoFailure = ROOM_INFO_FAILURES.DECRYPT_FAILED;
-            resolve(roomInfoData);
-          });
+                  resolve(roomInfoData);
+                }, function(error) {
+                  roomInfoData.roomInfoFailure = ROOM_INFO_FAILURES.DECRYPT_FAILED;
+                  resolve(roomInfoData);
+                });
         }.bind(this));
       }.bind(this));
     },

@@ -340,10 +340,10 @@ loop.roomViews = (function(mozL10n) {
             hide: this.props.showEditContext
           })}>
             <div className={cx({
-                "btn-copy": true,
-                "invite-button": true,
-                "triggered": this.state.copiedUrl
-              })}
+              "btn-copy": true,
+              "invite-button": true,
+              "triggered": this.state.copiedUrl
+            })}
               onClick={this.handleCopyButtonClick}>
               <img src="shared/img/glyph-link-16x16.svg" />
               <p>{mozL10n.get(this.state.copiedUrl ?
@@ -465,7 +465,7 @@ loop.roomViews = (function(mozL10n) {
             description: description,
             url: metaUrl
           }
-       });
+        });
       }.bind(this));
     },
 

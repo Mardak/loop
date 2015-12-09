@@ -120,7 +120,7 @@ add_test(function test_reconnect_no_registration() {
 
 add_test(function test_ping_websocket() {
   let pingReceived = false,
-      socketClosed = false;
+    socketClosed = false;
   mockWebSocket.defaultMsgHandler = () => {
     pingReceived = true;
     // Do not send a ping response.
@@ -155,33 +155,33 @@ add_test(function test_retry_pushurl() {
     // The PushHandler should retry the request for the push-server-config for
     // each of these cases without throwing an error.
     switch (++pushServerRequestCount) {
-    case 1:
+      case 1:
       // Non-200 response
-      response.setStatusLine(null, 500, "Retry");
-      response.processAsync();
-      response.finish();
-      break;
-    case 2:
+        response.setStatusLine(null, 500, "Retry");
+        response.processAsync();
+        response.finish();
+        break;
+      case 2:
       // missing parameter
-      response.setStatusLine(null, 200, "OK");
-      response.write(JSON.stringify({ pushServerURI: null }));
-      response.processAsync();
-      response.finish();
-      break;
-    case 3:
+        response.setStatusLine(null, 200, "OK");
+        response.write(JSON.stringify({ pushServerURI: null }));
+        response.processAsync();
+        response.finish();
+        break;
+      case 3:
       // json parse error
-      response.setStatusLine(null, 200, "OK");
-      response.processAsync();
-      response.finish();
-      break;
-    case 4:
-      response.setStatusLine(null, 200, "OK");
-      response.write(JSON.stringify({ pushServerURI: kServerPushUrl }));
-      response.processAsync();
-      response.finish();
+        response.setStatusLine(null, 200, "OK");
+        response.processAsync();
+        response.finish();
+        break;
+      case 4:
+        response.setStatusLine(null, 200, "OK");
+        response.write(JSON.stringify({ pushServerURI: kServerPushUrl }));
+        response.processAsync();
+        response.finish();
 
-      run_next_test();
-      break;
+        run_next_test();
+        break;
     }
   });
 

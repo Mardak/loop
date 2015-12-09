@@ -337,9 +337,9 @@ describe("loop.store.RoomStore", function() {
         sinon.assert.calledWithExactly(requestStubs.TelemetryAddValue,
           "LOOP_ROOM_CREATE", 1);
       });
-   });
+    });
 
-   describe("#createdRoom", function() {
+    describe("#createdRoom", function() {
       beforeEach(function() {
         sandbox.stub(dispatcher, "dispatch");
       });

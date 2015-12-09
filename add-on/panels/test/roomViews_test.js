@@ -419,22 +419,22 @@ describe("loop.roomViews", function() {
       }
 
       it("should dispatch a `SetupStreamElements` action when the MEDIA_WAIT state is entered", function() {
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
-          var component = mountTestComponent();
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
+        var component = mountTestComponent();
 
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
 
-          expectActionDispatched(component);
-        });
+        expectActionDispatched(component);
+      });
 
       it("should dispatch a `SetupStreamElements` action on MEDIA_WAIT state is re-entered", function() {
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.ENDED });
-          var component = mountTestComponent();
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.ENDED });
+        var component = mountTestComponent();
 
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
 
-          expectActionDispatched(component);
-        });
+        expectActionDispatched(component);
+      });
 
       it("should dispatch a `StartBrowserShare` action when the SESSION_CONNECTED state is entered", function() {
         activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
@@ -690,10 +690,10 @@ describe("loop.roomViews", function() {
           activeRoomStore.setStoreState({
             roomName: null,
             roomContextUrls: [
-                {
-                  location: "https://fakeurl.com"
-                }
-              ]
+              {
+                location: "https://fakeurl.com"
+              }
+            ]
           });
           view = mountTestComponent();
           expect(fakeWindow.document.title).to.equal("https://fakeurl.com");

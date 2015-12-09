@@ -79,7 +79,7 @@ describe("loop.OTSdkDriver", function() {
     };
 
     constants = {
-        TWO_WAY_MEDIA_CONN_LENGTH: {
+      TWO_WAY_MEDIA_CONN_LENGTH: {
         SHORTER_THAN_10S: 0,
         BETWEEN_10S_AND_30S: 1,
         BETWEEN_30S_AND_5M: 2,
@@ -783,27 +783,27 @@ describe("loop.OTSdkDriver", function() {
     describe("connectionDestroyed", function() {
       it("should dispatch a remotePeerDisconnected action if the client" +
         "disconnected", function() {
-          session.trigger("connectionDestroyed", {
-            reason: "clientDisconnected"
-          });
-
-          sinon.assert.called(dispatcher.dispatch);
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
-            sinon.match.hasOwn("name", "remotePeerDisconnected"));
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
-            sinon.match.hasOwn("peerHungup", true));
+        session.trigger("connectionDestroyed", {
+          reason: "clientDisconnected"
         });
+
+        sinon.assert.called(dispatcher.dispatch);
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
+            sinon.match.hasOwn("name", "remotePeerDisconnected"));
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
+            sinon.match.hasOwn("peerHungup", true));
+      });
 
       it("should dispatch a remotePeerDisconnected action if the connection" +
         "failed", function() {
-          session.trigger("connectionDestroyed", {
-            reason: "networkDisconnected"
-          });
+        session.trigger("connectionDestroyed", {
+          reason: "networkDisconnected"
+        });
 
-          sinon.assert.called(dispatcher.dispatch);
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
+        sinon.assert.called(dispatcher.dispatch);
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
             sinon.match.hasOwn("name", "remotePeerDisconnected"));
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
             sinon.match.hasOwn("peerHungup", false));
       });
 
@@ -875,16 +875,16 @@ describe("loop.OTSdkDriver", function() {
 
       it("should dispatch a connectionFailure action if the session was " +
          "forcibly disconnected", function() {
-          session.trigger("sessionDisconnected", {
-            reason: "forceDisconnected"
-          });
-
-          sinon.assert.calledTwice(dispatcher.dispatch);
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
-            sinon.match.hasOwn("name", "connectionFailure"));
-          sinon.assert.calledWithMatch(dispatcher.dispatch,
-            sinon.match.hasOwn("reason", FAILURE_DETAILS.EXPIRED_OR_INVALID));
+        session.trigger("sessionDisconnected", {
+          reason: "forceDisconnected"
         });
+
+        sinon.assert.calledTwice(dispatcher.dispatch);
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
+            sinon.match.hasOwn("name", "connectionFailure"));
+        sinon.assert.calledWithMatch(dispatcher.dispatch,
+            sinon.match.hasOwn("reason", FAILURE_DETAILS.EXPIRED_OR_INVALID));
+      });
 
       it("should call _noteConnectionLengthIfNeeded with connection duration", function() {
         driver.session = session;
@@ -1455,12 +1455,12 @@ describe("loop.OTSdkDriver", function() {
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
           new sharedActions.ConnectionStatus({
-          event: "Session.connectionCreated",
-          state: "sending",
-          connections: 2,
-          recvStreams: 0,
-          sendStreams: 1
-        }));
+            event: "Session.connectionCreated",
+            state: "sending",
+            connections: 2,
+            recvStreams: 0,
+            sendStreams: 1
+          }));
       });
 
       it("should not dispatch an RemotePeerConnected action if this is for a local user",

@@ -242,7 +242,7 @@ MockWebSocketChannel.prototype = {
           channelID: this.channelID,
           version: version
         }]
-    }));
+      }));
   },
 
   stop: function(err) {

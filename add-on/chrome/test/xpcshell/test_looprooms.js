@@ -638,7 +638,7 @@ add_task(function* () {
   Assert.strictEqual(Object.getOwnPropertyNames(gExpectedLeaves).length, 0,
                      "No room leaves should be expected anymore");
   Assert.ok(!gExpectedRefresh, "No refreshes should be expected anymore");
- });
+});
 
 function run_test() {
   setupFakeLoopServer();

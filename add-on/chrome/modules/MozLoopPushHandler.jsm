@@ -560,7 +560,7 @@ var MozLoopPushHandler = {
     this._pingMonitor.stop();
 
     switch (this.connectionState) {
-    case CONNECTION_STATE_OPEN:
+      case CONNECTION_STATE_OPEN:
         this.connectionState = CONNECTION_STATE_CLOSED;
         consoleLog.info("PushHandler: websocket closed: begin reconnect - ", aCode);
         // The first retry is immediate
@@ -573,8 +573,8 @@ var MozLoopPushHandler = {
         consoleLog.info("PushHandler: websocket closed: delay and retry - ", aCode);
         this._retryManager.retry(() => this._openSocket());
         break;
-     }
-   },
+    }
+  },
 
   /**
    * Listener method, called when the websocket receives a message.
@@ -617,8 +617,8 @@ var MozLoopPushHandler = {
           this._pingMonitor.restart();
         }
         break;
-     }
-   },
+    }
+  },
 
   /**
    * Handles hello message.
@@ -692,8 +692,8 @@ var MozLoopPushHandler = {
       consoleLog.log("PushHandler: PusherServer 'ack': ", ackChannels);
       this._pushSocket.send({ messageType: "ack",
                              updates: ackChannels });
-     }
-   },
+    }
+  },
 
   /**
    * Handles the PushServer registration response.

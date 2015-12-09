@@ -64,8 +64,8 @@ LoopRoomsCache.prototype = {
     this._cache = contents;
 
     return OS.File.makeDir(this.baseDir, { ignoreExisting: true }).then(() => {
-        return CommonUtils.writeJSON(contents, this.path);
-      });
+      return CommonUtils.writeJSON(contents, this.path);
+    });
   },
 
   /**

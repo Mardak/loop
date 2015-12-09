@@ -50,7 +50,7 @@ add_task(function* error_offline() {
       Assert.strictEqual(err.friendlyMessage, getLoopString("could_not_connect"));
       Assert.strictEqual(err.friendlyDetails, getLoopString("check_internet_connection"));
       Assert.strictEqual(err.friendlyDetailsButtonLabel, getLoopString("retry_button"));
-  });
+    });
   Services.io.offline = false;
 });
 
@@ -75,7 +75,7 @@ add_task(function* guest_401() {
       Assert.strictEqual(err.code, 401);
       Assert.strictEqual(err.friendlyMessage, getLoopString("session_expired_error_description"));
       Assert.equal(err.friendlyDetails, null);
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
@@ -99,7 +99,7 @@ add_task(function* fxa_401() {
       Assert.strictEqual(err.friendlyMessage, getLoopString("could_not_authenticate"));
       Assert.strictEqual(err.friendlyDetails, getLoopString("password_changed_question"));
       Assert.strictEqual(err.friendlyDetailsButtonLabel, getLoopString("retry_button"));
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
@@ -115,7 +115,7 @@ add_task(function* error_404() {
       Assert.strictEqual(err.code, 404);
       Assert.strictEqual(err.friendlyMessage, getLoopString("generic_failure_message"));
       Assert.equal(err.friendlyDetails, null);
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
@@ -132,7 +132,7 @@ add_task(function* error_500() {
       Assert.strictEqual(err.friendlyMessage, getLoopString("service_not_available"));
       Assert.strictEqual(err.friendlyDetails, getLoopString("try_again_later"));
       Assert.strictEqual(err.friendlyDetailsButtonLabel, getLoopString("retry_button"));
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
@@ -148,7 +148,7 @@ add_task(function* profile_500() {
       Assert.strictEqual(err.code, 500);
       Assert.strictEqual(err.friendlyMessage, getLoopString("problem_accessing_account"));
       Assert.equal(err.friendlyDetails, null);
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
@@ -165,7 +165,7 @@ add_task(function* error_503() {
       Assert.strictEqual(err.friendlyMessage, getLoopString("service_not_available"));
       Assert.strictEqual(err.friendlyDetails, getLoopString("try_again_later"));
       Assert.strictEqual(err.friendlyDetailsButtonLabel, getLoopString("retry_button"));
-  });
+    });
 });
 
 add_task(cleanup_between_tests);
