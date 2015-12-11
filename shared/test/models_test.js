@@ -74,7 +74,7 @@ describe("loop.shared.models", function() {
           expect(collection).to.have.length.of(1);
           expect(collection.at(0).get("level")).eql("error");
           expect(collection.at(0).get("message")).eql("translated:fakeId:fakeProp");
-      });
+        });
     });
   });
 });

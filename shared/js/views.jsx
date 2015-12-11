@@ -174,11 +174,11 @@ loop.shared.views = (function(_, mozL10n) {
      */
     getHandleToggleEdit: function(editItem) {
       return function _handleToglleEdit(event) {
-          event.preventDefault();
-          if (editItem.onClick) {
-            editItem.onClick(!editItem.enabled);
-          }
-        };
+        event.preventDefault();
+        if (editItem.onClick) {
+          editItem.onClick(!editItem.enabled);
+        }
+      };
     },
 
     /**
@@ -220,7 +220,7 @@ loop.shared.views = (function(_, mozL10n) {
         default:
           console.error("Invalid menu item", menuItem);
           return null;
-       }
+      }
     },
 
     /**
@@ -666,7 +666,7 @@ loop.shared.views = (function(_, mozL10n) {
     mixins: [React.addons.PureRenderMixin],
 
     render: function() {
-        return <div className="avatar"/>;
+      return <div className="avatar"/>;
     }
   });
 
@@ -677,7 +677,7 @@ loop.shared.views = (function(_, mozL10n) {
     mixins: [React.addons.PureRenderMixin],
 
     render: function() {
-        return (
+      return (
           <div className="loading-background">
             <div className="loading-stream"/>
           </div>

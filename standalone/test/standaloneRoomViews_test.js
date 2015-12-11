@@ -433,10 +433,10 @@ describe("loop.standaloneRoomViews", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.standaloneRoomViews.StandaloneRoomView, {
-        dispatcher: dispatcher,
-        activeRoomStore: activeRoomStore,
-        isFirefox: true
-      }));
+            dispatcher: dispatcher,
+            activeRoomStore: activeRoomStore,
+            isFirefox: true
+          }));
     }
 
     function expectActionDispatched() {
@@ -482,23 +482,23 @@ describe("loop.standaloneRoomViews", function() {
 
       it("should dispatch a `SetupStreamElements` action when the MEDIA_WAIT state " +
         "is entered", function() {
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
-          view = mountTestComponent();
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
+        view = mountTestComponent();
 
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
 
-          expectActionDispatched(view);
-        });
+        expectActionDispatched(view);
+      });
 
       it("should dispatch a `SetupStreamElements` action on MEDIA_WAIT state is " +
         "re-entered", function() {
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.ENDED });
-          view = mountTestComponent();
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.ENDED });
+        view = mountTestComponent();
 
-          activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
+        activeRoomStore.setStoreState({ roomState: ROOM_STATES.MEDIA_WAIT });
 
-          expectActionDispatched(view);
-        });
+        expectActionDispatched(view);
+      });
     });
 
     describe("#componentDidUpdate", function() {
@@ -807,12 +807,12 @@ describe("loop.standaloneRoomViews", function() {
 
         it("should not show loading screen if receivingScreenShare is false " +
            "and screenShareMediaElement is null", function() {
-             view.setState({
-               "receivingScreenShare": false,
-               "screenShareMediaElement": null
-             });
+          view.setState({
+            "receivingScreenShare": false,
+            "screenShareMediaElement": null
+          });
 
-             expect(view.getDOMNode().querySelector(".screen .loading-stream"))
+          expect(view.getDOMNode().querySelector(".screen .loading-stream"))
                  .eql(null);
         });
 
@@ -827,7 +827,7 @@ describe("loop.standaloneRoomViews", function() {
 
              expect(view.getDOMNode().querySelector(".screen .loading-stream"))
                  .eql(null);
-        });
+           });
       });
 
       describe("Participants", function() {
@@ -865,7 +865,7 @@ describe("loop.standaloneRoomViews", function() {
 
              expect(view.getDOMNode().querySelector(".local .loading-stream"))
                  .not.eql(null);
-        });
+           });
 
         it("should not render local loading screen when srcMediaElement is set",
            function() {
@@ -876,7 +876,7 @@ describe("loop.standaloneRoomViews", function() {
 
              expect(view.getDOMNode().querySelector(".local .loading-stream"))
                   .eql(null);
-        });
+           });
 
         it("should not render remote loading screen when srcMediaElement is set",
            function() {
@@ -887,7 +887,7 @@ describe("loop.standaloneRoomViews", function() {
 
              expect(view.getDOMNode().querySelector(".remote .loading-stream"))
                   .eql(null);
-        });
+           });
 
         it("should render remote video when the room HAS_PARTICIPANTS and" +
           " remoteVideoEnabled is true", function() {
@@ -1070,9 +1070,9 @@ describe("loop.standaloneRoomViews", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.standaloneRoomViews.StandaloneRoomControllerView, {
-        dispatcher: dispatcher,
-        isFirefox: true
-      }));
+            dispatcher: dispatcher,
+            isFirefox: true
+          }));
     }
 
     beforeEach(function() {

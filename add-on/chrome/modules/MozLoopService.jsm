@@ -557,8 +557,8 @@ var MozLoopServiceInternal = {
     }
 
     let error,
-        pushURLs = this.pushURLs.get(sessionType),
-        roomsPushURL = pushURLs ? pushURLs.rooms : null;
+      pushURLs = this.pushURLs.get(sessionType),
+      roomsPushURL = pushURLs ? pushURLs.rooms : null;
     this.pushURLs.delete(sessionType);
 
     if (!roomsPushURL) {
@@ -651,11 +651,11 @@ var MozLoopServiceInternal = {
         return result;
       },
       (error) => {
-      if (error.code && error.code == 401) {
-        this.clearSessionToken(sessionType);
-        if (retryOn401 && sessionType === LOOP_SESSION_TYPE.GUEST) {
-          log.info("401 and INVALID_AUTH_TOKEN - retry registration");
-          return this.registerWithLoopServer(sessionType, false).then(
+        if (error.code && error.code == 401) {
+          this.clearSessionToken(sessionType);
+          if (retryOn401 && sessionType === LOOP_SESSION_TYPE.GUEST) {
+            log.info("401 and INVALID_AUTH_TOKEN - retry registration");
+            return this.registerWithLoopServer(sessionType, false).then(
             () => {
               return this.hawkRequestInternal(sessionType, path, method, payloadObj, false);
             },
@@ -664,11 +664,11 @@ var MozLoopServiceInternal = {
               return handle401Error(error);
             }
           );
+          }
+          return handle401Error(error);
         }
-        return handle401Error(error);
-      }
-      throw error;
-    });
+        throw error;
+      });
   },
 
   /**

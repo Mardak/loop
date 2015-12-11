@@ -9,9 +9,9 @@ describe("loop.webapp", function() {
   var TestUtils = React.addons.TestUtils;
   var sharedActions = loop.shared.actions;
   var sharedUtils = loop.shared.utils,
-      sandbox,
-      dispatcher,
-      mozL10nGet;
+    sandbox,
+    dispatcher,
+    mozL10nGet;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -51,7 +51,7 @@ describe("loop.webapp", function() {
         sinon.match(function(value) {
           return TestUtils.isCompositeComponentElement(value,
             loop.webapp.WebappRootView);
-      }));
+        }));
     });
 
     it("should dispatch a ExtractTokenInfo action with the path and hash",
@@ -61,15 +61,15 @@ describe("loop.webapp", function() {
           pathname: "/c/faketoken"
         });
 
-      loop.webapp.init();
+        loop.webapp.init();
 
-      sinon.assert.calledOnce(loop.Dispatcher.prototype.dispatch);
-      sinon.assert.calledWithExactly(loop.Dispatcher.prototype.dispatch,
+        sinon.assert.calledOnce(loop.Dispatcher.prototype.dispatch);
+        sinon.assert.calledWithExactly(loop.Dispatcher.prototype.dispatch,
         new sharedActions.ExtractTokenInfo({
           windowPath: "/c/faketoken",
           windowHash: "#fakeKey"
         }));
-    });
+      });
   });
 
   describe("WebappRootView", function() {
@@ -130,11 +130,11 @@ describe("loop.webapp", function() {
       });
 
     it("should display the HomeView for `home` window type", function() {
-        standaloneAppStore.setStoreState({ windowType: "home", isFirefox: true });
+      standaloneAppStore.setStoreState({ windowType: "home", isFirefox: true });
 
-        var webappRootView = mountTestComponent();
+      var webappRootView = mountTestComponent();
 
-        TestUtils.findRenderedComponentWithType(webappRootView,
+      TestUtils.findRenderedComponentWithType(webappRootView,
           loop.webapp.HomeView);
     });
   });
@@ -154,7 +154,7 @@ describe("loop.webapp", function() {
         var comp = TestUtils.renderIntoDocument(
           React.createElement(loop.webapp.PromoteFirefoxView, {
             isFirefox: true
-        }));
+          }));
 
         expect(comp.getDOMNode()).eql(null);
       });
@@ -162,8 +162,8 @@ describe("loop.webapp", function() {
       it("should render when not using Firefox", function() {
         TestUtils.renderIntoDocument(
           React.createElement(loop.webapp.PromoteFirefoxView, {
-              isFirefox: false
-        }));
+            isFirefox: false
+          }));
 
         sinon.assert.calledWith(mozL10nGet, "promote_firefox_hello_heading");
         sinon.assert.calledWith(mozL10nGet, "get_firefox_button");

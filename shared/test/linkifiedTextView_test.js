@@ -318,7 +318,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
           desc: "should linkify HTML with nested tags and resource path properly escaped",
           rawText: '<a href="http://example.com"><img src="http://example.com" /></a>',
           markup: '<p>&lt;a href=&quot;<a href="http://example.com">http://example.com</a>&quot;&gt;&lt;img src=&quot;<a href="http://example.com">http://example.com</a>&quot; /&gt;&lt;/a&gt;</p>'
-         }
+        }
       ];
 
       var skippedTests = [

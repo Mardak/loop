@@ -122,10 +122,10 @@ var inChrome = typeof Components != "undefined" && "utils" in Components;
         rootObject.crypto.getRandomValues(iv);
 
         return rootObject.crypto.subtle.encrypt({
-            name: ALGORITHM,
-            iv: iv,
-            tagLength: ENCRYPT_TAG_LENGTH
-          }, cryptoKey,
+          name: ALGORITHM,
+          iv: iv,
+          tagLength: ENCRYPT_TAG_LENGTH
+        }, cryptoKey,
           dataBuffer);
       }).then(function(cipherText) {
         // Join the initialization vector and context for returning.

@@ -369,7 +369,7 @@ loop.shared.mixins = (function() {
           resolve(!mayNotDisturb);
         });
       }.bind(this));
-     },
+    },
 
     /**
      * Starts playing an audio file, stopping any audio that is already in progress.

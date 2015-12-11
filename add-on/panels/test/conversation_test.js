@@ -128,7 +128,7 @@ describe("loop.conversation", function() {
         sinon.match(function(value) {
           return TestUtils.isCompositeComponentElement(value,
             loop.conversation.AppControllerView);
-      }));
+        }));
     });
 
     it("should trigger a getWindowData action", function() {

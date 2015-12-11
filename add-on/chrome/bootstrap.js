@@ -534,8 +534,7 @@ var WindowListener = {
                 this._getString("infobar_button_pause_accesskey");
               return true;
             }
-          },
-          {
+          }, {
             label: this._getString("infobar_button_stop_label"),
             accessKey: this._getString("infobar_button_stop_accesskey"),
             isDefault: true,
