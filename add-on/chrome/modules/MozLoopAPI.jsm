@@ -896,8 +896,8 @@ const kMessageHandlers = {
    *                           the senders' channel.
    */
   OpenURL: function(message, reply) {
-    let url = message.data[0];
-    MozLoopService.openURL(url);
+    let [url, where] = message.data;
+    MozLoopService.openURL(url, where);
     reply();
   },
 

@@ -2024,10 +2024,11 @@ this.MozLoopService = {
    * Opens a URL in a new tab in the browser.
    *
    * @param {String} url The new url to open
+   * @param {String} where Optional. Location to open the url, e.g., tab/window.
    */
-  openURL: function(url) {
+  openURL(url, where = "tab") {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
-    win.openUILinkIn(Services.urlFormatter.formatURL(url), "tab");
+    win.openUILinkIn(Services.urlFormatter.formatURL(url), where);
   },
 
   /**

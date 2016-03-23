@@ -378,7 +378,7 @@ loop.store = loop.store || {};
                                  .replace("%APP_ID%", app_id)
                                  .replace("%REDIRECT_URI%", redirect_url);
 
-        return loop.request("OpenURL", finalURL);
+        return loop.request("OpenURL", finalURL, "window");
       }).then(() => {
         loop.request("NotifyUITour", "Loop:RoomURLShared");
       });
