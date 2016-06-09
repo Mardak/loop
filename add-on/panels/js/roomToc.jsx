@@ -47,8 +47,13 @@ loop.roomToc = (function(mozL10n) {
 
       let pageStore = new loop.store.PageStore(dispatcher, { dataDriver });
 
+      // XXX akita bug 1279042 Use user set name instead of fake name.
+      dispatcher.dispatch(
+        new sharedActions.SetOwnDisplayName({ displayName: "Room Owner" }));
+
       loop.store.StoreMixin.register({
         participantStore,
+        pageStore,
         serverConnectionStore,
         roomStore
       });

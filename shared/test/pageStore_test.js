@@ -34,27 +34,27 @@ describe("loop.store.PageStore", () => {
       let initialState = store.getInitialStoreState();
 
       expect(initialState.pages).not.eql(null);
+      expect(initialState.pages).to.have.lengthOf(0);
     });
   });
 
-  describe("updateRoomInfo", () => {
-    it("should update userId", () => {
-      let action = new actions.UpdateRoomInfo({
-        roomUrl: "fakeurl",
-        userId: "theUserId"
+  describe("setOwnDisplayName", () => {
+    it("should update user name", () => {
+      let action = new actions.SetOwnDisplayName({
+        displayName: "user name"
       });
-      store.updateRoomInfo(action);
+      store.setOwnDisplayName(action);
 
-      expect(store._currentUserId).eql("theUserId");
+      expect(store._currentUserName).eql("user name");
     });
   });
 
   describe("AddPage", () => {
     beforeEach(() => {
-      store._currentUserId = "theUserId";
+      store._currentUserName = "user name";
     });
 
-    it("should include the userId in page data", () => {
+    it("should include the user name in page data", () => {
       let metadata = {
         description: "fakeDescription",
         favicon_url: "fakeFavicon",
@@ -68,10 +68,69 @@ describe("loop.store.PageStore", () => {
       store.addPage(action);
 
       sinon.assert.calledOnce(fakeDataDriver.addPage);
-      sinon.assert.calledWithExactly(fakeDataDriver.addPage, {
-        userId: "theUserId",
-        metadata: metadata
+      sinon.assert.calledWithExactly(fakeDataDriver.addPage, Object.assign(
+        { userName: "user name" }, metadata));
+    });
+  });
+
+  describe("AddedPage", () => {
+    it("should add a page to the store", () => {
+      let action = new actions.AddedPage({
+        description: "fakeDescription",
+        favicon_url: "fakeFavicon",
+        images: [{
+          url: "fakeUrl"
+        }],
+        pageId: "fakeId",
+        title: "fakeTitle",
+        url: "fakeUrl",
+        userName: "fake user"
       });
+      store.addedPage(action);
+
+      expect(store.getStoreState("pages")).to.have.lengthOf(1);
+    });
+  });
+
+  describe("DeletePage", () => {
+    it("should get the page deleted", () => {
+      let action = new actions.DeletePage({
+        pageId: "fakeId"
+      });
+      store.deletePage(action);
+
+      sinon.assert.calledOnce(fakeDataDriver.deletePage);
+      sinon.assert.calledWithExactly(fakeDataDriver.deletePage, "fakeId");
+    });
+  });
+
+  describe("DeletedPage", () => {
+    beforeEach(() => {
+      let pages = store.getStoreState("pages");
+      pages.push({
+        description: "fakeDescription",
+        favicon_url: "fakeFavicon",
+        id: "fakeId",
+        images: [{
+          url: "fakeUrl"
+        }],
+        title: "fakeTitle",
+        url: "fakeUrl",
+        userName: "fake user"
+      });
+      store.setStoreState({ pages });
+    });
+
+    it("should remove a page from the store", () => {
+      let action = new actions.DeletedPage({
+        deletedTime: Date.now(),
+        pageId: "fakeId"
+      });
+
+      expect(store.getStoreState("pages")).to.have.lengthOf(1);
+      store.deletedPage(action);
+
+      expect(store.getStoreState("pages")).to.have.lengthOf(0);
     });
   });
 });

@@ -36,32 +36,28 @@ loop.store.PageStore = function() {
       "addedPage",
       "deletePage",
       "deletedPage",
-      "updateRoomInfo"
+      "setOwnDisplayName"
     ],
 
     /**
-     * Handle UpdateRoomInfo action by saving the id for the current user.
+     * Handle SetOwnDisplayName action by saving the current user's name.
      */
-    updateRoomInfo({ userId }) {
-      this._currentUserId = userId;
+    setOwnDisplayName({ displayName }) {
+      this._currentUserName = displayName;
     },
 
     /**
      * Handle AddPage action by saving the specific page.
      */
     addPage(actionData) {
-      let pageRecord = {
-        userId: this._currentUserId,
-        metadata: {
-          description: actionData.description,
-          favicon_url: actionData.favicon_url,
-          images: actionData.images,
-          title: actionData.title,
-          url: actionData.url
-        }
-      };
-
-      this._dataDriver.addPage(pageRecord);
+      this._dataDriver.addPage({
+        description: actionData.description,
+        favicon_url: actionData.favicon_url,
+        images: actionData.images,
+        title: actionData.title,
+        url: actionData.url,
+        userName: this._currentUserName
+      });
     },
 
     /**
@@ -69,13 +65,13 @@ loop.store.PageStore = function() {
      */
     addedPage(actionData) {
       let page = {
-        id: actionData.pageId,
-        title: actionData.title,
         description: actionData.description,
         favicon_url: actionData.favicon_url,
+        id: actionData.pageId,
         images: actionData.images,
+        title: actionData.title,
         url: actionData.url,
-        userId: actionData.userId
+        userName: actionData.userName
       };
 
       this._storeState.pages.push(page);
@@ -88,7 +84,7 @@ loop.store.PageStore = function() {
      * Handle DeletePage action by deleting the specific page.
      */
     deletePage(actionData) {
-      this._dataDriver.deletedPage(actionData.pageId);
+      this._dataDriver.deletePage(actionData.pageId);
     },
 
     /**
@@ -97,7 +93,6 @@ loop.store.PageStore = function() {
     deletedPage(actionData) {
       let pages = this._storeState.pages;
       pages = pages.filter(page => page.id !== actionData.pageId);
-console.info(pages);
       this.setStoreState({ pages });
     }
   });
