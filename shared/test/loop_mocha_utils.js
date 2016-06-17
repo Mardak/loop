@@ -326,12 +326,12 @@ var LoopMochaUtils = (function(global, _) {
   }
 
   return {
-    addErrorCheckingTests: addErrorCheckingTests,
-    createSandbox: createSandbox,
-    publish: publish,
-    restore: restore,
-    runTests: runTests,
-    stubLoopRequest: stubLoopRequest,
-    trapErrors: trapErrors
+    addErrorCheckingTests,
+    createSandbox,
+    publish,
+    restore,
+    runTests,
+    stubLoopRequest,
+    trapErrors
   };
 })(this, _);

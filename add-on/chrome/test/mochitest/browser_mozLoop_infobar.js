@@ -35,7 +35,7 @@ var fakeRoomListwithParticipants = new Map([[ROOM_TOKEN, {
 function promiseStartBrowserSharing() {
   return new Promise(resolve => {
       LoopAPI.stub([{
-      sendAsyncMessage: function(messageName, data) {
+      sendAsyncMessage(messageName, data) {
         let [name] = data;
         if (name == "BrowserSwitch") {
           LoopAPI.restore();

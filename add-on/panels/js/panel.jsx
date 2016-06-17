@@ -24,16 +24,16 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       displayRoomListContent: React.PropTypes.bool
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return { displayRoomListContent: false };
     },
 
-    handleButtonClick: function() {
+    handleButtonClick() {
       loop.request("OpenGettingStartedTour");
       this.closeWindow();
     },
 
-    renderGettingStartedButton: function() {
+    renderGettingStartedButton() {
       if (this.props.displayRoomListContent) {
         return null;
       }
@@ -48,7 +48,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       var fteClasses = classNames({
         "fte-get-started-content": true,
         "fte-get-started-content-borders": this.props.displayRoomListContent
@@ -84,17 +84,17 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
   var SignInRequestView = React.createClass({
     mixins: [sharedMixins.WindowCloseMixin],
 
-    handleSignInClick: function(event) {
+    handleSignInClick(event) {
       event.preventDefault();
       loop.request("LoginToFxA", true);
       this.closeWindow();
     },
 
-    handleGuestClick: function() {
+    handleGuestClick() {
       loop.request("LogoutFromFxA");
     },
 
-    render: function() {
+    render() {
       var shortname = mozL10n.get("clientShortname2");
       var line1 = mozL10n.get("sign_in_again_title_line_one", {
         clientShortname2: shortname
@@ -127,14 +127,14 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
   var ToSView = React.createClass({
     mixins: [sharedMixins.WindowCloseMixin],
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         terms_of_use_url: loop.getStoredRequest(["GetLoopPref", "legal.ToS_url"]),
         privacy_notice_url: loop.getStoredRequest(["GetLoopPref", "legal.privacy_url"])
       };
     },
 
-    handleLinkClick: function(event) {
+    handleLinkClick(event) {
       if (!event.target || !event.target.href) {
         return;
       }
@@ -144,7 +144,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.closeWindow();
     },
 
-    render: function() {
+    render() {
       var tosString =
         '<a href="' + this.state.terms_of_use_url + '" target="_blank">' +
         mozL10n.get("legal_text_tos") +
@@ -188,11 +188,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       onClick: React.PropTypes.func.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return { displayed: true };
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
 
       if (!this.props.displayed) {
@@ -220,14 +220,14 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
   var SettingsDropdown = React.createClass({
     mixins: [sharedMixins.DropdownMenuMixin(), sharedMixins.WindowCloseMixin],
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         signedIn: !!loop.getStoredRequest(["GetUserProfile"]),
         doNotDisturb: loop.getStoredRequest(["GetDoNotDisturb"])
       };
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       if (nextState.showMenu !== this.state.showMenu) {
         loop.requestMulti(
           ["GetUserProfile"],
@@ -241,16 +241,16 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    handleClickSettingsEntry: function() {
+    handleClickSettingsEntry() {
       // XXX to be implemented at the same time as unhiding the entry
     },
 
-    handleClickAccountEntry: function() {
+    handleClickAccountEntry() {
       loop.request("OpenFxASettings");
       this.closeWindow();
     },
 
-    handleClickAuthEntry: function() {
+    handleClickAuthEntry() {
       if (this.state.signedIn) {
         loop.request("LogoutFromFxA");
         // Close the menu but leave the panel open
@@ -262,7 +262,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    handleHelpEntry: function(event) {
+    handleHelpEntry(event) {
       event.preventDefault();
       loop.request("GetLoopPref", "support_url").then(function(helloSupportUrl) {
         loop.request("OpenURL", helloSupportUrl);
@@ -270,7 +270,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }.bind(this));
     },
 
-    handleToggleNotifications: function() {
+    handleToggleNotifications() {
       loop.request("GetDoNotDisturb").then(function(result) {
         loop.request("SetDoNotDisturb", !result);
       });
@@ -280,7 +280,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
     /**
      * Load on the browser the feedback url from prefs
      */
-    handleSubmitFeedback: function(event) {
+    handleSubmitFeedback(event) {
       event.preventDefault();
       loop.request("GetLoopPref", "feedback.manualFormURL").then(function(helloFeedbackUrl) {
         loop.request("OpenURL", helloFeedbackUrl);
@@ -288,12 +288,12 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }.bind(this));
     },
 
-    openGettingStartedTour: function() {
+    openGettingStartedTour() {
       loop.request("OpenGettingStartedTour");
       this.closeWindow();
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       var accountEntryCSSClass = this.state.signedIn ? "entry-settings-signout" :
                                                        "entry-settings-signin";
@@ -348,12 +348,12 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       userProfile: userProfileValidator
     },
 
-    handleSignInLinkClick: function() {
+    handleSignInLinkClick() {
       loop.request("LoginToFxA");
       this.closeWindow();
     },
 
-    render: function() {
+    render() {
       if (this.props.userProfile && this.props.userProfile.email) {
         return (
           <div className="user-identity">
@@ -379,7 +379,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       roomUrls: React.PropTypes.array
     },
 
-    handleClick: function(event) {
+    handleClick(event) {
       event.stopPropagation();
       event.preventDefault();
       if (event.currentTarget.href) {
@@ -388,7 +388,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    _renderDefaultIcon: function() {
+    _renderDefaultIcon() {
       return (
         <div className="room-entry-context-item">
           <img src="shared/img/icons-16x16.svg#globe" />
@@ -396,7 +396,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       );
     },
 
-    _renderIcon: function(roomUrl) {
+    _renderIcon(roomUrl) {
       return (
         <div className="room-entry-context-item">
           <a href={roomUrl.location}
@@ -408,7 +408,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       var roomUrl = this.props.roomUrls && this.props.roomUrls[0];
       if (roomUrl && roomUrl.location) {
         return this._renderIcon(roomUrl);
@@ -451,7 +451,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       sharedMixins.DropdownMenuMixin()
     ],
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         editMode: false,
         eventPosY: 0,
@@ -459,17 +459,17 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       };
     },
 
-    _isActive: function() {
+    _isActive() {
       return this.props.room.participants.length > 0;
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       if (this.state.editMode) {
         ReactDOM.findDOMNode(this).querySelector(".edit-room-input").focus();
       }
     },
 
-    handleClickEntry: function(event) {
+    handleClickEntry(event) {
       event.preventDefault();
 
       if (this.state.editMode) {
@@ -499,7 +499,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }.bind(this));
     },
 
-    handleClick: function(e) {
+    handleClick(e) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -510,7 +510,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.toggleDropdownMenu();
     },
 
-    handleEditButtonClick: function(e) {
+    handleEditButtonClick(e) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -523,13 +523,13 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
      * Handles a key being pressed - looking for the return key for saving
      * the new room name.
      */
-    handleKeyDown: function(event) {
+    handleKeyDown(event) {
       if (event.which === 13) {
         this.exitEditMode();
       }
     },
 
-    exitEditMode: function() {
+    exitEditMode() {
       this.props.dispatcher.dispatch(
         new sharedActions.UpdateRoomContext({
           roomToken: this.props.room.roomToken,
@@ -539,7 +539,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.setState({ editMode: false });
     },
 
-    handleEditInputChange: function(event) {
+    handleEditInputChange(event) {
       this.setState({ newRoomName: event.target.value });
     },
 
@@ -547,13 +547,13 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
      * Callback called when moving cursor away from the conversation entry.
      * Will close the dropdown menu.
      */
-    _handleMouseOut: function() {
+    _handleMouseOut() {
       if (this.state.showMenu) {
         this.toggleDropdownMenu();
       }
     },
 
-    render: function() {
+    render() {
       var roomClasses = classNames({
         "room-entry": true,
         "room-active": this._isActive(),
@@ -608,7 +608,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       toggleDropdownMenu: React.PropTypes.func.isRequired
     },
 
-    handleEmailButtonClick: function(event) {
+    handleEmailButtonClick(event) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -622,7 +622,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.props.toggleDropdownMenu();
     },
 
-    handleCopyButtonClick: function(event) {
+    handleCopyButtonClick(event) {
       event.stopPropagation();
       event.preventDefault();
 
@@ -634,7 +634,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.props.toggleDropdownMenu();
     },
 
-    handleDeleteButtonClick: function(event) {
+    handleDeleteButtonClick(event) {
       event.stopPropagation();
       event.preventDefault();
 
@@ -645,7 +645,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.props.toggleDropdownMenu();
     },
 
-    render: function() {
+    render() {
       return (
         <div className="room-entry-context-actions">
           <div
@@ -710,13 +710,13 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       handleEmailButtonClick: React.PropTypes.func.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         openDirUp: false
       };
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       var menuNode = ReactDOM.findDOMNode(this);
 
       var menuNodeRect = menuNode.getBoundingClientRect();
@@ -734,7 +734,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       menuNode.style.top = topPos + "px";
     },
 
-    render: function() {
+    render() {
       var dropdownClasses = classNames({
         "dropdown-menu": true,
         "dropdown-menu-up": this.state.openDirUp
@@ -795,11 +795,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       store: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.props.store.getStoreState();
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       this.listenTo(this.props.store, "change", this._onStoreStateChanged);
 
       // XXX this should no longer be necessary once have a better mechanism
@@ -808,11 +808,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.props.dispatcher.dispatch(new sharedActions.GetAllRooms());
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.stopListening(this.props.store);
     },
 
-    _onStoreStateChanged: function() {
+    _onStoreStateChanged() {
       this.setState(this.props.store.getStoreState());
     },
 
@@ -820,7 +820,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
      * Let the user know we're loading rooms
      * @returns {Object} React render
      */
-    _renderLoadingRoomsView: function() {
+    _renderLoadingRoomsView() {
       /* XXX should refactor and separate "rooms" amd perhaps room-list so that
       we arent duplicating those elements all over */
       return (
@@ -835,7 +835,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       );
     },
 
-    _renderNewRoomButton: function() {
+    _renderNewRoomButton() {
       return (
         <NewRoomView dispatcher={this.props.dispatcher}
           inRoom={this.state.openedRoom !== null}
@@ -844,7 +844,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       );
     },
 
-    _addListGradientIfNeeded: function() {
+    _addListGradientIfNeeded() {
       if (this.state.rooms.length > 5) {
         return (<div className="room-list-blur" />);
       }
@@ -852,7 +852,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       return null;
     },
 
-    render: function() {
+    render() {
       var roomListClasses = classNames({
         "room-list": true,
         // add extra space to last item so when scrolling to bottom,
@@ -920,7 +920,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       React.addons.PureRenderMixin
     ],
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         previewImage: "",
         description: "",
@@ -928,7 +928,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       };
     },
 
-    onDocumentVisible: function() {
+    onDocumentVisible() {
       // We would use onDocumentHidden to null out the data ready for the next
       // opening. However, this seems to cause an awkward glitch in the display
       // when opening the panel, and it seems cleaner just to update the data
@@ -945,14 +945,14 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
         var description = metadata.title || metadata.description;
         var url = metadata.url;
         this.setState({
-          previewImage: previewImage,
-          description: description,
-          url: url
+          previewImage,
+          description,
+          url
         });
       }.bind(this));
     },
 
-    handleCreateButtonClick: function() {
+    handleCreateButtonClick() {
       // check that tab is remote, open about:home if not
       loop.request("IsTabShareable").then(shareable => {
         if (!shareable) {
@@ -969,11 +969,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.props.dispatcher.dispatch(createRoomAction);
     },
 
-    handleStopSharingButtonClick: function() {
+    handleStopSharingButtonClick() {
       loop.request("HangupAllChatWindows");
     },
 
-    render: function() {
+    render() {
       return (
         <div className="new-room-view">
           {this.props.inRoom ?
@@ -999,11 +999,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
     propTypes: {
       onClick: React.PropTypes.func.isRequired
     },
-    componentWillMount: function() {
+    componentWillMount() {
       loop.request("SetPanelHeight", 262);
     },
 
-    render: function() {
+    render() {
       return (
         <div className="error-content">
           <header className="error-title">
@@ -1041,11 +1041,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       store: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.props.store.getStoreState();
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       loop.request("GetLoopPref", "facebook.enabled").then(result => {
         this.setState({
           facebookEnabled: result
@@ -1053,11 +1053,11 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       });
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       this.listenTo(this.props.store, "change", this._onStoreStateChanged);
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       if (this.state.showPanel) {
         setTimeout(() => {
           ReactDOM.findDOMNode(this).classList.add("share-panel-open");
@@ -1065,19 +1065,19 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.stopListening(this.props.store);
     },
 
-    _onStoreStateChanged: function() {
+    _onStoreStateChanged() {
       this.setState(this.props.store.getStoreState());
     },
 
-    onDocumentHidden: function() {
+    onDocumentHidden() {
       this.state.showPanel && this.handleClosePanel();
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       // If we've just created a room, open the panel
       if (this.state.pendingCreation &&
           !nextState.pendingCreation && !nextState.error) {
@@ -1088,7 +1088,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    handleClosePanel: function() {
+    handleClosePanel() {
       this.props.onSharePanelDisplayChange();
       this.openRoom();
       this.closeWindow();
@@ -1098,14 +1098,14 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       });
     },
 
-    openRoom: function() {
+    openRoom() {
       var activeRoom = this.state.activeRoom;
       this.props.dispatcher.dispatch(new sharedActions.OpenRoom({
         roomToken: activeRoom.roomToken
       }));
     },
 
-    render: function() {
+    render() {
       if (!this.state.showPanel && !this.props.forceRender) {
         return null;
       }
@@ -1145,30 +1145,30 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       roomToken: React.PropTypes.string.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return { focused: false };
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       ReactDOM.findDOMNode(this).querySelector("input").focus();
     },
 
-    handleBlur: function() {
+    handleBlur() {
       this.setState({ focused: false });
     },
 
-    handleFocus: function() {
+    handleFocus() {
       this.setState({ focused: true });
       ReactDOM.findDOMNode(this).querySelector("input").select();
     },
 
-    handleKeyDown: function(event) {
+    handleKeyDown(event) {
       if (event.which === 13) {
         this.handleNameChange();
       }
     },
 
-    handleNameChange: function() {
+    handleNameChange() {
       let token = this.props.roomToken,
           name = ReactDOM.findDOMNode(this).querySelector("input").value || "";
 
@@ -1184,7 +1184,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       this.closeWindow();
     },
 
-    render: function() {
+    render() {
       let inputClass = classNames({
         "input-group": true,
         "focused": this.state.focused
@@ -1239,13 +1239,13 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       userProfile: React.PropTypes.object
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         gettingStartedSeen: true
       };
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         hasEncryptionKey: loop.getStoredRequest(["GetHasEncryptionKey"]),
         userProfile: loop.getStoredRequest(["GetUserProfile"]),
@@ -1257,7 +1257,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       };
     },
 
-    _serviceErrorToShow: function() {
+    _serviceErrorToShow() {
       return new Promise(function(resolve) {
         loop.request("GetErrors").then(function(errors) {
           if (!errors || !Object.keys(errors).length) {
@@ -1274,7 +1274,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       });
     },
 
-    updateServiceErrors: function() {
+    updateServiceErrors() {
       this._serviceErrorToShow().then(function(serviceError) {
         if (serviceError) {
           this.props.notifications.set({
@@ -1291,7 +1291,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }.bind(this));
     },
 
-    _onStatusChanged: function() {
+    _onStatusChanged() {
       loop.requestMulti(
         ["GetUserProfile"],
         ["GetHasEncryptionKey"],
@@ -1325,7 +1325,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }.bind(this));
     },
 
-    _onClosingNewRoom: function() {
+    _onClosingNewRoom() {
       // If we close a recently created room, we offer the chance of renaming it
       let storeState = this.props.roomStore.getStoreState();
       if (!storeState.closingNewRoom || !storeState.openedRoom) {
@@ -1346,44 +1346,44 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       });
     },
 
-    onDocumentHidden: function() {
+    onDocumentHidden() {
       // consider closing panel any other way than click OK button
       // or Enter key the same as cancel renaming the room
       this.setState({ renameRoom: null });
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       this.updateServiceErrors();
       this.listenTo(this.props.roomStore, "change:closingNewRoom",
                     this._onClosingNewRoom);
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       loop.subscribe("LoopStatusChanged", this._onStatusChanged);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       loop.unsubscribe("LoopStatusChanged", this._onStatusChanged);
       this.stopListening(this.props.roomStore);
     },
 
-    handleContextMenu: function(e) {
+    handleContextMenu(e) {
       e.preventDefault();
     },
 
-    launchNonE10sWindow: function() {
+    launchNonE10sWindow() {
       loop.request("GetSelectedTabMetadata").then(function(metadata) {
         loop.request("OpenNonE10sWindow", metadata.url);
       });
     },
 
-    toggleSharePanelState: function() {
+    toggleSharePanelState() {
       this.setState({
         sharePanelOpened: !this.state.sharePanelOpened
       });
     },
 
-    render: function() {
+    render() {
       if (this.state.multiProcessActive && !this.state.remoteAutoStart) {
         return (
           <E10sNotSupported onClick={this.launchNonE10sWindow} />
@@ -1457,7 +1457,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       notification: React.PropTypes.object.isRequired
     },
 
-    render: function() {
+    render() {
       var notification = this.props.notification;
       return (
         <div className="notificationContainer">
@@ -1489,17 +1489,17 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       notifications: React.PropTypes.object.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return { clearOnDocumentHidden: false };
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       this.listenTo(this.props.notifications, "reset add remove", function() {
         this.forceUpdate();
       });
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.stopListening(this.props.notifications);
     },
 
@@ -1508,7 +1508,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
      * current document is hidden if the clearOnDocumentHidden prop is set to
      * true and the collection isn't empty.
      */
-    onDocumentHidden: function() {
+    onDocumentHidden() {
       if (this.props.clearOnDocumentHidden &&
           this.props.notifications.length > 0) {
         // Note: The `silent` option prevents the `reset` event to be triggered
@@ -1519,7 +1519,7 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       }
     },
 
-    render: function() {
+    render() {
       return (
         <div className="messages">
           {this.props.notifications.map(function(notification, key) {
@@ -1563,9 +1563,9 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       var locale = results[++requestIdx];
       var pluralRule = results[++requestIdx];
       mozL10n.initialize({
-        locale: locale,
-        pluralRule: pluralRule,
-        getStrings: function(key) {
+        locale,
+        pluralRule,
+        getStrings(key) {
           if (!(key in stringBundle)) {
             console.error("No string found for key: ", key);
             return "{ textContent: '' }";
@@ -1583,8 +1583,8 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
       var notifications = new panelModels.NotificationCollection();
       var dispatcher = new loop.Dispatcher();
       var roomStore = new loop.store.RoomStore(dispatcher, {
-        notifications: notifications,
-        constants: constants
+        notifications,
+        constants
       });
 
       ReactDOM.render(<PanelView
@@ -1604,23 +1604,23 @@ loop.panel = _.extend(loop.panel || {}, (function(_, mozL10n) {
   }
 
   return {
-    AccountLink: AccountLink,
-    computeAdjustedTopPosition: computeAdjustedTopPosition,
-    ConversationDropdown: ConversationDropdown,
-    E10sNotSupported: E10sNotSupported,
-    GettingStartedView: GettingStartedView,
-    init: init,
-    NewRoomView: NewRoomView,
-    NotificationListView: NotificationListView,
-    PanelView: PanelView,
-    RenameRoomView: RenameRoomView,
-    RoomEntry: RoomEntry,
-    RoomEntryContextButtons: RoomEntryContextButtons,
-    RoomList: RoomList,
-    SettingsDropdown: SettingsDropdown,
-    SharePanelView: SharePanelView,
-    SignInRequestView: SignInRequestView,
-    ToSView: ToSView
+    AccountLink,
+    computeAdjustedTopPosition,
+    ConversationDropdown,
+    E10sNotSupported,
+    GettingStartedView,
+    init,
+    NewRoomView,
+    NotificationListView,
+    PanelView,
+    RenameRoomView,
+    RoomEntry,
+    RoomEntryContextButtons,
+    RoomList,
+    SettingsDropdown,
+    SharePanelView,
+    SignInRequestView,
+    ToSView
   };
 })(_, document.mozL10n));
 

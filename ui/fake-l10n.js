@@ -12,11 +12,11 @@
    * @type {Object}
    */
   navigator.mozL10n = document.mozL10n = {
-    initialize: function() {},
+    initialize() {},
 
-    getLanguage: function() {},
+    getLanguage() {},
 
-    getDirection: function() {
+    getDirection() {
       if (document.location.search === "?rtl=1") {
         return "rtl";
       }
@@ -24,7 +24,7 @@
       return "ltr";
     },
 
-    get: function(stringId, vars) {
+    get(stringId, vars) {
 
       // upcase the first letter
       var readableStringId = stringId.replace(/^./, function(match) {

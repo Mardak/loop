@@ -25,7 +25,7 @@ describe("loop.shared.mixins", function() {
       var TestComp = React.createClass({
         mixins: [loop.shared.mixins.UrlHashChangeMixin],
         onUrlHashChange: onUrlHashChange || function() {},
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -35,7 +35,7 @@ describe("loop.shared.mixins", function() {
     it("should watch for hashchange event", function() {
       var addEventListener = sandbox.spy();
       sharedMixins.setRootObject({
-        addEventListener: addEventListener
+        addEventListener
       });
 
       TestUtils.renderIntoDocument(createTestComponent());
@@ -46,7 +46,7 @@ describe("loop.shared.mixins", function() {
 
     it("should call onUrlHashChange when the url is updated", function() {
       sharedMixins.setRootObject({
-        addEventListener: function(name, cb) {
+        addEventListener(name, cb) {
           if (name === "hashchange") {
             cb();
           }
@@ -74,7 +74,7 @@ describe("loop.shared.mixins", function() {
 
       TestComp = React.createClass({
         mixins: [loop.shared.mixins.DocumentLocationMixin],
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -100,7 +100,7 @@ describe("loop.shared.mixins", function() {
 
       TestComp = React.createClass({
         mixins: [loop.shared.mixins.DocumentTitleMixin],
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -127,7 +127,7 @@ describe("loop.shared.mixins", function() {
 
       TestComp = React.createClass({
         mixins: [loop.shared.mixins.WindowCloseMixin],
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -154,7 +154,7 @@ describe("loop.shared.mixins", function() {
         mixins: [loop.shared.mixins.DocumentVisibilityMixin],
         onDocumentHidden: onDocumentHiddenStub,
         onDocumentVisible: onDocumentVisibleStub,
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -163,7 +163,7 @@ describe("loop.shared.mixins", function() {
     function setupFakeVisibilityEventDispatcher(event) {
       loop.shared.mixins.setRootObject({
         document: {
-          addEventListener: function(_, fn) {
+          addEventListener(_, fn) {
             fn(event);
           },
           removeEventListener: sandbox.stub()
@@ -197,7 +197,7 @@ describe("loop.shared.mixins", function() {
     beforeEach(function() {
       var TestComp = React.createClass({
         mixins: [loop.shared.mixins.MediaSetupMixin],
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -227,7 +227,7 @@ describe("loop.shared.mixins", function() {
       getAudioBlobStub = sinon.stub().returns(
         new Blob([new ArrayBuffer(10)], { type: "audio/ogg" }));
       LoopMochaUtils.stubLoopRequest({
-        GetDoNotDisturb: function() { return true; },
+        GetDoNotDisturb() { return true; },
         GetAudioBlob: getAudioBlobStub,
         GetLoopPref: sandbox.stub()
       });
@@ -241,10 +241,10 @@ describe("loop.shared.mixins", function() {
 
       TestComp = React.createClass({
         mixins: [loop.shared.mixins.AudioMixin],
-        componentDidMount: function() {
+        componentDidMount() {
           this.play("failure");
         },
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });
@@ -263,7 +263,7 @@ describe("loop.shared.mixins", function() {
 
     it("should play a failure sound, once", function() {
       LoopMochaUtils.stubLoopRequest({
-        GetDoNotDisturb: function() { return false; }
+        GetDoNotDisturb() { return false; }
       });
       TestUtils.renderIntoDocument(React.createElement(TestComp));
       sinon.assert.calledOnce(getAudioBlobStub);
@@ -279,11 +279,11 @@ describe("loop.shared.mixins", function() {
     function createTestComponent(initialState) {
       var TestComp = React.createClass({
         mixins: [loop.shared.mixins.RoomsAudioMixin],
-        render: function() {
+        render() {
           return React.DOM.div();
         },
 
-        getInitialState: function() {
+        getInitialState() {
           return { roomState: initialState };
         }
       });

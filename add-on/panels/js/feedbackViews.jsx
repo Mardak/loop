@@ -19,7 +19,7 @@ loop.feedbackViews = (function(_, mozL10n) {
      * Pressing the button to leave feedback will open the form in a new page
      * and close the conversation window.
      */
-    onFeedbackButtonClick: function() {
+    onFeedbackButtonClick() {
       loop.requestMulti(
         ["GetLoopPref", "feedback.formURL"],
         ["GetAddonVersion"]
@@ -31,7 +31,7 @@ loop.feedbackViews = (function(_, mozL10n) {
       }.bind(this));
     },
 
-    render: function() {
+    render() {
       return (
         <div className="feedback-view-container">
           <h2 className="feedback-heading">
@@ -50,6 +50,6 @@ loop.feedbackViews = (function(_, mozL10n) {
   });
 
   return {
-    FeedbackView: FeedbackView
+    FeedbackView
   };
 })(_, navigator.mozL10n || document.mozL10n);

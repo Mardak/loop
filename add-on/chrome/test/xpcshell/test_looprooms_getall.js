@@ -66,8 +66,8 @@ add_task(function* setup_server() {
     res.processAsync();
 
     gQueuedResponses.push({
-      req: req,
-      res: res
+      req,
+      res
     });
   });
 

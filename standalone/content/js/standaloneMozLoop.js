@@ -73,7 +73,7 @@ loop.StandaloneMozLoop = (function() {
      *                             `Error` object or `null`. The second argument will
      *                             be the list of rooms, if it was fetched successfully.
      */
-    get: function(roomToken, callback) {
+    get(roomToken, callback) {
       var url = this.baseServerUrl + "/rooms/" + roomToken;
 
       this._xhrReq = new XMLHttpRequest();
@@ -122,7 +122,7 @@ loop.StandaloneMozLoop = (function() {
      *                            first parameter is non-null on error, the second parameter
      *                            is the response data.
      */
-    _postToRoom: function(roomToken, sessionToken, roomData, expectedProps,
+    _postToRoom(roomToken, sessionToken, roomData, expectedProps,
                           async, callback) {
       var url = this.baseServerUrl + "/rooms/" + roomToken;
       var xhrReq = new XMLHttpRequest();
@@ -166,7 +166,7 @@ loop.StandaloneMozLoop = (function() {
      *                            finished. The first argument passed will be an
      *                            `Error` object or `null`.
      */
-    join: function(roomToken, displayName, callback) {
+    join(roomToken, displayName, callback) {
       function callbackWrapper(err, result) {
         // XXX Save the sessionToken for purposes of get.
         // When bug 1103331 this can probably be removed.
@@ -179,7 +179,7 @@ loop.StandaloneMozLoop = (function() {
 
       this._postToRoom(roomToken, null, {
         action: "join",
-        displayName: displayName,
+        displayName,
         clientMaxSize: ROOM_MAX_CLIENTS
       }, {
         apiKey: String,
@@ -199,10 +199,10 @@ loop.StandaloneMozLoop = (function() {
      *                              finished. The first argument passed will be an
      *                              `Error` object or `null`.
      */
-    refreshMembership: function(roomToken, sessionToken, callback) {
+    refreshMembership(roomToken, sessionToken, callback) {
       this._postToRoom(roomToken, sessionToken, {
         action: "refresh",
-        sessionToken: sessionToken
+        sessionToken
       }, {
         expires: Number
       }, true, callback);
@@ -219,7 +219,7 @@ loop.StandaloneMozLoop = (function() {
      *                              finished. The first argument passed will be an
      *                              `Error` object or `null`.
      */
-    leave: function(roomToken, sessionToken, callback) {
+    leave(roomToken, sessionToken, callback) {
       if (!callback) {
         callback = function(error) {
           if (error) {
@@ -231,7 +231,7 @@ loop.StandaloneMozLoop = (function() {
       // We do this as a synchronous request in case this is closing the window.
       this._postToRoom(roomToken, sessionToken, {
         action: "leave",
-        sessionToken: sessionToken
+        sessionToken
       }, null, false, callback);
     },
 
@@ -243,7 +243,7 @@ loop.StandaloneMozLoop = (function() {
      *                               joined.
      * @param {sharedActions.SdkStatus} status  The connection status.
      */
-    sendConnectionStatus: function(roomToken, sessionToken, status) {
+    sendConnectionStatus(roomToken, sessionToken, status) {
       this._postToRoom(roomToken, sessionToken, {
         action: "status",
         event: status.event,
@@ -260,14 +260,14 @@ loop.StandaloneMozLoop = (function() {
   };
 
   var kMessageHandlers = {
-    AddConversationContext: function() {},
-    HangupNow: function(data, reply) {
+    AddConversationContext() {},
+    HangupNow(data, reply) {
       var roomToken = data[0];
       var sessionToken = data[1];
       StandaloneLoopRooms.leave(roomToken, sessionToken, reply);
     },
 
-    "Rooms:*": function(action, data, reply) {
+    "Rooms:*"(action, data, reply) {
       var funcName = action.split(":").pop();
       funcName = funcName.charAt(0).toLowerCase() + funcName.substr(1);
 
@@ -292,7 +292,7 @@ loop.StandaloneMozLoop = (function() {
      *                         to set.
      * @param {Function} reply Callback function to invoke when done.
      */
-    SetLoopPref: function(data, reply) {
+    SetLoopPref(data, reply) {
       var prefName = data[0];
       var value = data[1];
       localStorage.setItem(prefName, value);
@@ -306,7 +306,7 @@ loop.StandaloneMozLoop = (function() {
      * @param {Function} reply Callback function to invoke when done with the
      *                         value of the pref.
      */
-    GetLoopPref: function(data, reply) {
+    GetLoopPref(data, reply) {
       var prefName = data[0];
       reply(localStorage.getItem(prefName));
     }

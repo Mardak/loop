@@ -18,7 +18,7 @@ var listenerIds = [];
 function promiseWindowId() {
   return new Promise(resolve => {
     LoopAPI.stub([{
-      sendAsyncMessage: function(messageName, data) {
+      sendAsyncMessage(messageName, data) {
         let [name, windowId] = data;
         if (name == "BrowserSwitch") {
           LoopAPI.restore();

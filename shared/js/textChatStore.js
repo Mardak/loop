@@ -39,7 +39,7 @@ loop.store.TextChatStore = (function() {
      *                          - sdkDriver: The sdkDriver to use for sending
      *                                       messages.
      */
-    initialize: function(options) {
+    initialize(options) {
       options = options || {};
 
       if (!options.sdkDriver) {
@@ -52,7 +52,7 @@ loop.store.TextChatStore = (function() {
     /**
      * Returns initial state data for this active room.
      */
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         textChatEnabled: false,
         // The messages currently received. Care should be taken when updating
@@ -70,7 +70,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param {sharedActions.DataChannelsAvailable} actionData
      */
-    dataChannelsAvailable: function(actionData) {
+    dataChannelsAvailable(actionData) {
       this.setStoreState({ textChatEnabled: actionData.available });
 
       if (actionData.available) {
@@ -87,11 +87,11 @@ loop.store.TextChatStore = (function() {
      * - {String}             message     The message detail.
      * - {Object}             extraData   Extra data associated with the message.
      */
-    _appendTextChatMessage: function(type, messageData) {
+    _appendTextChatMessage(type, messageData) {
       // We create a new list to avoid updating the store's state directly,
       // which confuses the views.
       var message = {
-        type: type,
+        type,
         contentType: messageData.contentType,
         message: messageData.message,
         extraData: messageData.extraData,
@@ -135,7 +135,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param {sharedActions.ReceivedTextChatMessage} actionData
      */
-    receivedTextChatMessage: function(actionData) {
+    receivedTextChatMessage(actionData) {
       // If we don't know how to deal with this content, then skip it
       // as this version doesn't support it.
       if (actionData.contentType !== CHAT_CONTENT_TYPES.TEXT &&
@@ -152,7 +152,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param {sharedActions.SendTextChatMessage} actionData
      */
-    sendTextChatMessage: function(actionData) {
+    sendTextChatMessage(actionData) {
       this._appendTextChatMessage(CHAT_MESSAGE_TYPES.SENT, actionData);
       this._sdkDriver.sendTextChatMessage(actionData);
     },
@@ -163,7 +163,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param  {sharedActions.UpdateRoomInfo} actionData
      */
-    updateRoomInfo: function(actionData) {
+    updateRoomInfo(actionData) {
       // XXX When we add special messages to desktop, we'll need to not post
       // multiple changes of room name, only the first. Bug 1171940 should fix this.
       if (actionData.roomName) {
@@ -172,7 +172,7 @@ loop.store.TextChatStore = (function() {
           roomName = actionData.roomContextUrls[0].description ||
                      actionData.roomContextUrls[0].url;
         }
-        this.setStoreState({ roomName: roomName });
+        this.setStoreState({ roomName });
       }
 
       // Append the context if we have any.
@@ -197,7 +197,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param  {sharedActions.updateRoomContext} actionData
      */
-    updateRoomContext: function(actionData) {
+    updateRoomContext(actionData) {
       // Firstly, check if there is a previous context tile, if not, create it
       var contextTile = null;
 
@@ -231,7 +231,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param  {sharedActions.remotePeerDisconnected} actionData
      */
-    remotePeerDisconnected: function(actionData) {
+    remotePeerDisconnected(actionData) {
       var notificationTextKey;
 
       if (actionData.peerHungup) {
@@ -252,7 +252,7 @@ loop.store.TextChatStore = (function() {
       this._appendTextChatMessage(CHAT_MESSAGE_TYPES.RECEIVED, message);
     },
 
-    remotePeerConnected: function() {
+    remotePeerConnected() {
       var notificationTextKey = "peer_join_session";
 
       var message = {
@@ -272,7 +272,7 @@ loop.store.TextChatStore = (function() {
      *
      * @param  {sharedActions.updateRoomContext} data
      */
-    _appendContextTileMessage: function(data) {
+    _appendContextTileMessage(data) {
       var msgData = {
         contentType: CHAT_CONTENT_TYPES.CONTEXT_TILE,
         message: data.newRoomDescription,

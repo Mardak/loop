@@ -119,8 +119,8 @@ function promiseToken(code, state) {
     });
     xhr.addEventListener("error", reject);
     let payload = {
-      code: code,
-      state: state
+      code,
+      state
     };
     xhr.send(JSON.stringify(payload, null, 4));
   });

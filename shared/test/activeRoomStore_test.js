@@ -517,7 +517,7 @@ describe("loop.store.ActiveRoomStore", function() {
         // easier.
         sandbox.stub(loop.crypto, "decryptBytes", function() {
           return {
-            then: function(resolve, reject) {
+            then(resolve, reject) {
               reject(new Error("Operation unsupported"));
             }
           };
@@ -550,7 +550,7 @@ describe("loop.store.ActiveRoomStore", function() {
         // easier.
         sandbox.stub(loop.crypto, "decryptBytes", function() {
           return {
-            then: function(resolve) {
+            then(resolve) {
               resolve(JSON.stringify(roomContext));
             }
           };

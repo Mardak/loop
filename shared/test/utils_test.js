@@ -82,7 +82,7 @@ describe("loop.shared.utils", function() {
     describe("mozLoop set", function() {
       beforeEach(function() {
         LoopMochaUtils.stubLoopRequest({
-          GetLoopPref: function(prefName) {
+          GetLoopPref(prefName) {
             return prefName === "test.true";
           }
         });
@@ -354,7 +354,7 @@ describe("loop.shared.utils", function() {
         }
       });
       LoopMochaUtils.stubLoopRequest(requestStubs = {
-        GetAllConstants: function() {
+        GetAllConstants() {
           return {
             SHARING_ROOM_URL: {
               EMAIL_FROM_CALLFAILED: 2,

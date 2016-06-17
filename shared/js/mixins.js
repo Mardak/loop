@@ -36,11 +36,11 @@ loop.shared.mixins = (function() {
    * @type {Object}
    */
   var UrlHashChangeMixin = {
-    componentDidMount: function() {
+    componentDidMount() {
       rootObject.addEventListener("hashchange", this.onUrlHashChange, false);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       rootObject.removeEventListener("hashchange", this.onUrlHashChange, false);
     }
   };
@@ -51,7 +51,7 @@ loop.shared.mixins = (function() {
    * @type {Object}
    */
   var DocumentLocationMixin = {
-    locationReload: function() {
+    locationReload() {
       rootObject.location.reload();
     }
   };
@@ -62,7 +62,7 @@ loop.shared.mixins = (function() {
    * @type {Object}
    */
   var DocumentTitleMixin = {
-    setTitle: function(newTitle) {
+    setTitle(newTitle) {
       rootObject.document.title = newTitle;
     }
   };
@@ -77,7 +77,7 @@ loop.shared.mixins = (function() {
    * @see setRootObject for info on how to unit test code that uses this mixin
    */
   var WindowCloseMixin = {
-    closeWindow: function() {
+    closeWindow() {
       rootObject.close();
     }
   };
@@ -98,7 +98,7 @@ loop.shared.mixins = (function() {
         return rootObject.document.body;
       },
 
-      getInitialState: function() {
+      getInitialState() {
         return {
           showMenu: false
         };
@@ -108,7 +108,7 @@ loop.shared.mixins = (function() {
        * Event listener callback in charge of closing panels when the users
        * clicks on something that is not a dropdown trigger button or menu item.
        */
-      _onBodyClick: function(event) {
+      _onBodyClick(event) {
         var menuButton = this.refs["menu-button"];
 
         if (this.refs.anchor) {
@@ -133,7 +133,7 @@ loop.shared.mixins = (function() {
         }
       },
 
-      _correctMenuPosition: function() {
+      _correctMenuPosition() {
         var menu = this.refs.menu;
         if (!menu) {
           return;
@@ -240,21 +240,21 @@ loop.shared.mixins = (function() {
         menu.style.visibility = "visible";
       },
 
-      componentDidMount: function() {
+      componentDidMount() {
         this.documentBody.addEventListener("click", this._onBodyClick);
         rootObject.addEventListener("blur", this.hideDropdownMenu);
       },
 
-      componentWillUnmount: function() {
+      componentWillUnmount() {
         this.documentBody.removeEventListener("click", this._onBodyClick);
         rootObject.removeEventListener("blur", this.hideDropdownMenu);
       },
 
-      showDropdownMenu: function() {
+      showDropdownMenu() {
         this.setState({ showMenu: true }, this._correctMenuPosition);
       },
 
-      hideDropdownMenu: function() {
+      hideDropdownMenu() {
         this.setState({ showMenu: false }, function() {
           var menu = this.refs.menu && ReactDOM.findDOMNode(this.refs.menu);
           if (menu) {
@@ -263,7 +263,7 @@ loop.shared.mixins = (function() {
         });
       },
 
-      toggleDropdownMenu: function() {
+      toggleDropdownMenu() {
         this[this.state.showMenu ? "hideDropdownMenu" : "showDropdownMenu"]();
       }
     };
@@ -279,7 +279,7 @@ loop.shared.mixins = (function() {
    * @type {Object}
    */
   var DocumentVisibilityMixin = {
-    _onDocumentVisibilityChanged: function(event) {
+    _onDocumentVisibilityChanged(event) {
       if (!this.isMounted()) {
         return;
       }
@@ -293,7 +293,7 @@ loop.shared.mixins = (function() {
       }
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       rootObject.document.addEventListener(
         "visibilitychange", this._onDocumentVisibilityChanged);
       // Assume that the consumer components is only mounted when the document
@@ -301,7 +301,7 @@ loop.shared.mixins = (function() {
       this._onDocumentVisibilityChanged({ target: rootObject.document });
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       rootObject.document.removeEventListener(
         "visibilitychange", this._onDocumentVisibilityChanged);
     }
@@ -318,7 +318,7 @@ loop.shared.mixins = (function() {
      * @param {Object} options An options object containing:
      * - publishVideo A boolean set to true to publish video when the stream is initiated.
      */
-    getDefaultPublisherConfig: function(options) {
+    getDefaultPublisherConfig(options) {
       options = options || {};
       if (!("publishVideo" in options)) {
         throw new Error("missing option publishVideo");
@@ -345,7 +345,7 @@ loop.shared.mixins = (function() {
     audio: null,
     _audioRequest: null,
 
-    _isLoopDesktop: function() {
+    _isLoopDesktop() {
       var isUIShowcase = !!(rootObject.document.querySelector &&
         rootObject.document.querySelector("#main > .showcase"));
       return loop.shared.utils.isDesktop() || isUIShowcase;
@@ -358,7 +358,7 @@ loop.shared.mixins = (function() {
      *
      * @return {Promise}
      */
-    _canPlay: function() {
+    _canPlay() {
       return new Promise(function(resolve) {
         if (!this._isLoopDesktop()) {
           resolve(true);
@@ -378,7 +378,7 @@ loop.shared.mixins = (function() {
      * @param {Object} options A list of options for the sound:
      *                         - {Boolean} loop Whether or not to loop the sound.
      */
-    play: function(name, options) {
+    play(name, options) {
       this._canPlay().then(function(canPlay) {
         if (!canPlay) {
           return;
@@ -405,7 +405,7 @@ loop.shared.mixins = (function() {
       }.bind(this));
     },
 
-    _getAudioBlob: function(name, callback) {
+    _getAudioBlob(name, callback) {
       this._canPlay().then(function(canPlay) {
         if (!canPlay) {
           callback();
@@ -437,7 +437,7 @@ loop.shared.mixins = (function() {
           }
 
           var type = request.getResponseHeader("Content-Type");
-          var blob = new Blob([request.response], { type: type });
+          var blob = new Blob([request.response], { type });
           callback(null, blob);
         }.bind(this);
 
@@ -448,7 +448,7 @@ loop.shared.mixins = (function() {
     /**
      * Ensures audio is stopped playing, and removes the object from memory.
      */
-    _ensureAudioStopped: function() {
+    _ensureAudioStopped() {
       if (this._audioRequest) {
         this._audioRequest.abort();
         delete this._audioRequest;
@@ -464,7 +464,7 @@ loop.shared.mixins = (function() {
     /**
      * Ensures audio is stopped when the component is unmounted.
      */
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this._ensureAudioStopped();
     }
   };
@@ -476,7 +476,7 @@ loop.shared.mixins = (function() {
   var RoomsAudioMixin = {
     mixins: [AudioMixin],
 
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       var ROOM_STATES = loop.store.ROOM_STATES;
 
       function isConnectedToRoom(state) {
@@ -527,15 +527,15 @@ loop.shared.mixins = (function() {
   };
 
   return {
-    AudioMixin: AudioMixin,
-    RoomsAudioMixin: RoomsAudioMixin,
-    setRootObject: setRootObject,
-    DropdownMenuMixin: DropdownMenuMixin,
-    DocumentVisibilityMixin: DocumentVisibilityMixin,
-    DocumentLocationMixin: DocumentLocationMixin,
-    DocumentTitleMixin: DocumentTitleMixin,
-    MediaSetupMixin: MediaSetupMixin,
-    UrlHashChangeMixin: UrlHashChangeMixin,
-    WindowCloseMixin: WindowCloseMixin
+    AudioMixin,
+    RoomsAudioMixin,
+    setRootObject,
+    DropdownMenuMixin,
+    DocumentVisibilityMixin,
+    DocumentLocationMixin,
+    DocumentTitleMixin,
+    MediaSetupMixin,
+    UrlHashChangeMixin,
+    WindowCloseMixin
   };
 })();

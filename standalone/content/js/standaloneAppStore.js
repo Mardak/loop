@@ -24,7 +24,7 @@ loop.store.StandaloneAppStore = (function() {
    *                         dispatcher.
    */
   var StandaloneAppStore = loop.store.createStore({
-    initialize: function(options) {
+    initialize(options) {
       if (!options.sdk) {
         throw new Error("Missing option sdk");
       }
@@ -36,7 +36,7 @@ loop.store.StandaloneAppStore = (function() {
       ]);
     },
 
-    _extractWindowDataFromPath: function(windowPath) {
+    _extractWindowDataFromPath(windowPath) {
       var match;
       var windowType = "home";
 
@@ -68,7 +68,7 @@ loop.store.StandaloneAppStore = (function() {
     /**
      * Extracts the crypto key from the hash for the page.
      */
-    _extractCryptoKey: function(windowHash) {
+    _extractCryptoKey(windowHash) {
       if (windowHash && windowHash[0] === "#") {
         return windowHash.substring(1, windowHash.length);
       }
@@ -83,7 +83,7 @@ loop.store.StandaloneAppStore = (function() {
      *
      * @param {sharedActions.GetWindowData} actionData The action data
      */
-    extractTokenInfo: function(actionData) {
+    extractTokenInfo(actionData) {
       var windowType = "home";
       var token;
 
@@ -104,9 +104,9 @@ loop.store.StandaloneAppStore = (function() {
       // Else type is home.
 
       this.setStoreState({
-        windowType: windowType,
+        windowType,
         isFirefox: sharedUtils.isFirefox(navigator.userAgent),
-        unsupportedPlatform: unsupportedPlatform
+        unsupportedPlatform
       });
 
       // If we've not got a window ID, don't dispatch the action, as we don't
@@ -114,8 +114,8 @@ loop.store.StandaloneAppStore = (function() {
       if (token) {
         this.dispatcher.dispatch(new loop.shared.actions.FetchServerData({
           cryptoKey: this._extractCryptoKey(actionData.windowHash),
-          token: token,
-          windowType: windowType
+          token,
+          windowType
         }));
       }
     }

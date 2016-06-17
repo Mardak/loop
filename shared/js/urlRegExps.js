@@ -66,7 +66,7 @@ loop.shared.urlRegExps = (function() {
     "(?:[/?#]\\S*)?)", "i");
 
   return {
-    fullUrlMatch: fullUrlMatch
+    fullUrlMatch
   };
 
 })();

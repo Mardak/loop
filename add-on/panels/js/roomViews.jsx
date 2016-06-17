@@ -24,7 +24,7 @@ loop.roomViews = (function(mozL10n) {
       roomStore: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       this.listenTo(this.props.roomStore, "change:activeRoom",
                     this._onActiveRoomStateChanged);
       this.listenTo(this.props.roomStore, "change:error",
@@ -33,11 +33,11 @@ loop.roomViews = (function(mozL10n) {
                     this._onRoomSavingContext);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.stopListening(this.props.roomStore);
     },
 
-    _onActiveRoomStateChanged: function() {
+    _onActiveRoomStateChanged() {
       // Only update the state if we're mounted, to avoid the problem where
       // stopListening doesn't nuke the active listeners during a event
       // processing.
@@ -46,7 +46,7 @@ loop.roomViews = (function(mozL10n) {
       }
     },
 
-    _onRoomError: function() {
+    _onRoomError() {
       // Only update the state if we're mounted, to avoid the problem where
       // stopListening doesn't nuke the active listeners during a event
       // processing.
@@ -55,7 +55,7 @@ loop.roomViews = (function(mozL10n) {
       }
     },
 
-    _onRoomSavingContext: function() {
+    _onRoomSavingContext() {
       // Only update the state if we're mounted, to avoid the problem where
       // stopListening doesn't nuke the active listeners during a event
       // processing.
@@ -64,7 +64,7 @@ loop.roomViews = (function(mozL10n) {
       }
     },
 
-    getInitialState: function() {
+    getInitialState() {
       var storeState = this.props.roomStore.getStoreState("activeRoom");
       return _.extend({
         // Used by the UI showcase.
@@ -87,7 +87,7 @@ loop.roomViews = (function(mozL10n) {
      *
      * @return {String} The translated message for the failure reason.
      */
-    _getMessage: function() {
+    _getMessage() {
       switch (this.props.failureReason) {
         case FAILURE_DETAILS.NO_MEDIA:
         case FAILURE_DETAILS.UNABLE_TO_PUBLISH_MEDIA:
@@ -102,7 +102,7 @@ loop.roomViews = (function(mozL10n) {
       }
     },
 
-    render: function() {
+    render() {
       return (
         <div className="failure-info">
           <div className="failure-info-logo" />
@@ -123,15 +123,15 @@ loop.roomViews = (function(mozL10n) {
       failureReason: React.PropTypes.string
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       this.play("failure");
     },
 
-    handleRejoinCall: function() {
+    handleRejoinCall() {
       this.props.dispatcher.dispatch(new sharedActions.JoinRoom());
     },
 
-    render: function() {
+    render() {
       var btnTitle;
       if (this.props.failureReason === FAILURE_DETAILS.ICE_FAILED) {
         btnTitle = mozL10n.get("retry_call_button");
@@ -177,7 +177,7 @@ loop.roomViews = (function(mozL10n) {
       roomStore: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       // The SDK needs to know about the configuration and the elements to use
       // for display. So the best way seems to pass the information here - ideally
       // the sdk wouldn't need to know this, but we can't change that.
@@ -203,7 +203,7 @@ loop.roomViews = (function(mozL10n) {
     /**
      * User clicked on the "Leave" button.
      */
-    leaveRoom: function() {
+    leaveRoom() {
       if (this.state.used) {
         // The room has been used, so we might want to display the feedback view.
         // Therefore we leave the room to ensure that we have stopped sharing etc,
@@ -222,7 +222,7 @@ loop.roomViews = (function(mozL10n) {
      *
      * @return {Boolean} True if there's no guests.
      */
-    _shouldRenderInvitationOverlay: function() {
+    _shouldRenderInvitationOverlay() {
       var hasGuests = typeof this.state.participants === "object" &&
         this.state.participants.filter(function(participant) {
           return !participant.owner;
@@ -242,7 +242,7 @@ loop.roomViews = (function(mozL10n) {
      * XXX Refactor shouldRenderRemoteVideo & shouldRenderLoading into one fn
      *     that returns an enum
      */
-    shouldRenderRemoteVideo: function() {
+    shouldRenderRemoteVideo() {
       switch (this.state.roomState) {
         case ROOM_STATES.HAS_PARTICIPANTS:
           if (this.state.remoteVideoEnabled) {
@@ -285,7 +285,7 @@ loop.roomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _isLocalLoading: function() {
+    _isLocalLoading() {
       return this.state.roomState === ROOM_STATES.MEDIA_WAIT &&
              !this.state.localSrcMediaElement;
     },
@@ -297,17 +297,17 @@ loop.roomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _isRemoteLoading: function() {
+    _isRemoteLoading() {
       return !!(this.state.roomState === ROOM_STATES.HAS_PARTICIPANTS &&
                 !this.state.remoteSrcMediaElement &&
                 !this.state.mediaConnected);
     },
 
-    handleContextMenu: function(e) {
+    handleContextMenu(e) {
       e.preventDefault();
     },
 
-    render: function() {
+    render() {
       if (this.state.roomName || this.state.roomContextUrls) {
         var roomTitle = this.state.roomName ||
                         this.state.roomContextUrls[0].description ||
@@ -382,10 +382,10 @@ loop.roomViews = (function(mozL10n) {
   });
 
   return {
-    ActiveRoomStoreMixin: ActiveRoomStoreMixin,
-    FailureInfoView: FailureInfoView,
-    RoomFailureView: RoomFailureView,
-    DesktopRoomConversationView: DesktopRoomConversationView
+    ActiveRoomStoreMixin,
+    FailureInfoView,
+    RoomFailureView,
+    DesktopRoomConversationView
   };
 
 })(document.mozL10n || navigator.mozL10n);

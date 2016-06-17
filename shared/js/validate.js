@@ -60,7 +60,7 @@ loop.validate = (function() {
      * @return {Object}         The validated values object
      * @throws {TypeError}      If validation fails
      */
-    validate: function(values) {
+    validate(values) {
       this._checkRequiredProperties(values);
       this._checkRequiredTypes(values);
       return values;
@@ -73,7 +73,7 @@ loop.validate = (function() {
      * @param  {Object} values The values object
      * @throws {TypeError}
      */
-    _checkRequiredTypes: function(values) {
+    _checkRequiredTypes(values) {
       Object.keys(this.schema).forEach(function(name) {
         var types = this.schema[name];
         types = Array.isArray(types) ? types : [types];
@@ -92,7 +92,7 @@ loop.validate = (function() {
      * @param  {Object} values The values object
      * @throws {TypeError} If any dependency is missing.
      */
-    _checkRequiredProperties: function(values) {
+    _checkRequiredProperties(values) {
       var definedProperties = Object.keys(values).filter(function(name) {
         return typeof values[name] !== "undefined";
       });
@@ -110,7 +110,7 @@ loop.validate = (function() {
      * @return {Boolean}
      * @throws {TypeError} If the value doesn't match any types.
      */
-    _dependencyMatchTypes: function(value, types) {
+    _dependencyMatchTypes(value, types) {
       return types.some(function(Type) {
         try {
           return typeof Type === "undefined" || // skip checking
@@ -126,6 +126,6 @@ loop.validate = (function() {
   };
 
   return {
-    Validator: Validator
+    Validator
   };
 })();

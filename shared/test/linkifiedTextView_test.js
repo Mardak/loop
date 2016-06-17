@@ -109,7 +109,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
         it("should be called when a generated link is clicked", function() {
           var fakeUrl = "http://example.com";
           var linkClickHandler = sinon.stub();
-          var comp = mountTestComponent(fakeUrl, { linkClickHandler: linkClickHandler });
+          var comp = mountTestComponent(fakeUrl, { linkClickHandler });
 
           TestUtils.Simulate.click(ReactDOM.findDOMNode(comp).querySelector("a"));
 
@@ -121,7 +121,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
             var linkClickHandler = function() {};
 
             var markup = renderToMarkup("http://example.com", {
-              linkClickHandler: linkClickHandler,
+              linkClickHandler,
               sendReferrer: false,
               suppressTarget: false
             });
@@ -145,7 +145,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
           it("should call preventDefault on the given event", function() {
             function linkClickHandler() {}
             var comp = mountTestComponent(
-              fakeUrl, { linkClickHandler: linkClickHandler });
+              fakeUrl, { linkClickHandler });
 
             comp._handleClickEvent(fakeEvent);
 
@@ -156,7 +156,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
           it("should call stopPropagation on the given event", function() {
             function linkClickHandler() {}
             var comp = mountTestComponent(
-              fakeUrl, { linkClickHandler: linkClickHandler });
+              fakeUrl, { linkClickHandler });
 
             comp._handleClickEvent(fakeEvent);
 
@@ -167,7 +167,7 @@ describe("loop.shared.views.LinkifiedTextView", function() {
           it("should call this.props.linkClickHandler with event.currentTarget.href", function() {
             var linkClickHandler = sinon.stub();
             var comp = mountTestComponent(
-              fakeUrl, { linkClickHandler: linkClickHandler });
+              fakeUrl, { linkClickHandler });
 
             comp._handleClickEvent(fakeEvent);
 

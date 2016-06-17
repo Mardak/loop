@@ -60,7 +60,7 @@ LoopRoomsCache.prototype = {
    * @param  {Object} contents An object to be saved in json format.
    * @return {Promise} A promise that is resolved once the save is complete.
    */
-  _setCache: function(contents) {
+  _setCache(contents) {
     this._cache = contents;
 
     return OS.File.makeDir(this.baseDir, { ignoreExisting: true }).then(() =>
@@ -93,7 +93,7 @@ LoopRoomsCache.prototype = {
    *
    * @return {Promise} A promise that is resolved once the clear is complete.
    */
-  clear: function() {
+  clear() {
     this._cache = null;
     return OS.File.remove(this.path);
   },

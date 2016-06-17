@@ -40,7 +40,7 @@ describe("loop.store", function() {
 
         it("should call initialize() when constructed, if defined", function() {
           var initialize = sandbox.spy();
-          var TestStore = loop.store.createStore({ initialize: initialize });
+          var TestStore = loop.store.createStore({ initialize });
           var options = { fake: true };
 
           new TestStore(dispatcher, options);
@@ -53,8 +53,8 @@ describe("loop.store", function() {
           sandbox.stub(dispatcher, "register");
           var TestStore = loop.store.createStore({
             actions: ["a", "b"],
-            a: function() {},
-            b: function() {}
+            a() {},
+            b() {}
           });
 
           var store = new TestStore(dispatcher);
@@ -66,7 +66,7 @@ describe("loop.store", function() {
         it("should throw if a registered action isn't implemented", function() {
           var TestStore = loop.store.createStore({
             actions: ["a", "b"],
-            a: function() {} // missing b
+            a() {} // missing b
           });
 
           expect(function() {
@@ -78,7 +78,7 @@ describe("loop.store", function() {
       describe("#getInitialStoreState", function() {
         it("should set initial store state if provided", function() {
           var TestStore = loop.store.createStore({
-            getInitialStoreState: function() {
+            getInitialStoreState() {
               return { foo: "bar" };
             }
           });
@@ -164,11 +164,11 @@ describe("loop.store", function() {
 
       store = new storeClass(dispatcher);
 
-      loop.store.StoreMixin.register({ store: store });
+      loop.store.StoreMixin.register({ store });
 
       testComp = React.createClass({
         mixins: [loop.store.StoreMixin("store")],
-        render: function() {
+        render() {
           return React.DOM.div();
         }
       });

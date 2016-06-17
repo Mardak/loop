@@ -75,7 +75,7 @@ const PREF_LOG_LEVEL = "loop.debug.loglevel";
 const kChatboxHangupButton = {
   id: "loop-hangup",
   visibleWhenUndocked: false,
-  onCommand: function(e, chatbox) {
+  onCommand(e, chatbox) {
     let mm = chatbox.content.messageManager;
     mm.sendAsyncMessage("Social:CustomEvent", { name: "LoopHangupNow" });
   }
@@ -277,7 +277,7 @@ var MozLoopServiceInternal = {
     this.notifyStatusChanged();
   },
 
-  notifyStatusChanged: function(aReason = null) {
+  notifyStatusChanged(aReason = null) {
     log.debug("notifyStatusChanged with reason:", aReason);
     let profile = MozLoopService.userProfile;
     LoopRooms.maybeRefresh(profile && profile.uid);
@@ -294,7 +294,7 @@ var MozLoopServiceInternal = {
    * @param {Function} [actionCallback] an object describing the label and callback function for error
    *                                    bar's button e.g. to retry.
    */
-  setError: function(errorType, error, actionCallback = null) {
+  setError(errorType, error, actionCallback = null) {
     log.debug("setError", errorType, error);
     log.trace();
     let messageString, detailsString, detailsButtonLabelString, detailsButtonCallback;
@@ -359,7 +359,7 @@ var MozLoopServiceInternal = {
     this.notifyStatusChanged();
   },
 
-  clearError: function(errorType) {
+  clearError(errorType) {
     if (gErrors.has(errorType)) {
       gErrors.delete(errorType);
       this.notifyStatusChanged();
@@ -385,7 +385,7 @@ var MozLoopServiceInternal = {
    * @returns {Promise} A promise that is resolved with no params on completion, or
    *                    rejected with an error code or string.
    */
-  createNotificationChannel: function(channelID, sessionType, serviceType, onNotification) {
+  createNotificationChannel(channelID, sessionType, serviceType, onNotification) {
     log.debug("createNotificationChannel", channelID, sessionType, serviceType);
     // Wrap the push notification registration callback in a Promise.
     return new Promise((resolve, reject) => {
@@ -412,7 +412,7 @@ var MozLoopServiceInternal = {
    * @returns {Promise} a promise that is resolved with no params on completion, or
    *          rejected with an error code or string.
    */
-  promiseRegisteredWithServers: function(sessionType = LOOP_SESSION_TYPE.GUEST) {
+  promiseRegisteredWithServers(sessionType = LOOP_SESSION_TYPE.GUEST) {
     if (sessionType !== LOOP_SESSION_TYPE.GUEST && sessionType !== LOOP_SESSION_TYPE.FXA) {
       return Promise.reject(new Error("promiseRegisteredWithServers: Invalid sessionType"));
     }
@@ -460,7 +460,7 @@ var MozLoopServiceInternal = {
    * @param {Boolean} [retry=true] Whether to retry if authentication fails.
    * @return {Promise} resolves to pushURL or rejects with an Error
    */
-  registerWithLoopServer: function(sessionType, serviceType, pushURL, retry = true) {
+  registerWithLoopServer(sessionType, serviceType, pushURL, retry = true) {
     log.debug("registerWithLoopServer with sessionType:", sessionType, serviceType, retry);
     if (!pushURL || !sessionType || !serviceType) {
       return Promise.reject(new Error("Invalid or missing parameters for registerWithLoopServer"));
@@ -525,7 +525,7 @@ var MozLoopServiceInternal = {
    * @param {LOOP_SESSION_TYPE} sessionType The type of session e.g. guest or FxA
    * @return {Promise} resolving when the unregistration request finishes
    */
-  unregisterFromLoopServer: function(sessionType) {
+  unregisterFromLoopServer(sessionType) {
     let prefType = Services.prefs.getPrefType(this.getSessionTokenPrefName(sessionType));
     if (prefType == Services.prefs.PREF_INVALID) {
       log.debug("already unregistered from LoopServer", sessionType);
@@ -576,7 +576,7 @@ var MozLoopServiceInternal = {
    *        as JSON and contains an 'error' property, the promise will be
    *        rejected with this JSON-parsed response.
    */
-  hawkRequestInternal: function(sessionType, path, method, payloadObj, retryOn401 = true) {
+  hawkRequestInternal(sessionType, path, method, payloadObj, retryOn401 = true) {
     log.debug("hawkRequestInternal: ", sessionType, path, method);
     if (!gHawkClient) {
       gHawkClient = new HawkClient(this.loopServerUri);
@@ -664,7 +664,7 @@ var MozLoopServiceInternal = {
    *        as JSON and contains an 'error' property, the promise will be
    *        rejected with this JSON-parsed response.
    */
-  hawkRequest: function(sessionType, path, method, payloadObj) {
+  hawkRequest(sessionType, path, method, payloadObj) {
     log.debug("hawkRequest: " + path, sessionType);
     return new Promise((resolve, reject) => {
       MozLoopService.promiseRegisteredWithServers(sessionType).then(() => {
@@ -682,12 +682,12 @@ var MozLoopServiceInternal = {
    *
    */
 
-  _hawkRequestError: function(error) {
+  _hawkRequestError(error) {
     log.error("Loop hawkRequest error:", error);
     throw error;
   },
 
-  getSessionTokenPrefName: function(sessionType) {
+  getSessionTokenPrefName(sessionType) {
     let suffix;
     switch (sessionType) {
       case LOOP_SESSION_TYPE.GUEST:
@@ -711,7 +711,7 @@ var MozLoopServiceInternal = {
    *                         "hawk-session-token" to be saved.
    * @return true on success or no token, false on failure.
    */
-  storeSessionToken: function(sessionType, headers) {
+  storeSessionToken(sessionType, headers) {
     let sessionToken = headers["hawk-session-token"];
     if (sessionToken) {
       // XXX should do more validation here
@@ -736,7 +736,7 @@ var MozLoopServiceInternal = {
    * @param {LOOP_SESSION_TYPE} sessionType The type of session to use for the request.
    *                                        One of the LOOP_SESSION_TYPE members.
    */
-  clearSessionToken: function(sessionType) {
+  clearSessionToken(sessionType) {
     Services.prefs.clearUserPref(this.getSessionTokenPrefName(sessionType));
     log.debug("Cleared hawk session token for sessionType", sessionType);
   },
@@ -781,7 +781,7 @@ var MozLoopServiceInternal = {
    * @param {nsIDOMWindow} window The window object which can be communicated with
    * @param {Object}        The peerConnection in question.
    */
-  stageForTelemetryUpload: function(window, details) {
+  stageForTelemetryUpload(window, details) {
     let mm = window.messageManager;
     mm.addMessageListener("Loop:GetAllWebrtcStats", function getAllStats(message) {
       mm.removeMessageListener("Loop:GetAllWebrtcStats", getAllStats);
@@ -808,7 +808,7 @@ var MozLoopServiceInternal = {
         let directory = OS.Path.join(OS.Constants.Path.profileDir,
                                      "saved-telemetry-pings");
         let job = {
-          directory: directory,
+          directory,
           filename: uuid + ".json",
           ping: {
             reason: "loop",
@@ -856,11 +856,11 @@ var MozLoopServiceInternal = {
    *
    * @param  {Object} conversationWindowData The conversation window data.
    */
-  getChatWindowID: function(conversationWindowData) {
+  getChatWindowID(conversationWindowData) {
     return conversationWindowData.roomToken;
   },
 
-  getChatURL: function(chatWindowId) {
+  getChatURL(chatWindowId) {
     return "about:loopconversation#" + chatWindowId;
   },
 
@@ -898,7 +898,7 @@ var MozLoopServiceInternal = {
    * @param  {String}  chatWindowId The window id.
    * @return {Boolean}              True if the window is opened.
    */
-  isChatWindowOpen: function(chatWindowId) {
+  isChatWindowOpen(chatWindowId) {
     if (this.mocks.isChatWindowOpen !== undefined) {
       return this.mocks.isChatWindowOpen;
     }
@@ -918,7 +918,7 @@ var MozLoopServiceInternal = {
    * @returns {Promise} That is resolved with the id of the window, null if a
    *                    window could not be opened.
    */
-  openChatWindow: function(conversationWindowData, windowCloseCallback) {
+  openChatWindow(conversationWindowData, windowCloseCallback) {
     return new Promise(resolve => {
       // So I guess the origin is the loop server!?
       let origin = this.loopServerUri;
@@ -1095,9 +1095,9 @@ var MozLoopServiceInternal = {
 
       LoopAPI.initialize();
       let chatboxInstance = Chat.open(null, {
-        origin: origin,
+        origin,
         title: "",
-        url: url,
+        url,
         remote: MozLoopService.getLoopPref("remote.autostart")
       }, callback);
       if (!chatboxInstance) {
@@ -1127,7 +1127,7 @@ var MozLoopServiceInternal = {
    *
    * @return {Promise} resolved with the body of the hawk request for OAuth parameters.
    */
-  promiseFxAOAuthParameters: function() {
+  promiseFxAOAuthParameters() {
     const SESSION_TYPE = LOOP_SESSION_TYPE.FXA;
     return this.hawkRequestInternal(SESSION_TYPE, "/fxa-oauth/params", "POST").then(response => {
       if (!this.storeSessionToken(SESSION_TYPE, response.headers)) {
@@ -1167,7 +1167,7 @@ var MozLoopServiceInternal = {
 
         try {
           gFxAOAuthClient = new FxAccountsOAuthClient({
-            parameters: parameters
+            parameters
           });
         } catch (ex) {
           gFxAOAuthClientPromise = null;
@@ -1190,7 +1190,7 @@ var MozLoopServiceInternal = {
    * @param {Boolean} forceReAuth Set to true to force the user to reauthenticate.
    * @return {Promise}
    */
-  promiseFxAOAuthAuthorization: function(forceReAuth) {
+  promiseFxAOAuthAuthorization(forceReAuth) {
     let deferred = Promise.defer();
     this.promiseFxAOAuthClient(forceReAuth).then(
       client => {
@@ -1217,14 +1217,14 @@ var MozLoopServiceInternal = {
    *
    * @return {Promise} resolving with OAuth token data.
    */
-  promiseFxAOAuthToken: function(code, state) {
+  promiseFxAOAuthToken(code, state) {
     if (!code || !state) {
       throw new Error("promiseFxAOAuthToken: code and state are required.");
     }
 
     let payload = {
-      code: code,
-      state: state
+      code,
+      state
     };
     return this.hawkRequestInternal(LOOP_SESSION_TYPE.FXA, "/fxa-oauth/token", "POST", payload).then(
       response => JSON.parse(response.body), error => this._hawkRequestError(error));
@@ -1236,7 +1236,7 @@ var MozLoopServiceInternal = {
    * @param {Deferred} deferred used to resolve the gFxAOAuthClientPromise
    * @param {Object} result (with code and state)
    */
-  _fxAOAuthComplete: function(deferred, result, keys) {
+  _fxAOAuthComplete(deferred, result, keys) {
     if (keys.kBr) {
       // Trim Base64 padding from relier keys.
       Services.prefs.setCharPref("loop.key.fxa", keys.kBr.k.replace(/=/g, "")); // eslint-disable-line no-div-regex
@@ -1252,7 +1252,7 @@ var MozLoopServiceInternal = {
    * @param {Deferred} deferred used to reject the gFxAOAuthClientPromise
    * @param {Object} error object returned by FxAOAuthClient
    */
-  _fxAOAuthError: function(deferred, err) {
+  _fxAOAuthError(deferred, err) {
     gFxAOAuthClientPromise = null;
     deferred.reject(err);
   }
@@ -1297,7 +1297,7 @@ this.MozLoopService = {
    * Used to reset if the service has been initialized or not - for test
    * purposes.
    */
-  resetServiceInitialized: function() {
+  resetServiceInitialized() {
     gServiceInitialized = false;
   },
 
@@ -1397,7 +1397,7 @@ this.MozLoopService = {
    * Maybe resume the tour (re-opening the tab, if necessary) if someone else joins
    * a room of ours and it's currently open.
    */
-  maybeResumeTourOnRoomJoined: function(e, room, participant) {
+  maybeResumeTourOnRoomJoined(e, room, participant) {
     let isOwnerInRoom = false;
     let isOtherInRoom = false;
 
@@ -1508,7 +1508,7 @@ this.MozLoopService = {
    * @param {Function} windowCloseCallback Callback for when the window closes.
    * @returns {Number} The id of the window.
    */
-  openChatWindow: function(conversationWindowData, windowCloseCallback) {
+  openChatWindow(conversationWindowData, windowCloseCallback) {
     return MozLoopServiceInternal.openChatWindow(conversationWindowData,
       windowCloseCallback);
   },
@@ -1519,14 +1519,14 @@ this.MozLoopService = {
    * @param  {String}  chatWindowId The window id.
    * @return {Boolean}              True if the window is opened.
    */
-  isChatWindowOpen: function(chatWindowId) {
+  isChatWindowOpen(chatWindowId) {
     return MozLoopServiceInternal.isChatWindowOpen(chatWindowId);
   },
 
   /**
    * @see MozLoopServiceInternal.promiseRegisteredWithServers
    */
-  promiseRegisteredWithServers: function(sessionType = LOOP_SESSION_TYPE.GUEST) {
+  promiseRegisteredWithServers(sessionType = LOOP_SESSION_TYPE.GUEST) {
     return MozLoopServiceInternal.promiseRegisteredWithServers(sessionType);
   },
 
@@ -1538,7 +1538,7 @@ this.MozLoopService = {
    * @return {String} A JSON string containing the localized attribute/value pairs
    *                  for the element.
    */
-  getStrings: function(key) {
+  getStrings(key) {
     var stringData = MozLoopServiceInternal.localizedStrings;
     if (!key) {
       return stringData;
@@ -1566,7 +1566,7 @@ this.MozLoopService = {
    *
    * Returns a new GUID (UUID) in curly braces format.
    */
-  generateUUID: function() {
+  generateUUID() {
     return uuidgen.generateUUID().toString();
   },
 
@@ -1605,7 +1605,7 @@ this.MozLoopService = {
   /**
    * Gets the encryption key for this profile.
    */
-  promiseProfileEncryptionKey: function() {
+  promiseProfileEncryptionKey() {
     return new Promise((resolve, reject) => {
       if (this.userProfile) {
         // We're an FxA user.
@@ -1695,7 +1695,7 @@ this.MozLoopService = {
    *
    * Any errors thrown by the Mozilla pref API are logged to the console.
    */
-  setLoopPref: function(prefSuffix, value, prefType) {
+  setLoopPref(prefSuffix, value, prefType) {
     let prefName = "loop." + prefSuffix;
     try {
       if (!prefType) {
@@ -1734,7 +1734,7 @@ this.MozLoopService = {
    *
    * @return {*} on success, null on error
    */
-  getLoopPref: function(prefSuffix, prefType) {
+  getLoopPref(prefSuffix, prefType) {
     let prefName = "loop." + prefSuffix;
     try {
       if (!prefType) {
@@ -1769,7 +1769,7 @@ this.MozLoopService = {
    * @param {Boolean} forceReAuth Set to true to force the user to reauthenticate.
    * @return {Promise} that resolves when the FxA login flow is complete.
    */
-  logInToFxA: function(forceReAuth) {
+  logInToFxA(forceReAuth) {
     log.debug("logInToFxA with fxAOAuthTokenData:", !!MozLoopServiceInternal.fxAOAuthTokenData);
     if (!forceReAuth && MozLoopServiceInternal.fxAOAuthTokenData) {
       return Promise.resolve(MozLoopServiceInternal.fxAOAuthTokenData);
@@ -1843,7 +1843,7 @@ this.MozLoopService = {
    *                   rejecting if the profile information couldn't be retrieved.
    *                   A profile error is registered.
    **/
-  fetchFxAProfile: function() {
+  fetchFxAProfile() {
     log.debug("fetchFxAProfile");
     let client = new FxAccountsProfileClient({
       serverURL: gFxAOAuthClient.parameters.profile_uri,
@@ -1888,7 +1888,7 @@ this.MozLoopService = {
    * @param {String} aSrc A string representing the entry point to begin the tour, optional.
    * @param {Object} aAdditionalParams An object with keys used as query parameter names
    */
-  getTourURL: function(aSrc = null, aAdditionalParams = {}) {
+  getTourURL(aSrc = null, aAdditionalParams = {}) {
     let urlStr = this.getLoopPref("gettingStarted.url");
     let url = new URL(Services.urlFormatter.formatURL(urlStr));
     Object.keys(aAdditionalParams).forEach(paramName => {
@@ -1918,7 +1918,7 @@ this.MozLoopService = {
     return url;
   },
 
-  resumeTour: function(aIncomingConversationState) {
+  resumeTour(aIncomingConversationState) {
     if (!this.getLoopPref("gettingStarted.resumeOnFirstJoin")) {
       return;
     }
@@ -2016,7 +2016,7 @@ this.MozLoopService = {
    *
    * @param {String} url The new url to open
    */
-  openURL: function(url) {
+  openURL(url) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     win.openUILinkIn(Services.urlFormatter.formatURL(url), "tab");
   },
@@ -2036,7 +2036,7 @@ this.MozLoopService = {
    *        as JSON and contains an 'error' property, the promise will be
    *        rejected with this JSON-parsed response.
    */
-  hawkRequest: function(sessionType, path, method, payloadObj) {
+  hawkRequest(sessionType, path, method, payloadObj) {
     return MozLoopServiceInternal.hawkRequest(sessionType, path, method, payloadObj).catch(
       error => MozLoopServiceInternal._hawkRequestError(error));
   },
@@ -2050,7 +2050,7 @@ this.MozLoopService = {
    * @param {String} conversationWindowId
    * @returns {Object} The window data or null if error.
    */
-  getConversationWindowData: function(conversationWindowId) {
+  getConversationWindowData(conversationWindowId) {
     if (gConversationWindowData.has(conversationWindowId)) {
       var conversationData = gConversationWindowData.get(conversationWindowId);
       gConversationWindowData.delete(conversationWindowId);
@@ -2061,11 +2061,11 @@ this.MozLoopService = {
     return null;
   },
 
-  getConversationContext: function(winId) {
+  getConversationContext(winId) {
     return MozLoopServiceInternal.conversationContexts.get(winId);
   },
 
-  addConversationContext: function(windowId, context) {
+  addConversationContext(windowId, context) {
     MozLoopServiceInternal.conversationContexts.set(windowId, context);
   },
 
@@ -2077,7 +2077,7 @@ this.MozLoopService = {
    *                          is being changed for.
    * @param {Boolean} active  Whether or not screen sharing is now active.
    */
-  setScreenShareState: function(windowId, active) {
+  setScreenShareState(windowId, active) {
     if (active) {
       this._activeScreenShares.add(windowId);
     } else if (this._activeScreenShares.has(windowId)) {

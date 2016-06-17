@@ -32,16 +32,16 @@ loop.shared.views.LinkifiedTextView = (function() {
       React.addons.PureRenderMixin
     ],
 
-    _handleClickEvent: function(e) {
+    _handleClickEvent(e) {
       e.preventDefault();
       e.stopPropagation();
 
       this.props.linkClickHandler(e.currentTarget.href);
     },
 
-    _generateLinkAttributes: function(href) {
+    _generateLinkAttributes(href) {
       var linkAttributes = {
-        href: href
+        href
       };
 
       if (this.props.linkClickHandler) {
@@ -71,7 +71,7 @@ loop.shared.views.LinkifiedTextView = (function() {
      *
      * @returns {Array} of strings and React <a> elements in order.
      */
-    parseStringToElements: function(s) {
+    parseStringToElements(s) {
       var elements = [];
       var result = loop.shared.urlRegExps.fullUrlMatch.exec(s);
       var reactElementsCounter = 0; // For giving keys to each ReactElement.
@@ -114,7 +114,7 @@ loop.shared.views.LinkifiedTextView = (function() {
       return elements;
     },
 
-    render: function() {
+    render() {
       return (
         <p>{this.parseStringToElements(this.props.rawText)}</p>
       );

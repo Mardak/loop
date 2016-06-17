@@ -45,7 +45,7 @@ window.queuedFrames = [];
       style: React.PropTypes.object,
       width: React.PropTypes.number
     },
-    render: function() {
+    render() {
       return React.createElement("iframe", {
         style: this.props.style,
         head: this.props.head,
@@ -54,10 +54,10 @@ window.queuedFrames = [];
         className: this.props.className
       });
     },
-    componentDidMount: function() {
+    componentDidMount() {
       this.renderFrameContents();
     },
-    renderFrameContents: function() {
+    renderFrameContents() {
       function isStyleSheet(node) {
         return node.tagName.toLowerCase() === "link" &&
           node.getAttribute("rel") === "stylesheet";
@@ -145,7 +145,7 @@ window.queuedFrames = [];
      *
      * For now, just wait for multiple seconds.  Yuck.
      */
-    fireOnContentsRendered: function() {
+    fireOnContentsRendered() {
       if (!this.props.onContentsRendered) {
         return;
       }
@@ -167,10 +167,10 @@ window.queuedFrames = [];
       setTimeout(this.props.onContentsRendered.bind(undefined, contentWindow),
                  3000);
     },
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       this.renderFrameContents();
     },
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       React.unmountComponentAtNode(React.findDOMNode(this).contentDocument.body);
     }
   });

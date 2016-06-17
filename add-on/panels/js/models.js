@@ -28,7 +28,7 @@ loop.panel.models = (function() {
   });
 
   return {
-    NotificationCollection: NotificationCollection,
-    NotificationModel: NotificationModel
+    NotificationCollection,
+    NotificationModel
   };
 })();

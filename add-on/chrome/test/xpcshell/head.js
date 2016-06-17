@@ -21,7 +21,7 @@ Cu.import("resource://gre/modules/FileUtils.jsm");
 
 function registerDirectory(key, dir) {
   let dirProvider = {
-    getFile: function(prop, persistent) {
+    getFile(prop, persistent) {
       persistent.value = false;
       if (prop == key) {
         return dir.clone();
@@ -152,26 +152,26 @@ var mockPushHandler = {
   /**
    * MozLoopPushHandler API
    */
-  initialize: function(options = {}) {
+  initialize(options = {}) {
     if ("mockWebSocket" in options) {
       this._mockWebSocket = options.mockWebSocket;
     }
   },
 
-  register: function(channelId, registerCallback, notificationCallback) {
+  register(channelId, registerCallback, notificationCallback) {
     this.notificationCallback[channelId] = notificationCallback;
     this.registeredChannels[channelId] = this.registrationPushURL;
     registerCallback(this.registrationResult, this.registrationPushURL, channelId);
   },
 
-  unregister: function() {
+  unregister() {
     return;
   },
 
   /**
    * Test-only API to simplify notifying a push notification result.
    */
-  notify: function(version, chanId) {
+  notify(version, chanId) {
     this.notificationCallback[chanId](version, chanId);
   }
 };
@@ -188,7 +188,7 @@ MockWebSocketChannel.prototype = {
 
   initRegStatus: 0,
 
-  defaultMsgHandler: function() {
+  defaultMsgHandler() {
     // Treat as a ping
     this.listener.onMessageAvailable(this.context,
                                      JSON.stringify({}));
@@ -199,7 +199,7 @@ MockWebSocketChannel.prototype = {
    * nsIWebSocketChannel implementations.
    * See nsIWebSocketChannel.idl for API details.
    */
-  asyncOpen: function(aURI, aOrigin, aWindowId, aListener, aContext) {
+  asyncOpen(aURI, aOrigin, aWindowId, aListener, aContext) {
     this.uri = aURI;
     this.origin = aOrigin;
     this.listener = aListener;
@@ -209,7 +209,7 @@ MockWebSocketChannel.prototype = {
     this.listener.onStart(this.context);
   },
 
-  sendMsg: function(aMsg) {
+  sendMsg(aMsg) {
     var message = JSON.parse(aMsg);
 
     switch (message.messageType) {
@@ -237,25 +237,25 @@ MockWebSocketChannel.prototype = {
     }
   },
 
-  close: function(aCode) {
+  close(aCode) {
     this.stop(aCode);
   },
 
-  notify: function(version) {
+  notify(version) {
     this.listener.onMessageAvailable(this.context,
       JSON.stringify({
         messageType: "notification", updates: [{
           channelID: this.channelID,
-          version: version
+          version
         }]
     }));
   },
 
-  stop: function(err) {
+  stop(err) {
     this.listener.onStop(this.context, err || -1);
   },
 
-  serverClose: function(err) {
+  serverClose(err) {
     this.listener.onServerClose(this.context, err || -1);
   }
 };

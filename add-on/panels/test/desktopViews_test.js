@@ -19,7 +19,7 @@ describe("loop.shared.desktopViews", function() {
     });
 
     LoopMochaUtils.stubLoopRequest({
-      GetLoopPref: function() {
+      GetLoopPref() {
         return true;
       }
     });
@@ -38,7 +38,7 @@ describe("loop.shared.desktopViews", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         locationForMetrics: "conversation",
         roomData: {
           roomUrl: "http://invalid",
@@ -93,7 +93,7 @@ describe("loop.shared.desktopViews", function() {
     it("should invoke callback if defined", function() {
       var callback = sinon.stub();
       view = mountTestComponent({
-        callback: callback
+        callback
       });
       var copyBtn = ReactDOM.findDOMNode(view);
       React.addons.TestUtils.Simulate.click(copyBtn);
@@ -108,7 +108,7 @@ describe("loop.shared.desktopViews", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         locationForMetrics: "conversation",
         roomData: {
           roomUrl: "http://invalid",
@@ -164,7 +164,7 @@ describe("loop.shared.desktopViews", function() {
     it("should invoke callback if defined", function() {
       var callback = sinon.stub();
       view = mountTestComponent({
-        callback: callback
+        callback
       });
       var emailBtn = ReactDOM.findDOMNode(view);
       React.addons.TestUtils.Simulate.click(emailBtn);
@@ -178,7 +178,7 @@ describe("loop.shared.desktopViews", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         locationForMetrics: "conversation",
         roomData: {
           roomUrl: "http://invalid",
@@ -208,7 +208,7 @@ describe("loop.shared.desktopViews", function() {
     it("should invoke callback if defined", function() {
       var callback = sinon.stub();
       view = mountTestComponent({
-        callback: callback
+        callback
       });
       var facebookBtn = ReactDOM.findDOMNode(view);
       React.addons.TestUtils.Simulate.click(facebookBtn);
@@ -222,7 +222,7 @@ describe("loop.shared.desktopViews", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         facebookEnabled: false,
         locationForMetrics: "conversation",
         roomData: { roomUrl: "http://invalid" },

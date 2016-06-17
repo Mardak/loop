@@ -11,7 +11,7 @@ var [, gHandlers] = LoopAPI.inspect();
 function promiseBrowserSwitch() {
   return new Promise(resolve => {
     LoopAPI.stub([{
-      sendAsyncMessage: function(messageName, data) {
+      sendAsyncMessage(messageName, data) {
         if (data[0] == "BrowserSwitch") {
           LoopAPI.restore();
           resolve();

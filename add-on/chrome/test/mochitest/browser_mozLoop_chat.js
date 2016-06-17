@@ -42,7 +42,7 @@ add_task(function* test_mozLoop_hangupOnClose() {
 
   let hangupNowCalls = [];
   LoopAPI.stubMessageHandlers({
-    HangupNow: function(message, reply) {
+    HangupNow(message, reply) {
       hangupNowCalls.push(message);
       reply();
     }

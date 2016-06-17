@@ -26,11 +26,11 @@ loop.shared.views = (function(_, mozL10n) {
       title: React.PropTypes.string
     },
 
-    handleClick: function() {
+    handleClick() {
       this.props.action();
     },
 
-    render: function() {
+    render() {
       return (
           <button className="btn btn-hangup"
                   onClick={this.handleClick}
@@ -59,7 +59,7 @@ loop.shared.views = (function(_, mozL10n) {
       visible: React.PropTypes.bool.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         disabled: false,
         muted: false,
@@ -67,11 +67,11 @@ loop.shared.views = (function(_, mozL10n) {
       };
     },
 
-    handleClick: function() {
+    handleClick() {
       this.props.action();
     },
 
-    _getClasses: function() {
+    _getClasses() {
       var cx = classNames;
       // classes
       var classesObj = {
@@ -87,7 +87,7 @@ loop.shared.views = (function(_, mozL10n) {
       return cx(classesObj);
     },
 
-    _getTitle: function() {
+    _getTitle() {
       if (this.props.title) {
         return this.props.title;
       }
@@ -98,7 +98,7 @@ loop.shared.views = (function(_, mozL10n) {
       return mozL10n.get(msgId);
     },
 
-    render: function() {
+    render() {
       return (
         <button className={this._getClasses()}
                 onClick={this.handleClick}
@@ -111,7 +111,7 @@ loop.shared.views = (function(_, mozL10n) {
    * Conversation controls.
    */
   var ConversationToolbar = React.createClass({
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         video: { enabled: true, visible: true },
         audio: { enabled: true, visible: true },
@@ -119,7 +119,7 @@ loop.shared.views = (function(_, mozL10n) {
       };
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         idle: false
       };
@@ -133,17 +133,17 @@ loop.shared.views = (function(_, mozL10n) {
       video: React.PropTypes.object.isRequired
     },
 
-    handleClickHangup: function() {
+    handleClickHangup() {
       this.props.hangup();
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       this.userActivity = false;
       this.startIdleCountDown();
       document.body.addEventListener("mousemove", this._onBodyMouseMove);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       clearTimeout(this.inactivityTimeout);
       clearInterval(this.inactivityPollInterval);
       document.body.removeEventListener("mousemove", this._onBodyMouseMove);
@@ -153,7 +153,7 @@ loop.shared.views = (function(_, mozL10n) {
      * If the conversation toolbar is idle, update its state and initialize the countdown
      * to return of the idle state. If the toolbar is active, only it's updated the userActivity flag.
      */
-    _onBodyMouseMove: function() {
+    _onBodyMouseMove() {
       if (this.state.idle) {
         this.setState({ idle: false });
         this.startIdleCountDown();
@@ -167,7 +167,7 @@ loop.shared.views = (function(_, mozL10n) {
      * when the mouse is moving, we check the flat userActivity every 4 seconds. If the flag is activated,
      * the user is still active, and we can restart the countdown for the idle state
      */
-    checkUserActivity: function() {
+    checkUserActivity() {
       this.inactivityPollInterval = setInterval(function() {
         if (this.userActivity) {
           this.userActivity = false;
@@ -179,7 +179,7 @@ loop.shared.views = (function(_, mozL10n) {
     /**
      * Stop the execution of the current inactivity countdown and it starts a new one.
      */
-    restartIdleCountDown: function() {
+    restartIdleCountDown() {
       clearTimeout(this.inactivityTimeout);
       this.startIdleCountDown();
     },
@@ -190,7 +190,7 @@ loop.shared.views = (function(_, mozL10n) {
      * When the toolbar changes to idle, we remove the procces to check the user activity,
      * because the toolbar is going to be updated directly when the user moves the mouse.
      */
-    startIdleCountDown: function() {
+    startIdleCountDown() {
       this.checkUserActivity();
       this.inactivityTimeout = setTimeout(function() {
         this.setState({ idle: true });
@@ -198,7 +198,7 @@ loop.shared.views = (function(_, mozL10n) {
       }.bind(this), 6000);
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       var conversationToolbarCssClasses = cx({
         "conversation-toolbar": true,
@@ -239,13 +239,13 @@ loop.shared.views = (function(_, mozL10n) {
       muted: React.PropTypes.bool.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         disabled: false
       };
     },
 
-    toggleAudio: function() {
+    toggleAudio() {
       if (this.props.disabled) {
         return;
       }
@@ -255,7 +255,7 @@ loop.shared.views = (function(_, mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       return (
         <MediaControlButton action={this.toggleAudio}
                             disabled={this.props.disabled}
@@ -273,13 +273,13 @@ loop.shared.views = (function(_, mozL10n) {
       muted: React.PropTypes.bool.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         disabled: false
       };
     },
 
-    toggleVideo: function() {
+    toggleVideo() {
       if (this.props.disabled) {
         return;
       }
@@ -289,7 +289,7 @@ loop.shared.views = (function(_, mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       return (
         <MediaControlButton action={this.toggleVideo}
                             disabled={this.props.disabled}
@@ -310,7 +310,7 @@ loop.shared.views = (function(_, mozL10n) {
       onClick: React.PropTypes.func.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         disabled: false,
         additionalClass: "",
@@ -318,7 +318,7 @@ loop.shared.views = (function(_, mozL10n) {
       };
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       var classObject = { button: true, disabled: this.props.disabled };
       if (this.props.additionalClass) {
@@ -345,13 +345,13 @@ loop.shared.views = (function(_, mozL10n) {
       ])
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         additionalClass: ""
       };
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       var classObject = { "button-group": true };
       if (this.props.additionalClass) {
@@ -380,7 +380,7 @@ loop.shared.views = (function(_, mozL10n) {
       value: React.PropTypes.string
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         additionalClass: "",
         checked: false,
@@ -391,7 +391,7 @@ loop.shared.views = (function(_, mozL10n) {
       };
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
       // Only change the state if the prop has changed, and if it is also
       // different from the state.
       if (this.props.checked !== nextProps.checked &&
@@ -400,14 +400,14 @@ loop.shared.views = (function(_, mozL10n) {
       }
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         checked: this.props.checked,
         value: this.props.checked ? this.props.value : ""
       };
     },
 
-    _handleClick: function(event) {
+    _handleClick(event) {
       event.preventDefault();
 
       var newState = {
@@ -418,7 +418,7 @@ loop.shared.views = (function(_, mozL10n) {
       this.props.onChange(newState);
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       var wrapperClasses = {
         "checkbox-wrapper": true,
@@ -460,7 +460,7 @@ loop.shared.views = (function(_, mozL10n) {
   var AvatarView = React.createClass({
     mixins: [React.addons.PureRenderMixin],
 
-    render: function() {
+    render() {
         return <div className="avatar" />;
     }
   });
@@ -471,7 +471,7 @@ loop.shared.views = (function(_, mozL10n) {
   var LoadingView = React.createClass({
     mixins: [React.addons.PureRenderMixin],
 
-    render: function() {
+    render() {
         return (
           <div className="loading-background">
             <div className="loading-stream" />
@@ -504,7 +504,7 @@ loop.shared.views = (function(_, mozL10n) {
       url: React.PropTypes.string
     },
 
-    render: function() {
+    render() {
       var sanitizedURL = loop.shared.utils.formatSanitizedContextURL(this.props.url);
 
       var opts = {};
@@ -562,7 +562,7 @@ loop.shared.views = (function(_, mozL10n) {
     /**
      * Dispatches an action to record when the link is clicked.
      */
-    handleLinkClick: function() {
+    handleLinkClick() {
       if (!this.props.allowClick) {
         return;
       }
@@ -572,7 +572,7 @@ loop.shared.views = (function(_, mozL10n) {
       }));
     },
 
-    render: function() {
+    render() {
       var description = this.props.description || null;
       var thumbnail = this.props.thumbnail;
       var url = this.props.url || null;
@@ -624,13 +624,13 @@ loop.shared.views = (function(_, mozL10n) {
       srcMediaElement: React.PropTypes.object
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         videoElementSize: null
       };
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       if (!this.props.displayAvatar) {
         this.attachVideo(this.props.srcMediaElement);
       }
@@ -641,7 +641,7 @@ loop.shared.views = (function(_, mozL10n) {
       }
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       var videoElement = ReactDOM.findDOMNode(this).querySelector("video");
       if (!this.props.shareCursor || !videoElement) {
         return;
@@ -653,13 +653,13 @@ loop.shared.views = (function(_, mozL10n) {
       videoElement.removeEventListener("click", this.handleMouseClick);
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       if (!this.props.displayAvatar) {
         this.attachVideo(this.props.srcMediaElement);
       }
     },
 
-    handleVideoDimensions: function() {
+    handleVideoDimensions() {
       var videoElement = ReactDOM.findDOMNode(this).querySelector("video");
       if (!videoElement) {
         return;
@@ -679,7 +679,7 @@ loop.shared.views = (function(_, mozL10n) {
     lastCursorX: -1,
     lastCursorY: -1,
 
-    handleMouseMove: function(event) {
+    handleMouseMove(event) {
       // Only update every so often.
       var now = Date.now();
       if (now - this.lastCursorTime < this.MIN_CURSOR_INTERVAL) {
@@ -719,7 +719,7 @@ loop.shared.views = (function(_, mozL10n) {
       }));
     },
 
-    handleMouseClick: function() {
+    handleMouseClick() {
       this.props.dispatcher.dispatch(new sharedActions.SendCursorData({
         type: loop.shared.utils.CURSOR_MESSAGE_TYPES.CLICK
       }));
@@ -735,7 +735,7 @@ loop.shared.views = (function(_, mozL10n) {
      * XXX need to have a corresponding detachVideo or change this to syncVideo
      * to protect from leaks (bug 1171978)
      */
-    attachVideo: function(srcMediaElement) {
+    attachVideo(srcMediaElement) {
       if (!srcMediaElement) {
         // Not got anything to display.
         return;
@@ -778,7 +778,7 @@ loop.shared.views = (function(_, mozL10n) {
       videoElement.play();
     },
 
-    render: function() {
+    render() {
       if (this.props.isLoading) {
         return <LoadingView />;
       }
@@ -841,7 +841,7 @@ loop.shared.views = (function(_, mozL10n) {
       showTile: React.PropTypes.bool.isRequired
     },
 
-    isLocalMediaAbsolutelyPositioned: function(matchMedia) {
+    isLocalMediaAbsolutelyPositioned(matchMedia) {
       if (!matchMedia) {
         matchMedia = this.props.matchMedia;
       }
@@ -853,28 +853,28 @@ loop.shared.views = (function(_, mozL10n) {
          (matchMedia("screen and (max-width:300px)").matches));
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         localMediaAboslutelyPositioned: this.isLocalMediaAbsolutelyPositioned()
       };
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
       // This is all for the ui-showcase's benefit.
       if (this.props.matchMedia !== nextProps.matchMedia) {
         this.updateLocalMediaState(null, nextProps.matchMedia);
       }
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       window.addEventListener("resize", this.updateLocalMediaState);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       window.removeEventListener("resize", this.updateLocalMediaState);
     },
 
-    updateLocalMediaState: function(event, matchMedia) {
+    updateLocalMediaState(event, matchMedia) {
       var newState = this.isLocalMediaAbsolutelyPositioned(matchMedia);
       if (this.state.localMediaAboslutelyPositioned !== newState) {
         this.setState({
@@ -883,7 +883,7 @@ loop.shared.views = (function(_, mozL10n) {
       }
     },
 
-    renderLocalVideo: function() {
+    renderLocalVideo() {
       return (
         <div className="local">
           <MediaView
@@ -896,7 +896,7 @@ loop.shared.views = (function(_, mozL10n) {
       );
     },
 
-    renderMediaWait: function() {
+    renderMediaWait() {
       var msg = mozL10n.get("call_progress_getting_media_description",
                                 { clientShortname: mozL10n.get("clientShortname2") });
       var utils = loop.shared.utils;
@@ -919,7 +919,7 @@ loop.shared.views = (function(_, mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       var remoteStreamClasses = classNames({
         "remote": true,
         "focus-stream": !this.props.displayScreenShare
@@ -999,11 +999,11 @@ loop.shared.views = (function(_, mozL10n) {
       videoElementSize: React.PropTypes.object
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.getStoreState();
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       if (!this.state.realVideoSize) {
         return;
       }
@@ -1011,7 +1011,7 @@ loop.shared.views = (function(_, mozL10n) {
       this._calculateVideoLetterboxing();
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
       if (!this.state.realVideoSize) {
         return;
       }
@@ -1022,7 +1022,7 @@ loop.shared.views = (function(_, mozL10n) {
                                        nextProps.videoElementSize);
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       if (!this.state.realVideoSize || !nextState.realVideoSize) {
         return;
       }
@@ -1042,7 +1042,7 @@ loop.shared.views = (function(_, mozL10n) {
       }
     },
 
-    _calculateVideoLetterboxing: function(realVideoSize, videoElementSize) {
+    _calculateVideoLetterboxing(realVideoSize, videoElementSize) {
       realVideoSize = realVideoSize || this.state.realVideoSize;
       videoElementSize = videoElementSize || this.props.videoElementSize;
 
@@ -1065,12 +1065,12 @@ loop.shared.views = (function(_, mozL10n) {
           left: (clientWidth - streamVideoWidth) / 2,
           top: (clientHeight - streamVideoHeight) / 2
         },
-        streamVideoHeight: streamVideoHeight,
-        streamVideoWidth: streamVideoWidth
+        streamVideoHeight,
+        streamVideoWidth
       });
     },
 
-    calculateCursorPosition: function() {
+    calculateCursorPosition() {
       // We need to calculate the cursor postion based on the current video
       // stream dimensions.
       var remoteCursorPosition = this.state.remoteCursorPosition;
@@ -1086,13 +1086,13 @@ loop.shared.views = (function(_, mozL10n) {
       };
     },
 
-    resetClickState: function() {
+    resetClickState() {
       this.getStore().setStoreState({
         remoteCursorClick: false
       });
     },
 
-    render: function() {
+    render() {
       if (!this.state.remoteCursorPosition || !this.state.videoLetterboxing) {
         return null;
       }
@@ -1121,16 +1121,16 @@ loop.shared.views = (function(_, mozL10n) {
       showTile: React.PropTypes.bool.isRequired
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       // Watch for messages from the waiting-tile iframe
       window.addEventListener("message", this.recordTileClick);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       window.removeEventListener("message", this.recordTileClick);
     },
 
-    recordTileClick: function(event) {
+    recordTileClick(event) {
       if (event.data === "tile-click") {
         this.props.dispatcher.dispatch(new sharedActions.RecordClick({
           linkInfo: "Tiles iframe click"
@@ -1138,13 +1138,13 @@ loop.shared.views = (function(_, mozL10n) {
       }
     },
 
-    recordTilesSupport: function() {
+    recordTilesSupport() {
       this.props.dispatcher.dispatch(new sharedActions.RecordClick({
         linkInfo: "Tiles support link click"
       }));
     },
 
-    render: function() {
+    render() {
       if (!this.props.showTile) {
         window.removeEventListener("message", this.recordTileClick);
         return null;
@@ -1168,21 +1168,21 @@ loop.shared.views = (function(_, mozL10n) {
   });
 
   return {
-    AdsTileView: AdsTileView,
-    AudioMuteButton: AudioMuteButton,
-    AvatarView: AvatarView,
-    Button: Button,
-    ButtonGroup: ButtonGroup,
-    Checkbox: Checkbox,
-    ContextUrlLink: ContextUrlLink,
-    ContextUrlView: ContextUrlView,
-    ConversationToolbar: ConversationToolbar,
-    HangUpControlButton: HangUpControlButton,
-    MediaControlButton: MediaControlButton,
-    MediaLayoutView: MediaLayoutView,
-    MediaView: MediaView,
-    LoadingView: LoadingView,
-    RemoteCursorView: RemoteCursorView,
-    VideoMuteButton: VideoMuteButton
+    AdsTileView,
+    AudioMuteButton,
+    AvatarView,
+    Button,
+    ButtonGroup,
+    Checkbox,
+    ContextUrlLink,
+    ContextUrlView,
+    ConversationToolbar,
+    HangUpControlButton,
+    MediaControlButton,
+    MediaLayoutView,
+    MediaView,
+    LoadingView,
+    RemoteCursorView,
+    VideoMuteButton
   };
 })(_, navigator.mozL10n || document.mozL10n);

@@ -94,7 +94,7 @@ loop.store = loop.store || {};
       "updateRoomList"
     ],
 
-    initialize: function(options) {
+    initialize(options) {
       if (!options.constants) {
         throw new Error("Missing option constants");
       }
@@ -110,7 +110,7 @@ loop.store = loop.store || {};
       }
     },
 
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         activeRoom: this.activeRoomStore ? this.activeRoomStore.getStoreState() : {},
         closingNewRoom: false,
@@ -127,7 +127,7 @@ loop.store = loop.store || {};
     /**
      * Registers Loop API rooms events.
      */
-    startListeningToRoomEvents: function() {
+    startListeningToRoomEvents() {
       // Rooms event registration
       loop.request("Rooms:PushSubscription", ["add", "close", "delete", "open",
         "refresh", "update"]);
@@ -142,7 +142,7 @@ loop.store = loop.store || {};
     /**
      * Updates active room store state.
      */
-    _onActiveRoomStoreChange: function() {
+    _onActiveRoomStoreChange() {
       this.setStoreState({ activeRoom: this.activeRoomStore.getStoreState() });
     },
 
@@ -151,7 +151,7 @@ loop.store = loop.store || {};
      *
      * @param {Object} addedRoomData The added room data.
      */
-    _onRoomAdded: function(addedRoomData) {
+    _onRoomAdded(addedRoomData) {
       addedRoomData.participants = addedRoomData.participants || [];
       addedRoomData.ctime = addedRoomData.ctime || new Date().getTime();
 
@@ -166,7 +166,7 @@ loop.store = loop.store || {};
     /**
      * Clears the current active room.
      */
-    _onRoomClose: function() {
+    _onRoomClose() {
       let state = this.getStoreState();
 
       // If the room getting closed has been just created, then open the panel.
@@ -190,7 +190,7 @@ loop.store = loop.store || {};
      *
      * @param {String} roomToken Identifier of the room.
      */
-    _onRoomOpen: function(roomToken) {
+    _onRoomOpen(roomToken) {
       this.setStoreState({
         openedRoom: roomToken
       });
@@ -201,7 +201,7 @@ loop.store = loop.store || {};
      *
      * @param {Object} updatedRoomData The updated room data.
      */
-    _onRoomUpdated: function(updatedRoomData) {
+    _onRoomUpdated(updatedRoomData) {
       this.dispatchAction(new sharedActions.UpdateRoomList({
         roomList: this._storeState.rooms.map(function(room) {
           return room.roomToken === updatedRoomData.roomToken ?
@@ -215,7 +215,7 @@ loop.store = loop.store || {};
      *
      * @param {Object} removedRoomData The removed room data.
      */
-    _onRoomRemoved: function(removedRoomData) {
+    _onRoomRemoved(removedRoomData) {
       this.dispatchAction(new sharedActions.UpdateRoomList({
         roomList: this._storeState.rooms.filter(function(room) {
           return room.roomToken !== removedRoomData.roomToken;
@@ -226,7 +226,7 @@ loop.store = loop.store || {};
     /**
      * Executed when the user switches accounts.
      */
-    _onRoomsRefresh: function() {
+    _onRoomsRefresh() {
       this.dispatchAction(new sharedActions.UpdateRoomList({
         roomList: []
       }));
@@ -238,7 +238,7 @@ loop.store = loop.store || {};
      * @param  {Array} rawRoomList Raw room list.
      * @return {Array}
      */
-    _processRoomList: function(rawRoomList) {
+    _processRoomList(rawRoomList) {
       if (!rawRoomList) {
         return [];
       }
@@ -257,7 +257,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.CreateRoom} actionData The new room information.
      */
-    createRoom: function(actionData) {
+    createRoom(actionData) {
       this.setStoreState({
         pendingCreation: true,
         error: null
@@ -300,7 +300,7 @@ loop.store = loop.store || {};
     /**
      * Executed when a room has been created
      */
-    createdRoom: function(actionData) {
+    createdRoom(actionData) {
       this.setStoreState({
         activeRoom: {
           decryptedContext: actionData.decryptedContext,
@@ -316,7 +316,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.CreateRoomError} actionData The action data.
      */
-    createRoomError: function(actionData) {
+    createRoomError(actionData) {
       this.setStoreState({
         error: actionData.error,
         pendingCreation: false
@@ -335,7 +335,7 @@ loop.store = loop.store || {};
      *
      * @param  {sharedActions.CopyRoomUrl} actionData The action data.
      */
-    copyRoomUrl: function(actionData) {
+    copyRoomUrl(actionData) {
       loop.requestMulti(
         ["CopyString", actionData.roomUrl],
         ["NotifyUITour", "Loop:RoomURLCopied"]);
@@ -354,7 +354,7 @@ loop.store = loop.store || {};
      *
      * @param  {sharedActions.EmailRoomUrl} actionData The action data.
      */
-    emailRoomUrl: function(actionData) {
+    emailRoomUrl(actionData) {
       var from = actionData.from;
       loop.shared.utils.composeCallUrlEmail(actionData.roomUrl, null,
         actionData.roomDescription);
@@ -377,7 +377,7 @@ loop.store = loop.store || {};
      *
      * @param  {sharedActions.FacebookShareRoomUrl} actionData The action data.
      */
-    facebookShareRoomUrl: function(actionData) {
+    facebookShareRoomUrl(actionData) {
       var encodedRoom = encodeURIComponent(actionData.roomUrl);
 
       loop.requestMulti(
@@ -413,7 +413,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.DeleteRoom} actionData The action data.
      */
-    deleteRoom: function(actionData) {
+    deleteRoom(actionData) {
       loop.request("Rooms:Delete", actionData.roomToken).then(function(result) {
         var isError = (result && result.isError);
         if (isError) {
@@ -428,14 +428,14 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.DeleteRoomError} actionData The action data.
      */
-    deleteRoomError: function(actionData) {
+    deleteRoomError(actionData) {
       this.setStoreState({ error: actionData.error });
     },
 
     /**
      * Gather the list of all available rooms from the Loop API.
      */
-    getAllRooms: function() {
+    getAllRooms() {
       // XXX Ideally, we'd have a specific command to "start up" the room store
       // to get the rooms. We should address this alongside bug 1074665.
       if (this._gotAllRooms) {
@@ -468,7 +468,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.GetAllRoomsError} actionData The action data.
      */
-    getAllRoomsError: function(actionData) {
+    getAllRoomsError(actionData) {
       this.setStoreState({ error: actionData.error });
     },
 
@@ -477,7 +477,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.UpdateRoomList} actionData The action data.
      */
-    updateRoomList: function(actionData) {
+    updateRoomList(actionData) {
       this.setStoreState({
         error: undefined,
         rooms: this._processRoomList(actionData.roomList)
@@ -489,7 +489,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.OpenRoom} actionData The action data.
      */
-    openRoom: function(actionData) {
+    openRoom(actionData) {
       loop.requestMulti(
         ["Rooms:Open", actionData.roomToken],
         ["TelemetryAddValue", "LOOP_ACTIVITY_COUNTER", this._constants.LOOP_MAU_TYPE.ROOM_OPEN]
@@ -501,7 +501,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.UpdateRoomContext} actionData
      */
-    updateRoomContext: function(actionData) {
+    updateRoomContext(actionData) {
       this.setStoreState({ savingContext: true });
       loop.request("Rooms:Get", actionData.roomToken).then(function(result) {
         if (result.isError) {
@@ -573,7 +573,7 @@ loop.store = loop.store || {};
     /**
      * Handles the updateRoomContextDone action.
      */
-    updateRoomContextDone: function() {
+    updateRoomContextDone() {
       this.setStoreState({ savingContext: false });
     },
 
@@ -582,7 +582,7 @@ loop.store = loop.store || {};
      *
      * @param {sharedActions.UpdateRoomContextError} actionData
      */
-    updateRoomContextError: function(actionData) {
+    updateRoomContextError(actionData) {
       this.setStoreState({
         error: actionData.error,
         savingContext: false

@@ -43,7 +43,7 @@ BackChannel.prototype = {
   receivedData: null,
   pendingResolve: null,
 
-  tearDown: function() {
+  tearDown() {
     this.channel.stopListening();
   }
 };
@@ -66,7 +66,7 @@ function promiseNewChannelResponse(uri, channel, hash) {
   });
 
   return BrowserTestUtils.withNewTab({
-    gBrowser: gBrowser,
+    gBrowser,
     url: uri.spec + "#" + hash
   }, () => waitForChannelPromise);
 }

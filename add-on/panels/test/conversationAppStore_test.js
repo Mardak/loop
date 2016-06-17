@@ -13,11 +13,11 @@ describe("loop.store.ConversationAppStore", function() {
     feedbackPeriodMs = 15770000000;
 
     activeRoomStore = {
-      getStoreState: function() { return { used: roomUsed }; }
+      getStoreState() { return { used: roomUsed }; }
     };
     sandbox = LoopMochaUtils.createSandbox();
     LoopMochaUtils.stubLoopRequest({
-      GetLoopPref: function() {}
+      GetLoopPref() {}
     });
     dispatcher = new loop.Dispatcher();
     sandbox.stub(dispatcher, "dispatch");
@@ -41,7 +41,7 @@ describe("loop.store.ConversationAppStore", function() {
     it("should throw an error if the dispatcher is missing", function() {
       expect(function() {
         new loop.store.ConversationAppStore(undefined, {
-          activeRoomStore: activeRoomStore,
+          activeRoomStore,
           feedbackPeriod: 1,
           feedbackTimestamp: 1
         });
@@ -51,7 +51,7 @@ describe("loop.store.ConversationAppStore", function() {
     it("should throw an error if feedbackPeriod is missing", function() {
       expect(function() {
         new loop.store.ConversationAppStore(dispatcher, {
-          activeRoomStore: activeRoomStore,
+          activeRoomStore,
           feedbackTimestamp: 1
         });
       }).to.Throw(/feedbackPeriod/);
@@ -60,7 +60,7 @@ describe("loop.store.ConversationAppStore", function() {
     it("should throw an error if feedbackTimestamp is missing", function() {
       expect(function() {
         new loop.store.ConversationAppStore(dispatcher, {
-          activeRoomStore: activeRoomStore,
+          activeRoomStore,
           feedbackPeriod: 1
         });
       }).to.Throw(/feedbackTimestamp/);
@@ -72,7 +72,7 @@ describe("loop.store.ConversationAppStore", function() {
       };
 
       var store = new loop.store.ConversationAppStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         feedbackPeriod: 1,
         feedbackTimestamp: 1,
         rootObject: fakeWindow
@@ -113,7 +113,7 @@ describe("loop.store.ConversationAppStore", function() {
       });
 
       store = new loop.store.ConversationAppStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         feedbackPeriod: 42,
         feedbackTimestamp: 42
       });
@@ -180,11 +180,11 @@ describe("loop.store.ConversationAppStore", function() {
       };
 
       LoopMochaUtils.stubLoopRequest({
-        GetLoopPref: function() {}
+        GetLoopPref() {}
       });
 
       store = new loop.store.ConversationAppStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         feedbackPeriod: 1,
         feedbackTimestamp: 1,
         rootObject: fakeWindow
@@ -292,7 +292,7 @@ describe("loop.store.ConversationAppStore", function() {
       it("should dispatch a LeaveRoom action if delta > feedback period", function() {
         var feedbackTimestamp = new Date() - feedbackPeriodMs;
         store.setStoreState({
-          feedbackTimestamp: feedbackTimestamp,
+          feedbackTimestamp,
           feedbackPeriod: feedbackPeriodMs,
           windowType: "room"
         });
@@ -309,7 +309,7 @@ describe("loop.store.ConversationAppStore", function() {
       it("should dispatch a ShowFeedbackForm action if delta > feedback period", function() {
         var feedbackTimestamp = new Date() - feedbackPeriodMs;
         store.setStoreState({
-          feedbackTimestamp: feedbackTimestamp,
+          feedbackTimestamp,
           feedbackPeriod: feedbackPeriodMs,
           windowType: "room"
         });
@@ -324,7 +324,7 @@ describe("loop.store.ConversationAppStore", function() {
       it("should close the window if delta < feedback period", function() {
         var feedbackTimestamp = new Date().getTime();
         store.setStoreState({
-          feedbackTimestamp: feedbackTimestamp,
+          feedbackTimestamp,
           feedbackPeriod: feedbackPeriodMs
         });
 

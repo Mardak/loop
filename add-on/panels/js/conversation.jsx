@@ -32,19 +32,19 @@ loop.conversation = (function(mozL10n) {
       roomStore: React.PropTypes.instanceOf(loop.store.RoomStore)
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       this.listenTo(this.props.cursorStore, "change:remoteCursorPosition",
                     this._onRemoteCursorPositionChange);
       this.listenTo(this.props.cursorStore, "change:remoteCursorClick",
                     this._onRemoteCursorClick);
     },
 
-    _onRemoteCursorPositionChange: function() {
+    _onRemoteCursorPositionChange() {
       loop.request("AddRemoteCursorOverlay",
                   this.props.cursorStore.getStoreState("remoteCursorPosition"));
     },
 
-    _onRemoteCursorClick: function() {
+    _onRemoteCursorClick() {
       let click = this.props.cursorStore.getStoreState("remoteCursorClick");
       // if the click is 'false', assume it is a storeState reset,
       // so don't do anything
@@ -59,11 +59,11 @@ loop.conversation = (function(mozL10n) {
       loop.request("ClickRemoteCursor", click);
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.getStoreState();
     },
 
-    _renderFeedbackForm: function() {
+    _renderFeedbackForm() {
       this.setTitle(mozL10n.get("conversation_has_ended"));
 
       return (<FeedbackView
@@ -74,11 +74,11 @@ loop.conversation = (function(mozL10n) {
      * We only show the feedback for once every 6 months, otherwise close
      * the window.
      */
-    handleCallTerminated: function() {
+    handleCallTerminated() {
       this.props.dispatcher.dispatch(new sharedActions.LeaveConversation());
     },
 
-    render: function() {
+    render() {
       if (this.state.showFeedbackForm) {
         return this._renderFeedbackForm();
       }
@@ -143,8 +143,8 @@ loop.conversation = (function(mozL10n) {
       var stringBundle = results[++requestIdx];
       var locale = results[++requestIdx];
       mozL10n.initialize({
-        locale: locale,
-        getStrings: function(key) {
+        locale,
+        getStrings(key) {
           if (!(key in stringBundle)) {
             console.error("No string found for key: ", key);
             return "{ textContent: '' }";
@@ -158,10 +158,10 @@ loop.conversation = (function(mozL10n) {
       // don't work in the conversation window
       var currGuid = results[++requestIdx];
       window.OT.overrideGuidStorage({
-        get: function(callback) {
+        get(callback) {
           callback(null, currGuid);
         },
-        set: function(guid, callback) {
+        set(guid, callback) {
           // See nsIPrefBranch
           var PREF_STRING = 32;
           currGuid = guid;
@@ -172,20 +172,20 @@ loop.conversation = (function(mozL10n) {
 
       var dispatcher = new loop.Dispatcher();
       var sdkDriver = new loop.OTSdkDriver({
-        constants: constants,
+        constants,
         isDesktop: true,
         useDataChannels: true,
-        dispatcher: dispatcher,
+        dispatcher,
         sdk: OT
       });
 
       // Create the stores.
       var activeRoomStore = new loop.store.ActiveRoomStore(dispatcher, {
         isDesktop: true,
-        sdkDriver: sdkDriver
+        sdkDriver
       });
       var conversationAppStore = new loop.store.ConversationAppStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         feedbackPeriod: results[++requestIdx],
         feedbackTimestamp: results[++requestIdx],
         facebookEnabled: results[++requestIdx]
@@ -197,20 +197,20 @@ loop.conversation = (function(mozL10n) {
       });
 
       var roomStore = new loop.store.RoomStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
-        constants: constants
+        activeRoomStore,
+        constants
       });
       var textChatStore = new loop.store.TextChatStore(dispatcher, {
-        sdkDriver: sdkDriver
+        sdkDriver
       });
       var remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
-        sdkDriver: sdkDriver
+        sdkDriver
       });
 
       loop.store.StoreMixin.register({
-        conversationAppStore: conversationAppStore,
-        remoteCursorStore: remoteCursorStore,
-        textChatStore: textChatStore
+        conversationAppStore,
+        remoteCursorStore,
+        textChatStore
       });
 
       ReactDOM.render(
@@ -224,7 +224,7 @@ loop.conversation = (function(mozL10n) {
       document.body.setAttribute("platform", loop.shared.utils.getPlatform());
 
       dispatcher.dispatch(new sharedActions.GetWindowData({
-        windowId: windowId
+        windowId
       }));
 
       loop.request("TelemetryAddValue", "LOOP_ACTIVITY_COUNTER", constants.LOOP_MAU_TYPE.OPEN_CONVERSATION);
@@ -232,8 +232,8 @@ loop.conversation = (function(mozL10n) {
   }
 
   return {
-    AppControllerView: AppControllerView,
-    init: init
+    AppControllerView,
+    init
   };
 })(document.mozL10n);
 

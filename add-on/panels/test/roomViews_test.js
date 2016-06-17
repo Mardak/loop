@@ -29,7 +29,7 @@ describe("loop.roomViews", function() {
       }),
       GetLoopPref: sinon.stub(),
       GetSelectedTabMetadata: sinon.stub().returns({
-        favicon: favicon,
+        favicon,
         previews: [],
         title: ""
       }),
@@ -45,7 +45,7 @@ describe("loop.roomViews", function() {
       "Rooms:Update": sinon.stub().returns(null),
       TelemetryAddValue: sinon.stub(),
       SetLoopPref: sandbox.stub(),
-      GetDoNotDisturb: function() { return false; }
+      GetDoNotDisturb() { return false; }
     });
 
     dispatcher = new loop.Dispatcher();
@@ -55,9 +55,9 @@ describe("loop.roomViews", function() {
     fakeWindow = {
       close: sinon.stub(),
       document: {},
-      addEventListener: function() {},
-      removeEventListener: function() {},
-      setTimeout: function(callback) { callback(); }
+      addEventListener() {},
+      removeEventListener() {},
+      setTimeout(callback) { callback(); }
     };
     loop.shared.mixins.setRootObject(fakeWindow);
 
@@ -72,7 +72,7 @@ describe("loop.roomViews", function() {
     });
     roomStore = new loop.store.RoomStore(dispatcher, {
       constants: {},
-      activeRoomStore: activeRoomStore
+      activeRoomStore
     });
     remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
       sdkDriver: {}
@@ -82,7 +82,7 @@ describe("loop.roomViews", function() {
     });
 
     loop.store.StoreMixin.register({
-      textChatStore: textChatStore
+      textChatStore
     });
 
     sandbox.stub(dispatcher, "dispatch");
@@ -100,15 +100,15 @@ describe("loop.roomViews", function() {
     it("should merge initial state", function() {
       var TestView = React.createClass({
         mixins: [loop.roomViews.ActiveRoomStoreMixin],
-        getInitialState: function() {
+        getInitialState() {
           return { foo: "bar" };
         },
-        render: function() { return React.DOM.div(); }
+        render() { return React.DOM.div(); }
       });
 
       var testView = TestUtils.renderIntoDocument(
         React.createElement(TestView, {
-          roomStore: roomStore
+          roomStore
         }));
 
       var expectedState = _.extend({ foo: "bar", savingContext: false },
@@ -120,11 +120,11 @@ describe("loop.roomViews", function() {
     it("should listen to store changes", function() {
       var TestView = React.createClass({
         mixins: [loop.roomViews.ActiveRoomStoreMixin],
-        render: function() { return React.DOM.div(); }
+        render() { return React.DOM.div(); }
       });
       var testView = TestUtils.renderIntoDocument(
         React.createElement(TestView, {
-          roomStore: roomStore
+          roomStore
         }));
 
       activeRoomStore.setStoreState({ roomState: ROOM_STATES.READY });
@@ -138,7 +138,7 @@ describe("loop.roomViews", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         failureReason: props && props.failureReason || FAILURE_DETAILS.UNKNOWN
       });
       return TestUtils.renderIntoDocument(
@@ -198,7 +198,7 @@ describe("loop.roomViews", function() {
 
     beforeEach(function() {
       LoopMochaUtils.stubLoopRequest({
-        GetLoopPref: function(prefName) {
+        GetLoopPref(prefName) {
           if (prefName === "contextInConversations.enabled") {
             return true;
           }
@@ -219,9 +219,9 @@ describe("loop.roomViews", function() {
       props = _.extend({
         chatWindowDetached: false,
         cursorStore: remoteCursorStore,
-        dispatcher: dispatcher,
+        dispatcher,
         facebookEnabled: false,
-        roomStore: roomStore,
+        roomStore,
         onCallTerminated: onCallTerminatedStub
       }, props);
       return TestUtils.renderIntoDocument(

@@ -25,9 +25,9 @@ loop.slideshow = (function(mozL10n) {
       var locale = results[++requestIdx];
       var pluralRule = results[++requestIdx];
       mozL10n.initialize({
-        locale: locale,
-        pluralRule: pluralRule,
-        getStrings: function(key) {
+        locale,
+        pluralRule,
+        getStrings(key) {
           if (!(key in stringBundle)) {
             return "{ textContent: '' }";
           }
@@ -64,14 +64,14 @@ loop.slideshow = (function(mozL10n) {
           imageClass: "slide3-image",
           title: mozL10n.get("fte_slide_3_title"),
           text: mozL10n.get("fte_slide_3_copy", {
-            clientSuperShortname: clientSuperShortname
+            clientSuperShortname
           })
         },
         {
           id: "slide4",
           imageClass: "slide4-image",
           title: mozL10n.get("fte_slide_4_title", {
-            clientSuperShortname: clientSuperShortname
+            clientSuperShortname
           }),
           text: mozL10n.get("fte_slide_4_copy", {
             brandShortname: mozL10n.get("brandShortname")
@@ -84,7 +84,7 @@ loop.slideshow = (function(mozL10n) {
   }
 
   return {
-    init: init
+    init
   };
 })(document.mozL10n);
 

@@ -53,7 +53,7 @@ var WindowListener = {
    *
    * @param {Object} window The window to inject the integration into.
    */
-  setupBrowserUI: function(window) {
+  setupBrowserUI(window) {
     let document = window.document;
     let { gBrowser, gURLBar } = window;
     let xhrClass = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"];
@@ -146,7 +146,7 @@ var WindowListener = {
        *                           function.
        * @return {Promise}
        */
-      togglePanel: function(event) {
+      togglePanel(event) {
         if (!this.panel) {
           // We're on the hidden window! What fun!
           let obs = win => {
@@ -181,7 +181,7 @@ var WindowListener = {
        * user the chance to modify the name. For that we need to open the panel.
        * Showing the proper layout is done on panel.jsx
        */
-      renameRoom: function() {
+      renameRoom() {
         this.openPanel();
       },
 
@@ -192,7 +192,7 @@ var WindowListener = {
        *                         the panel to the button which triggers it.
        * @return {Promise}
        */
-      openPanel: function(event) {
+      openPanel(event) {
         if (PrivateBrowsingUtils.isWindowPrivate(window)) {
           return Promise.reject();
         }
@@ -257,7 +257,7 @@ var WindowListener = {
        *                         the panel to the button which triggers it.
        * @return {Promise}
        */
-      openCallPanel: function(event) {
+      openCallPanel(event) {
         return this.openPanel(event);
       },
 
@@ -293,7 +293,7 @@ var WindowListener = {
       /**
        * @return {Promise} resolved with an array of Rooms with participants (excluding owners)
        */
-      roomsWithNonOwners: function() {
+      roomsWithNonOwners() {
         return new Promise(resolve => {
           this.LoopRooms.getAll((error, rooms) => {
             let roomsWithNonOwners = [];
@@ -316,7 +316,7 @@ var WindowListener = {
        * Triggers the initialization of the loop service if necessary.
        * Also adds appropraite observers for the UI.
        */
-      init: function() {
+      init() {
         // This is a promise for test purposes, but we don't want to be logging
         // expected errors to the console, so we catch them here.
         this.MozLoopService.initialize(WindowListener.addonVersion).catch(ex => {
@@ -360,7 +360,7 @@ var WindowListener = {
        * Adds a menu item to the browsers' Tools menu that open the Loop panel
        * when selected.
        */
-      addMenuItem: function() {
+      addMenuItem() {
         let menu = document.getElementById("menu_ToolsPopup");
         if (!menu || menuItem) {
           return;
@@ -379,7 +379,7 @@ var WindowListener = {
       /**
        * Removes the menu item from the browsers' Tools menu.
        */
-      removeMenuItem: function() {
+      removeMenuItem() {
         if (menuItem) {
           menuItem.parentNode.removeChild(menuItem);
         }
@@ -509,7 +509,7 @@ var WindowListener = {
       },
 
       // Implements nsIObserver
-      observe: function(subject, topic, data) {
+      observe(subject, topic, data) {
         if (topic != "loop-status-changed") {
           return;
         }
@@ -527,7 +527,7 @@ var WindowListener = {
        *                   successfully. This is used so the state can be
        *                   temporarily shown until the next state change.
        */
-      updateToolbarState: function(aReason = null) {
+      updateToolbarState(aReason = null) {
         if (!this.toolbarButton.node) {
           return;
         }
@@ -579,7 +579,7 @@ var WindowListener = {
        * @param {string} [mozL10nId] l10n ID that refelct the current
        *                           Loop status.
        */
-      updateTooltiptext: function(mozL10nId) {
+      updateTooltiptext(mozL10nId) {
         this.toolbarButton.node.setAttribute("tooltiptext", mozL10nId);
         var tooltiptext = CustomizableUI.getLocalizedProperty(this.toolbarButton, "tooltiptext");
         this.toolbarButton.node.setAttribute("tooltiptext", tooltiptext);
@@ -601,7 +601,7 @@ var WindowListener = {
        *                                                  the notification is clicked.
        *                                                  Opens the panel by default.
        */
-      showNotification: function(options) {
+      showNotification(options) {
         if (this.MozLoopService.doNotDisturb) {
           return;
         }
@@ -654,7 +654,7 @@ var WindowListener = {
        *
        * @param {String} name Name of the sound, like 'ringtone' or 'room-joined'
        */
-      playSound: function(name) {
+      playSound(name) {
         if (this.ActiveSound || this.MozLoopService.doNotDisturb) {
           return;
         }
@@ -677,7 +677,7 @@ var WindowListener = {
        *
        * @param {(String)} roomToken  The current room that the link generator is connecting to.
        */
-      startBrowserSharing: function(roomToken) {
+      startBrowserSharing(roomToken) {
         if (!this._listeningToTabSelect) {
           gBrowser.tabContainer.addEventListener("TabSelect", this);
           this._listeningToTabSelect = true;
@@ -724,7 +724,7 @@ var WindowListener = {
       /**
        * Stop listening to selected tab changes.
        */
-      stopBrowserSharing: function() {
+      stopBrowserSharing() {
         if (!this._listeningToTabSelect) {
           return;
         }
@@ -760,7 +760,7 @@ var WindowListener = {
        *                      ratioY: position on the Y axis (percentage value)
        *                    }
        */
-      addRemoteCursor: function(cursorData) {
+      addRemoteCursor(cursorData) {
         if (this._browserSharePaused || !this._listeningToTabSelect) {
           return;
         }
@@ -798,7 +798,7 @@ var WindowListener = {
        *
        *  @param clickData bool click event
        */
-      clickRemoteCursor: function(clickData) {
+      clickRemoteCursor(clickData) {
         if (!clickData || !this._listeningToTabSelect) {
           return;
         }
@@ -820,7 +820,7 @@ var WindowListener = {
       /**
        *  Removes the remote cursor from the screen
        */
-      removeRemoteCursor: function() {
+      removeRemoteCursor() {
         let cursor = document.getElementById("loop-remote-cursor");
 
         if (cursor) {
@@ -835,7 +835,7 @@ var WindowListener = {
        * @param  {String} key The element id to get strings for.
        * @return {String}
        */
-      _getString: function(key) {
+      _getString(key) {
         let str = this.MozLoopService.getStrings(key);
         if (str) {
           str = JSON.parse(str).textContent;
@@ -847,7 +847,7 @@ var WindowListener = {
        * Set correct strings for infobar notification based on if paused or empty.
        */
 
-      _setInfoBarStrings: function(nonOwnerParticipants, sharePaused) {
+      _setInfoBarStrings(nonOwnerParticipants, sharePaused) {
         let message;
         if (nonOwnerParticipants) {
           // More than just the owner in the room.
@@ -866,7 +866,7 @@ var WindowListener = {
         let accessKey = this._getString(
           sharePaused ? "infobar_button_restart_accesskey" : "infobar_button_stop_accesskey");
 
-        return { message: message, label: label, accesskey: accessKey };
+        return { message, label, accesskey: accessKey };
       },
 
       /**
@@ -883,7 +883,7 @@ var WindowListener = {
        * @param  {String} currentRoomToken Room we are currently joined.
        * @return {void}
        */
-      _maybeShowBrowserSharingInfoBar: function(currentRoomToken) {
+      _maybeShowBrowserSharingInfoBar(currentRoomToken) {
         this._hideBrowserSharingInfoBar();
 
         let participantsCount = this.LoopRooms.getNumParticipants(currentRoomToken);
@@ -946,7 +946,7 @@ var WindowListener = {
        *                    to current browser instance.
        * @return  {Boolean} |true| if the infobar was hidden here.
        */
-      _hideBrowserSharingInfoBar: function(browser) {
+      _hideBrowserSharingInfoBar(browser) {
         browser = browser || gBrowser.selectedBrowser;
         let box = gBrowser.getNotificationBox(browser);
         let notification = box.getNotificationWithValue(kBrowserSharingNotificationId);
@@ -962,7 +962,7 @@ var WindowListener = {
       /**
        * Broadcast 'BrowserSwitch' event.
        */
-      _notifyBrowserSwitch: function() {
+      _notifyBrowserSwitch() {
          // Get the first window Id for the listener.
         this.LoopAPI.broadcastPushMessage("BrowserSwitch",
           gBrowser.selectedBrowser.outerWindowID);
@@ -972,7 +972,7 @@ var WindowListener = {
        * Handles updating of the sharing infobar when the room participants
        * change.
        */
-      handleRoomJoinedOrLeft: function() {
+      handleRoomJoinedOrLeft() {
         // Don't attempt to show it if we're not actively sharing.
         if (!this._listeningToTabSelect) {
           return;
@@ -985,7 +985,7 @@ var WindowListener = {
        *
        * @param {Object} message The message received from the frame script.
        */
-      handleDOMTitleChanged: function(message) {
+      handleDOMTitleChanged(message) {
         if (!this._listeningToTabSelect || this._browserSharePaused) {
           return;
         }
@@ -999,7 +999,7 @@ var WindowListener = {
       /**
        * Handles events from gBrowser.
        */
-      handleEvent: function(event) {
+      handleEvent(event) {
 
         switch (event.type) {
           case "TabSelect": {
@@ -1036,7 +1036,7 @@ var WindowListener = {
        * with all the data needed for sending link generator cursor position
        * through the sdk.
        */
-      handleMousemove: function(event) {
+      handleMousemove(event) {
         // Won't send events if not sharing (paused or not started).
         if (this._browserSharePaused || !this._listeningToTabSelect) {
           return;
@@ -1073,7 +1073,7 @@ var WindowListener = {
        * with all the data needed for sending link generator cursor click position
        * through the sdk.
        */
-      handleMouseClick: function() {
+      handleMouseClick() {
         // We want to stop sending events if sharing is paused.
         if (this._browserSharePaused) {
           return;
@@ -1090,7 +1090,7 @@ var WindowListener = {
        *                             a string as second argument when the favicon
        *                             has been fetched.
        */
-      getFavicon: function(callback) {
+      getFavicon(callback) {
         let pageURI = gBrowser.selectedTab.linkedBrowser.currentURI.spec;
         // If the tab page’s url starts with http(s), fetch icon.
         if (!/^https?:/.test(pageURI)) {
@@ -1144,7 +1144,7 @@ var WindowListener = {
    *
    * @param {Object} window The window to remove the integration from.
    */
-  tearDownBrowserUI: function(window) {
+  tearDownBrowserUI(window) {
     if (window.LoopUI) {
       window.LoopUI.removeCopyPanel();
       window.LoopUI.removeMenuItem();
@@ -1158,7 +1158,7 @@ var WindowListener = {
   },
 
   // nsIWindowMediatorListener functions.
-  onOpenWindow: function(xulWindow) {
+  onOpenWindow(xulWindow) {
     // A new window has opened.
     let domWindow = xulWindow.QueryInterface(Ci.nsIInterfaceRequestor)
                              .getInterface(Ci.nsIDOMWindow);
@@ -1174,10 +1174,10 @@ var WindowListener = {
     }, false);
   },
 
-  onCloseWindow: function() {
+  onCloseWindow() {
   },
 
-  onWindowTitleChange: function() {
+  onWindowTitleChange() {
   }
 };
 
@@ -1278,7 +1278,7 @@ function createLoopButton() {
     privateBrowsingTooltiptext: "loop-call-button3-pb.tooltiptext",
     defaultArea: CustomizableUI.AREA_NAVBAR,
     removable: true,
-    onBuild: function(aDocument) {
+    onBuild(aDocument) {
       // If we're not supposed to see the button, return zip.
       if (!Services.prefs.getBoolPref("loop.enabled")) {
         return null;

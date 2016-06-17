@@ -233,7 +233,7 @@ var mockPushHandler = {
   /**
    * MozLoopPushHandler API
    */
-  initialize: function(options = {}) {
+  initialize(options = {}) {
     if ("mockWebSocket" in options) {
       this._mockWebSocket = options.mockWebSocket;
     }
@@ -243,20 +243,20 @@ var mockPushHandler = {
       "https://localhost/pushUrl/fxa-rooms";
   },
 
-  register: function(channelId, registerCallback, notificationCallback) {
+  register(channelId, registerCallback, notificationCallback) {
     this.notificationCallback[channelId] = notificationCallback;
     this.registeredChannels[channelId] = this.registrationPushURLs[channelId];
     setTimeout(registerCallback(this.registrationResult, this.registeredChannels[channelId], channelId), 0);
   },
 
-  unregister: function() {
+  unregister() {
     return;
   },
 
   /**
    * Test-only API to simplify notifying a push notification result.
    */
-  notify: function(version, chanId) {
+  notify(version, chanId) {
     this.notificationCallback[chanId](version, chanId);
   }
 };
@@ -269,7 +269,7 @@ const mockDb = {
     return Object.getOwnPropertyNames(this._store).length;
   },
 
-  add: function(details, callback) {
+  add(details, callback) {
     if (!("id" in details)) {
       callback(new Error("No 'id' field present"));
       return;
@@ -278,7 +278,7 @@ const mockDb = {
     this._store[details._guid] = details;
     callback(null, details);
   },
-  remove: function(guid, callback) {
+  remove(guid, callback) {
     if (!(guid in this._store)) {
       callback(new Error("Could not find _guid '" + guid + "' in database"));
       return;
@@ -286,13 +286,13 @@ const mockDb = {
     delete this._store[guid];
     callback(null);
   },
-  getAll: function(callback) {
+  getAll(callback) {
     callback(null, this._store);
   },
-  get: function(guid, callback) {
+  get(guid, callback) {
     callback(null, this._store[guid]);
   },
-  getByServiceId: function(serviceId, callback) {
+  getByServiceId(serviceId, callback) {
     for (let guid in this._store) {
       if (serviceId === this._store[guid].id) {
         callback(null, this._store[guid]);
@@ -301,12 +301,12 @@ const mockDb = {
     }
     callback(null, null);
   },
-  removeAll: function(callback) {
+  removeAll(callback) {
     this._store = {};
     this._next_guid = 1;
     callback(null);
   },
-  promise: function(method, ...params) {
+  promise(method, ...params) {
     return new Promise((resolve, reject) => {
       this[method](...params, (err, res) => (err ? reject(err) : resolve(res)));
     });

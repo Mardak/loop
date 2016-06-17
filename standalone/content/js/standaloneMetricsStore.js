@@ -61,7 +61,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * @param  {Object} options Options for the store, should include a
      *                          reference to the activeRoomStore.
      */
-    initialize: function(options) {
+    initialize(options) {
       options = options || {};
 
       if (!options.activeRoomStore) {
@@ -86,7 +86,7 @@ loop.store.StandaloneMetricsStore = (function() {
      *
      * @return {Object} The initial store state.
      */
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         audioMuted: false,
         roomState: ROOM_STATES.INIT,
@@ -101,7 +101,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * @param  {String} action   The type of action.
      * @param  {String} label    The label detailing the action.
      */
-    _storeEvent: function(category, action, label) {
+    _storeEvent(category, action, label) {
       // ga might not be defined if donottrack is enabled, see index.html.
       if (!window.ga) {
         return;
@@ -114,7 +114,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles notification that we've connected to the sdk servers.
      */
-    connectedToSdkServers: function() {
+    connectedToSdkServers() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.success,
         "Joined sdk servers");
     },
@@ -124,7 +124,7 @@ loop.store.StandaloneMetricsStore = (function() {
      *
      * @param {sharedActions.ConnectionFailure} actionData
      */
-    connectionFailure: function(actionData) {
+    connectionFailure(actionData) {
       switch (actionData.reason) {
         case FAILURE_DETAILS.MEDIA_DENIED:
           this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.failed,
@@ -144,7 +144,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles media permssion being obtained.
      */
-    gotMediaPermission: function() {
+    gotMediaPermission() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.success,
         "Media granted");
     },
@@ -154,7 +154,7 @@ loop.store.StandaloneMetricsStore = (function() {
      *
      * @param {sharedActions.MetricsLogJoinRoom} actionData
      */
-    metricsLogJoinRoom: function(actionData) {
+    metricsLogJoinRoom(actionData) {
       var label;
 
       if (actionData.userAgentHandledRoom) {
@@ -170,7 +170,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles the room having been joined on the loop-server.
      */
-    joinedRoom: function() {
+    joinedRoom() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.success,
         "Joined room");
     },
@@ -178,7 +178,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles the user clicking the leave room button.
      */
-    leaveRoom: function() {
+    leaveRoom() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.button,
         "Leave conversation");
     },
@@ -186,7 +186,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles notification that two-way media has been achieved.
      */
-    mediaConnected: function() {
+    mediaConnected() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.success,
         "Media connected");
     },
@@ -197,7 +197,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * @param {sharedActions.RecordClick} actionData The data associated with
      *                                               the link.
      */
-    recordClick: function(actionData) {
+    recordClick(actionData) {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.linkClick,
         actionData.linkInfo);
     },
@@ -205,7 +205,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles notification that the remote peer is connected.
      */
-    remotePeerConnected: function() {
+    remotePeerConnected() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.success,
         "Remote peer connected");
     },
@@ -214,7 +214,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * Handles when the user retrys room activity after its failed initially
      * (e.g. on first load).
      */
-    retryAfterRoomFailure: function() {
+    retryAfterRoomFailure() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.button,
         "Retry failed room");
     },
@@ -222,7 +222,7 @@ loop.store.StandaloneMetricsStore = (function() {
     /**
      * Handles when a tile was finally shown (potentially after a delay)
      */
-    tileShown: function() {
+    tileShown() {
       this._storeEvent(METRICS_GA_CATEGORY.general, METRICS_GA_ACTIONS.pageLoad,
         "Tile shown");
     },
@@ -231,7 +231,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * Handles notifications that the activeRoomStore has changed, updating
      * the metrics for room state and mute state as necessary.
      */
-    _onActiveRoomStoreChange: function() {
+    _onActiveRoomStoreChange() {
       var roomStore = this.activeRoomStore.getStoreState();
 
       this._checkRoomState(roomStore.roomState, roomStore.failureReason);
@@ -248,7 +248,7 @@ loop.store.StandaloneMetricsStore = (function() {
      *                               state, this should contain the reason for
      *                               the failure.
      */
-    _checkRoomState: function(roomState, failureReason) {
+    _checkRoomState(roomState, failureReason) {
       if (this._storeState.roomState === roomState) {
         return;
       }
@@ -273,7 +273,7 @@ loop.store.StandaloneMetricsStore = (function() {
      *                        "video".
      * @param  {Boolean} muted The new state of mute
      */
-    _checkMuteState: function(type, muted) {
+    _checkMuteState(type, muted) {
       var muteItem = type + "Muted";
       if (this._storeState[muteItem] === muted) {
         return;
@@ -291,7 +291,7 @@ loop.store.StandaloneMetricsStore = (function() {
      * explicitly closing it.  Expected to do any necessary housekeeping, such
      * as shutting down the call cleanly and adding any relevant telemetry data.
      */
-    windowUnload: function() {
+    windowUnload() {
       if (this.activeRoomStore) {
         this.stopListening(this.activeRoomStore);
       }

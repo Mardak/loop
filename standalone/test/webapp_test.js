@@ -26,7 +26,7 @@ describe("loop.webapp", function() {
       sdkDriver: {}
     });
 
-    loop.store.StoreMixin.register({ remoteCursorStore: remoteCursorStore });
+    loop.store.StoreMixin.register({ remoteCursorStore });
   });
 
   afterEach(function() {
@@ -87,23 +87,23 @@ describe("loop.webapp", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.webapp.WebappRootView, {
-            activeRoomStore: activeRoomStore,
+            activeRoomStore,
             cursorStore: remoteCursorStore,
-            dispatcher: dispatcher,
-            standaloneAppStore: standaloneAppStore
+            dispatcher,
+            standaloneAppStore
           }));
     }
 
     beforeEach(function() {
       sdk = {
-        checkSystemRequirements: function() { return true; }
+        checkSystemRequirements() { return true; }
       };
       activeRoomStore = new loop.store.ActiveRoomStore(dispatcher, {
         mozLoop: {},
         sdkDriver: {}
       });
       standaloneAppStore = new loop.store.StandaloneAppStore(dispatcher, {
-        sdk: sdk
+        sdk
       });
       remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
         sdkDriver: sdk

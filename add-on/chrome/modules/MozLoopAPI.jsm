@@ -134,7 +134,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  AddBrowserSharingListener: function(message, reply) {
+  AddBrowserSharingListener(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     let browser = win && win.gBrowser.selectedBrowser;
     if (!win || !browser) {
@@ -184,7 +184,7 @@ const kMessageHandlers = {
    *                          message handler. The result will be sent back to
    *                          the senders' channel.
    */
-  AddRemoteCursorOverlay: function(message, reply) {
+  AddRemoteCursorOverlay(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     if (win) {
       win.LoopUI.addRemoteCursor(message.data[0]);
@@ -203,7 +203,7 @@ const kMessageHandlers = {
    *                          message handler. The result will be sent back to
    *                          the senders' channel.
    */
-  ClickRemoteCursor: function(message, reply) {
+  ClickRemoteCursor(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     if (win) {
       win.LoopUI.clickRemoteCursor(message.data[0]);
@@ -226,10 +226,10 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  AddConversationContext: function(message, reply) {
+  AddConversationContext(message, reply) {
     let [windowId, sessionId, callid] = message.data;
     MozLoopService.addConversationContext(windowId, {
-      sessionId: sessionId,
+      sessionId,
       callId: callid
     });
     reply();
@@ -249,7 +249,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  ComposeEmail: function(message, reply) {
+  ComposeEmail(message, reply) {
     let [subject, body, recipient] = message.data;
     recipient = recipient || "";
     let mailtoURL = "mailto:" + encodeURIComponent(recipient) +
@@ -275,7 +275,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  Confirm: function(message, reply) {
+  Confirm(message, reply) {
     let options = message.data[0];
     let buttonFlags;
     if (options.okButton && options.cancelButton) {
@@ -312,7 +312,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  CopyString: function(message, reply) {
+  CopyString(message, reply) {
     let str = message.data[0];
     clipboardHelper.copyString(str);
     reply();
@@ -328,7 +328,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GenerateUUID: function(message, reply) {
+  GenerateUUID(message, reply) {
     reply(MozLoopService.generateUUID());
   },
 
@@ -343,7 +343,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetAllStrings: function(message, reply) {
+  GetAllStrings(message, reply) {
     if (gStringBundle) {
       reply(gStringBundle);
       return;
@@ -369,13 +369,13 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetAllConstants: function(message, reply) {
+  GetAllConstants(message, reply) {
     reply({
-      COPY_PANEL: COPY_PANEL,
-      LOOP_SESSION_TYPE: LOOP_SESSION_TYPE,
-      LOOP_MAU_TYPE: LOOP_MAU_TYPE,
-      ROOM_CREATE: ROOM_CREATE,
-      SHARING_ROOM_URL: SHARING_ROOM_URL
+      COPY_PANEL,
+      LOOP_SESSION_TYPE,
+      LOOP_MAU_TYPE,
+      ROOM_CREATE,
+      SHARING_ROOM_URL
     });
   },
 
@@ -393,7 +393,7 @@ const kMessageHandlers = {
    *   - version: The application version
    *   - OS: The operating system the application is running on
    */
-  GetAppVersionInfo: function(message, reply) {
+  GetAppVersionInfo(message, reply) {
     if (!gAppVersionInfo) {
       // If the lazy getter explodes, we're probably loaded in xpcshell,
       // which doesn't have what we need, so log an error.
@@ -422,7 +422,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetAudioBlob: function(message, reply) {
+  GetAudioBlob(message, reply) {
     let name = message.data[0];
     let request = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"]
                         .createInstance(Ci.nsIXMLHttpRequest);
@@ -459,7 +459,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @returns {Object} The window data or null if error.
    */
-  GetConversationWindowData: function(message, reply) {
+  GetConversationWindowData(message, reply) {
     reply(MozLoopService.getConversationWindowData(message.data[0]));
   },
 
@@ -473,7 +473,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetDoNotDisturb: function(message, reply) {
+  GetDoNotDisturb(message, reply) {
     reply(MozLoopService.doNotDisturb);
   },
 
@@ -488,7 +488,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetErrors: function(message, reply) {
+  GetErrors(message, reply) {
     let errors = {};
     for (let [type, error] of MozLoopService.errors) {
       // if error.error is an nsIException, just delete it since it's hard
@@ -516,7 +516,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @return {Boolean} True if the profile has an encryption key.
    */
-  GetHasEncryptionKey: function(message, reply) {
+  GetHasEncryptionKey(message, reply) {
     reply(MozLoopService.hasEncryptionKey);
   },
 
@@ -531,7 +531,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @returns {String} The locale string
    */
-  GetLocale: function(message, reply) {
+  GetLocale(message, reply) {
     reply(MozLoopService.locale);
   },
 
@@ -546,7 +546,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @returns {String} Addon Version string.
    */
-  GetAddonVersion: function(message, reply) {
+  GetAddonVersion(message, reply) {
     reply(MozLoopService.addonVersion);
   },
 
@@ -569,7 +569,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @return {*} on success, null on error
    */
-  GetLoopPref: function(message, reply) {
+  GetLoopPref(message, reply) {
     let [prefName, prefType] = message.data;
     reply(MozLoopService.getLoopPref(prefName, prefType));
   },
@@ -584,7 +584,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetPluralRule: function(message, reply) {
+  GetPluralRule(message, reply) {
     reply(PluralForm.ruleNum);
   },
 
@@ -599,7 +599,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GetSelectedTabMetadata: function(message, reply) {
+  GetSelectedTabMetadata(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     let browser = win && win.gBrowser.selectedBrowser;
     if (!win || !browser) {
@@ -645,7 +645,7 @@ const kMessageHandlers = {
    *                           the senders' channel.
    * @return null if user not logged in; profile object otherwise
    */
-  GetUserProfile: function(message, reply) {
+  GetUserProfile(message, reply) {
     if (!MozLoopService.userProfile) {
       reply(null);
       return;
@@ -667,7 +667,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  HangupAllChatWindows: function(message, reply) {
+  HangupAllChatWindows(message, reply) {
     MozLoopService.hangupAllChatWindows();
     reply();
   },
@@ -686,7 +686,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  HangupNow: function(message, reply) {
+  HangupNow(message, reply) {
     let [roomToken, sessionToken, windowId] = message.data;
     if (!windowId) {
       windowId = sessionToken;
@@ -712,7 +712,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  IsMultiProcessActive: function(message, reply) {
+  IsMultiProcessActive(message, reply) {
     reply(isMultiProcessActive());
   },
 
@@ -726,7 +726,7 @@ const kMessageHandlers = {
    *                            the check. The result will be sent back to
    *                            the senders' channel.
    */
-  IsTabShareable: function(message, reply) {
+  IsTabShareable(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     let browser = win && win.gBrowser.selectedBrowser;
     if (!win || !browser) {
@@ -757,7 +757,7 @@ const kMessageHandlers = {
    * @return {Promise} Returns a promise that is resolved on successful
    *                   completion, or rejected otherwise.
    */
-  LoginToFxA: function(message, reply) {
+  LoginToFxA(message, reply) {
     let forceReAuth = message.data[0];
     MozLoopService.logInToFxA(forceReAuth);
     reply();
@@ -774,7 +774,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  LogoutFromFxA: function(message, reply) {
+  LogoutFromFxA(message, reply) {
     MozLoopService.logOutFromFxA();
     reply();
   },
@@ -795,7 +795,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  NotifyUITour: function(message, reply) {
+  NotifyUITour(message, reply) {
     let [subject, params] = message.data;
     UITour.notify(subject, params);
     reply();
@@ -811,7 +811,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  OpenGettingStartedTour: function(message, reply) {
+  OpenGettingStartedTour(message, reply) {
     MozLoopService.openGettingStartedTour();
     reply();
   },
@@ -826,7 +826,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  GettingStartedURL: function(message, reply) {
+  GettingStartedURL(message, reply) {
     let aSrc = message.data[0] || null;
     let aAdditionalParams = message.data[1] || {};
     reply(MozLoopService.getTourURL(aSrc, aAdditionalParams).href);
@@ -842,7 +842,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  OpenFxASettings: function(message, reply) {
+  OpenFxASettings(message, reply) {
     MozLoopService.openFxASettings();
     reply();
   },
@@ -857,7 +857,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  OpenNonE10sWindow: function(message, reply) {
+  OpenNonE10sWindow(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     let url = message.data[0] ? message.data[0] : "about:home";
     win.openDialog("chrome://browser/content/", "_blank", "chrome,all,dialog=no,non-remote", url);
@@ -876,7 +876,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  OpenURL: function(message, reply) {
+  OpenURL(message, reply) {
     let url = message.data[0];
     MozLoopService.openURL(url);
     reply();
@@ -894,7 +894,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  RemoveBrowserSharingListener: function(message, reply) {
+  RemoveBrowserSharingListener(message, reply) {
     if (!gBrowserSharingListeners.size) {
       reply();
       return;
@@ -922,7 +922,7 @@ const kMessageHandlers = {
     reply();
   },
 
-  "Rooms:*": function(action, message, reply) {
+  "Rooms:*"(action, message, reply) {
     LoopAPIInternal.handleObjectAPIMessage(LoopRooms, kRoomsPushPrefix,
       action, message, reply);
   },
@@ -937,7 +937,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  SetDoNotDisturb: function(message, reply) {
+  SetDoNotDisturb(message, reply) {
     MozLoopService.doNotDisturb = message.data[0];
     reply();
   },
@@ -960,7 +960,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  SetLoopPref: function(message, reply) {
+  SetLoopPref(message, reply) {
     let [prefName, value, prefType] = message.data;
     MozLoopService.setLoopPref(prefName, value, prefType);
     reply();
@@ -976,7 +976,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  SetNameNewRoom: function(message, reply) {
+  SetNameNewRoom(message, reply) {
     let win = Services.wm.getMostRecentWindow("navigator:browser");
     win && win.LoopUI.renameRoom();
 
@@ -999,7 +999,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  SetScreenShareState: function(message, reply) {
+  SetScreenShareState(message, reply) {
     let [windowId, active] = message.data;
     MozLoopService.setScreenShareState(windowId, active);
     reply();
@@ -1020,7 +1020,7 @@ const kMessageHandlers = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  TelemetryAddValue: function(message, reply) {
+  TelemetryAddValue(message, reply) {
     let [histogramId, value] = message.data;
 
     if (histogramId === "LOOP_ACTIVITY_COUNTER") {
@@ -1057,7 +1057,7 @@ const LoopAPIInternal = {
    *    start listening for messages therein.
    * 2) start listening for other events that may be interesting.
    */
-  initialize: function() {
+  initialize() {
     if (gPageListeners) {
       return;
     }
@@ -1087,7 +1087,7 @@ const LoopAPIInternal = {
    *                         - {Array}          data   Payload of the message
    * @param {Function} [reply]
    */
-  handleMessage: function(message, reply) {
+  handleMessage(message, reply) {
     let seq = message.data.shift();
     let action = message.data.shift();
 
@@ -1162,7 +1162,7 @@ const LoopAPIInternal = {
    *                           message handler. The result will be sent back to
    *                           the senders' channel.
    */
-  handleBatchMessage: function(seq, message, reply) {
+  handleBatchMessage(seq, message, reply) {
     let requests = message.data[0];
     if (!requests.length) {
       MozLoopService.log.error("Ough, a batch call with no requests is not much " +
@@ -1207,7 +1207,7 @@ const LoopAPIInternal = {
    *                                     of this message handler. The result will
    *                                     be sent back to the senders' channel.
    */
-  handleObjectAPIMessage: function(api, pushMessagePrefix, action, message, reply) {
+  handleObjectAPIMessage(api, pushMessagePrefix, action, message, reply) {
     let funcName = getObjectAPIFunctionName(action);
 
     if (funcName == kPushSubscription) {
@@ -1255,7 +1255,7 @@ const LoopAPIInternal = {
   /**
    * Observer function for the 'loop-status-changed' event.
    */
-  handleStatusChanged: function() {
+  handleStatusChanged() {
     LoopAPIInternal.broadcastPushMessage("LoopStatusChanged");
   },
 
@@ -1265,7 +1265,7 @@ const LoopAPIInternal = {
    *
    * @param {name} name Name of the event
    */
-  broadcastPushMessage: function(name, data) {
+  broadcastPushMessage(name, data) {
     if (!gPageListeners) {
       return;
     }
@@ -1285,7 +1285,7 @@ const LoopAPIInternal = {
   /**
    * De the reverse of `initialize` above; unhook page and event listeners.
    */
-  destroy: function() {
+  destroy() {
     if (!gPageListeners) {
       return;
     }
@@ -1301,15 +1301,15 @@ const LoopAPIInternal = {
 
 this.LoopAPI = Object.freeze({
   /* @see LoopAPIInternal#initialize */
-  initialize: function() {
+  initialize() {
     LoopAPIInternal.initialize();
   },
   /* @see LoopAPIInternal#broadcastPushMessage */
-  broadcastPushMessage: function(name, data) {
+  broadcastPushMessage(name, data) {
     LoopAPIInternal.broadcastPushMessage(name, data);
   },
   /* @see LoopAPIInternal#destroy */
-  destroy: function() {
+  destroy() {
     LoopAPIInternal.destroy();
   },
   /**
@@ -1328,7 +1328,7 @@ this.LoopAPI = Object.freeze({
    * @param {Function} [reply] Callback function, invoked with the result of this
    *                           message handler. Optional.
    */
-  sendMessageToHandler: function(message, reply) {
+  sendMessageToHandler(message, reply) {
     reply = reply || function() {};
     let handlerName = message.name;
     let handler = kMessageHandlers[handlerName];
@@ -1353,20 +1353,20 @@ this.LoopAPI = Object.freeze({
     }
   },
   // The following functions are only used in unit tests.
-  inspect: function() {
+  inspect() {
     return [Object.create(LoopAPIInternal), Object.create(kMessageHandlers),
       gPageListeners ? [...gPageListeners] : null];
   },
-  stub: function(pageListeners) {
+  stub(pageListeners) {
     if (!gOriginalPageListeners) {
       gOriginalPageListeners = gPageListeners;
     }
     gPageListeners = pageListeners;
   },
-  stubMessageHandlers: function(handlers) {
+  stubMessageHandlers(handlers) {
     gStubbedMessageHandlers = handlers;
   },
-  restore: function() {
+  restore() {
     if (gOriginalPageListeners) {
       gPageListeners = gOriginalPageListeners;
     }

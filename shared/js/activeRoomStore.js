@@ -84,7 +84,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
       "fetchServerData"
     ],
 
-    initialize: function(options) {
+    initialize(options) {
       if (!options.sdkDriver) {
         throw new Error("Missing option sdkDriver");
       }
@@ -125,7 +125,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * When adding states, consider if _statesToResetOnLeave needs updating
      * as well.
      */
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         roomState: ROOM_STATES.INIT,
         audioMuted: false,
@@ -170,7 +170,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.RoomFailure} actionData
      */
-    roomFailure: function(actionData) {
+    roomFailure(actionData) {
       function getReason(serverCode) {
         switch (serverCode) {
           case REST_ERRNOS.INVALID_TOKEN:
@@ -203,7 +203,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Attempts to retry getting the room data if there has been a room failure.
      */
-    retryAfterRoomFailure: function() {
+    retryAfterRoomFailure() {
       if (this._storeState.failureReason === FAILURE_DETAILS.EXPIRED_OR_INVALID) {
         console.error("Invalid retry attempt for expired or invalid url");
         return;
@@ -235,7 +235,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * Registers the actions with the dispatcher that this store is interested
      * in after the initial setup has been performed.
      */
-    _registerPostSetupActions: function() {
+    _registerPostSetupActions() {
       // Protect against calling this twice, as we don't want to register
       // before we know what type we are, but in some cases we need to re-do
       // an action (e.g. FetchServerData).
@@ -299,7 +299,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.SetupWindowData} actionData
      */
-    setupWindowData: function(actionData) {
+    setupWindowData(actionData) {
       if (actionData.type !== "room") {
         // Nothing for us to do here, leave it to other stores.
         return Promise.resolve();
@@ -350,7 +350,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *                   once data is received from the server, and it is determined
      *                   if Firefox handles the room or not.
      */
-    fetchServerData: function(actionData) {
+    fetchServerData(actionData) {
       if (actionData.windowType !== "room") {
         // Nothing for us to do here, leave it to other stores.
         return Promise.resolve();
@@ -383,7 +383,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * @return {Promise}              A promise that is resolved once the get
      *                                and decryption is complete.
      */
-    _getRoomDataForStandalone: function(roomCryptoKey) {
+    _getRoomDataForStandalone(roomCryptoKey) {
       return new Promise(function(resolve) {
         loop.request("Rooms:Get", this._storeState.roomToken).then(function(result) {
           if (result.isError) {
@@ -452,7 +452,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * @return {Promise} A promise that is resolved once it has been determined
      *                   if Firefox can handle the room.
      */
-    _promiseDetectUserAgentHandles: function() {
+    _promiseDetectUserAgentHandles() {
       return new Promise(function(resolve) {
         function resolveWithNotHandlingResponse() {
           resolve(new sharedActions.UserAgentHandlesRoom({
@@ -511,7 +511,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.UpdateRoomInfo} actionData
      */
-    updateRoomInfo: function(actionData) {
+    updateRoomInfo(actionData) {
       var newState = {
         roomUrl: actionData.roomUrl
       };
@@ -531,7 +531,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.userAgentHandlesRoom} actionData
      */
-    userAgentHandlesRoom: function(actionData) {
+    userAgentHandlesRoom(actionData) {
       this.setStoreState({
         userAgentHandlesRoom: actionData.handlesRoom
       });
@@ -542,7 +542,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {Object} roomData  The new roomData.
      */
-    _handleRoomUpdate: function(roomData) {
+    _handleRoomUpdate(roomData) {
       this.dispatchAction(new sharedActions.UpdateRoomInfo({
         roomContextUrls: roomData.decryptedContext.urls,
         roomDescription: roomData.decryptedContext.description,
@@ -556,7 +556,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * Handles the deletion of a room, notified by the Loop rooms API.
      *
      */
-    _handleRoomDelete: function() {
+    _handleRoomDelete() {
       this._sdkDriver.forceDisconnectAll(function() {
         window.close();
       });
@@ -567,7 +567,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * room if there are. If there aren't then it will dispatch a ConnectionFailure
      * action with NO_MEDIA.
      */
-    _checkDevicesAndJoinRoom: function() {
+    _checkDevicesAndJoinRoom() {
       // XXX Ideally we'd do this check before joining a room, but we're waiting
       // for the UX for that. See bug 1166824. In the meantime this gives us
       // additional information for analysis.
@@ -587,7 +587,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Hands off the room join to Firefox.
      */
-    _handoffRoomJoin: function() {
+    _handoffRoomJoin() {
       var channelListener;
 
       function handleRoomJoinResponse(e) {
@@ -634,7 +634,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Handles the action to join to a room.
      */
-    joinRoom: function() {
+    joinRoom() {
       // Reset the failure reason if necessary.
       if (this.getStoreState().failureReason) {
         this.setStoreState({ failureReason: undefined });
@@ -663,7 +663,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * Handles the action that signifies when media permission has been
      * granted and starts joining the room.
      */
-    gotMediaPermission: function() {
+    gotMediaPermission() {
       this.setStoreState({ roomState: ROOM_STATES.JOINING });
 
       loop.request("Rooms:Join", this._storeState.roomToken,
@@ -697,7 +697,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.JoinedRoom} actionData
      */
-    joinedRoom: function(actionData) {
+    joinedRoom(actionData) {
       // If we're standalone and firefox is handling, then just store the new
       // state. No need to do anything else.
       if (this._storeState.standalone && this._storeState.userAgentHandlesRoom) {
@@ -725,7 +725,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Handles recording when the sdk has connected to the servers.
      */
-    connectedToSdkServers: function() {
+    connectedToSdkServers() {
       this.setStoreState({
         roomState: ROOM_STATES.SESSION_CONNECTED
       });
@@ -736,7 +736,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.ConnectionFailure} actionData
      */
-    connectionFailure: function(actionData) {
+    connectionFailure(actionData) {
       var exitState = this._storeState.roomState === ROOM_STATES.FAILED ?
         this._storeState.failureExitState : this._storeState.roomState;
 
@@ -756,7 +756,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.setMute} actionData The mute state for the stream type.
      */
-    setMute: function(actionData) {
+    setMute(actionData) {
       var muteState = {};
       muteState[actionData.type + "Muted"] = !actionData.enabled;
       this.setStoreState(muteState);
@@ -767,7 +767,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.MediaStreamCreated} actionData
      */
-    mediaStreamCreated: function(actionData) {
+    mediaStreamCreated(actionData) {
       if (actionData.isLocal) {
         this.setStoreState({
           localAudioEnabled: actionData.hasAudio,
@@ -789,7 +789,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.MediaStreamDestroyed} actionData
      */
-    mediaStreamDestroyed: function(actionData) {
+    mediaStreamDestroyed(actionData) {
       if (actionData.isLocal) {
         this.setStoreState({
           localSrcMediaElement: null
@@ -807,7 +807,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.RemoteVideoStatus} actionData
      */
-    remoteVideoStatus: function(actionData) {
+    remoteVideoStatus(actionData) {
       this.setStoreState({
         remoteVideoEnabled: actionData.videoEnabled
       });
@@ -816,14 +816,14 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Records when the remote media has been connected.
      */
-    mediaConnected: function() {
+    mediaConnected() {
       this.setStoreState({ mediaConnected: true });
     },
 
     /**
      * Used to note the current screensharing state.
      */
-    screenSharingState: function(actionData) {
+    screenSharingState(actionData) {
       this.setStoreState({ screenSharingState: actionData.state });
 
       loop.request("SetScreenShareState", this.getStoreState().windowId,
@@ -835,7 +835,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * XXX this should be split into multiple actions to make the code clearer.
      */
-    receivingScreenShare: function(actionData) {
+    receivingScreenShare(actionData) {
       if (!actionData.receiving &&
           this.getStoreState().remoteVideoDimensions.screen) {
         // Remove the remote video dimensions for type screen as we're not
@@ -862,7 +862,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {Number} windowId  The new windowId to start sharing.
      */
-    _handleSwitchBrowserShare: function(windowId) {
+    _handleSwitchBrowserShare(windowId) {
       if (Array.isArray(windowId)) {
         windowId = windowId[0];
       }
@@ -905,7 +905,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Get the current tab context to update the room context.
      */
-    _checkTabContext: function() {
+    _checkTabContext() {
       loop.request("GetSelectedTabMetadata").then(function(meta) {
         // Avoid sending the event if there is no data nor url.
         if (!meta || !meta.url) {
@@ -933,7 +933,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.StartBrowserShare} actionData
      */
-    startBrowserShare: function() {
+    startBrowserShare() {
       if (this._storeState.screenSharingState !== SCREEN_SHARE_STATES.INACTIVE) {
         console.error("Attempting to start browser sharing when already running.");
         return;
@@ -960,7 +960,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Ends an active screenshare session.
      */
-    endScreenShare: function() {
+    endScreenShare() {
       if (this._browserSharingListener) {
         // Remove the browser sharing listener as we don't need it now.
         loop.request("RemoveBrowserSharingListener", this.getStoreState().windowId);
@@ -980,7 +980,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.ToggleBrowserSharing} actionData
      */
-    toggleBrowserSharing: function(actionData) {
+    toggleBrowserSharing(actionData) {
       this.setStoreState({
         sharingPaused: !actionData.enabled
       });
@@ -994,7 +994,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Handles recording when a remote peer has connected to the servers.
      */
-    remotePeerConnected: function() {
+    remotePeerConnected() {
       this.setStoreState({
         remotePeerDisconnected: false,
         roomState: ROOM_STATES.HAS_PARTICIPANTS,
@@ -1007,7 +1007,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * support 2 participants, we declare the room as SESSION_CONNECTED as soon as
      * one participant leaves.
      */
-    remotePeerDisconnected: function() {
+    remotePeerDisconnected() {
       // Update the participants to just the owner.
       var participants = this.getStoreState("participants");
       if (participants) {
@@ -1018,7 +1018,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
 
       this.setStoreState({
         mediaConnected: false,
-        participants: participants,
+        participants,
         roomState: ROOM_STATES.SESSION_CONNECTED,
         remotePeerDisconnected: true,
         remoteSrcMediaElement: null,
@@ -1031,7 +1031,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.ConnectionStatus} actionData
      */
-    connectionStatus: function(actionData) {
+    connectionStatus(actionData) {
       loop.request("Rooms:SendConnectionStatus", this.getStoreState("roomToken"),
         this.getStoreState("sessionToken"), actionData);
     },
@@ -1039,7 +1039,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
     /**
      * Handles the window being unloaded. Ensures the room is left.
      */
-    windowUnload: function() {
+    windowUnload() {
       this._leaveRoom(ROOM_STATES.CLOSING);
 
       if (!this._onUpdateListener) {
@@ -1062,7 +1062,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.LeaveRoom} actionData
      */
-    leaveRoom: function(actionData) {
+    leaveRoom(actionData) {
       this._leaveRoom(ROOM_STATES.ENDED,
                       false,
                       actionData && actionData.windowStayingOpen);
@@ -1073,7 +1073,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {Integer} expireTime The time until expiry (in seconds).
      */
-    _setRefreshTimeout: function(expireTime) {
+    _setRefreshTimeout(expireTime) {
       this._timeout = setTimeout(this._refreshMembership.bind(this),
         expireTime * this.expiresTimeFactor * 1000);
     },
@@ -1082,7 +1082,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * Refreshes the membership of the room with the server, and then
      * sets up the refresh for the next cycle.
      */
-    _refreshMembership: function() {
+    _refreshMembership() {
       loop.request("Rooms:RefreshMembership", this._storeState.roomToken,
         this._storeState.sessionToken)
         .then(function(result) {
@@ -1113,7 +1113,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *                                        that messages relating to ending
      *                                        of the conversation are sent on desktop.
      */
-    _leaveRoom: function(nextState, failedJoinRequest, windowStayingOpen) {
+    _leaveRoom(nextState, failedJoinRequest, windowStayingOpen) {
       if (this._storeState.standalone && this._storeState.userAgentHandlesRoom) {
         // If the user agent is handling the room, all we need to do is advance
         // to the next state.
@@ -1167,7 +1167,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * When feedback is complete, we go back to the ready state, rather than
      * init or gather, as we don't need to get the data from the server again.
      */
-    feedbackComplete: function() {
+    feedbackComplete() {
       this.setStoreState({
         roomState: ROOM_STATES.READY,
         // Reset the used state here as the user has now given feedback and the
@@ -1182,7 +1182,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.VideoDimensionsChanged} actionData
      */
-    videoDimensionsChanged: function(actionData) {
+    videoDimensionsChanged(actionData) {
       // NOTE: in the future, when multiple remote video streams are supported,
       //       we'll need to make this support multiple remotes as well. Good
       //       starting point for video tiling.
@@ -1199,7 +1199,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.VideoScreenStreamChanged} actionData
      */
-    videoScreenStreamChanged: function(actionData) {
+    videoScreenStreamChanged(actionData) {
       this.setStoreState({
         streamPaused: !actionData.hasVideo
       });
@@ -1215,7 +1215,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param  {sharedActions.ReceivedTextChatMessage|SendTextChatMessage} actionData
      */
-    _handleTextChatMessage: function(actionData) {
+    _handleTextChatMessage(actionData) {
       if (!this._isDesktop || this.getStoreState().chatMessageExchanged ||
           actionData.contentType !== CHAT_CONTENT_TYPES.TEXT) {
         return;
@@ -1234,7 +1234,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.ReceivedTextChatMessage} actionData
      */
-    receivedTextChatMessage: function(actionData) {
+    receivedTextChatMessage(actionData) {
       this._handleTextChatMessage(actionData);
     },
 
@@ -1243,7 +1243,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      *
      * @param {sharedActions.SendTextChatMessage} actionData
      */
-    sendTextChatMessage: function(actionData) {
+    sendTextChatMessage(actionData) {
       this._handleTextChatMessage(actionData);
     },
 
@@ -1251,7 +1251,7 @@ loop.store.ActiveRoomStore = (function(mozL10n) {
      * Checks if the room is empty or has participants.
      *
      */
-    _hasParticipants: function() {
+    _hasParticipants() {
       // Update the participants to just the owner.
       var participants = this.getStoreState("participants");
       if (participants) {

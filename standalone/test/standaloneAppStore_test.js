@@ -55,7 +55,7 @@ describe("loop.store.StandaloneAppStore", function() {
       sandbox.stub(dispatcher, "dispatch");
 
       store = new loop.store.StandaloneAppStore(dispatcher, {
-        helper: helper,
+        helper,
         sdk: fakeSdk
       });
     });

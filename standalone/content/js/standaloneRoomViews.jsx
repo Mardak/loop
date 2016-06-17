@@ -18,7 +18,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired
     },
 
-    _getContent: function() {
+    _getContent() {
       // We use this technique of static markup as it means we get
       // just one overall string for L10n to define the structure of
       // the whole item.
@@ -39,7 +39,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       });
     },
 
-    recordClick: function(event) {
+    recordClick(event) {
       // Check for valid href, as this is clicking on the paragraph -
       // so the user may be clicking on the text rather than the link.
       if (event.target && event.target.href) {
@@ -49,7 +49,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    render: function() {
+    render() {
       return (
         <p
           className="terms-service"
@@ -68,15 +68,15 @@ loop.standaloneRoomViews = (function(mozL10n) {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.getStoreState();
     },
 
-    handleJoinButton: function() {
+    handleJoinButton() {
       this.props.dispatcher.dispatch(new sharedActions.JoinRoom());
     },
 
-    _renderJoinButton: function() {
+    _renderJoinButton() {
       var buttonMessage = this.state.roomState === ROOM_STATES.JOINED ?
         mozL10n.get("rooms_room_joined_own_conversation_label") :
         mozL10n.get("rooms_room_join_label");
@@ -96,13 +96,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    _renderFailureText: function() {
+    _renderFailureText() {
       return (
         <p className="failure">{mozL10n.get("rooms_already_joined")}</p>
       );
     },
 
-    render: function() {
+    render() {
       var roomName = this.state.roomName ||
                      this.state.roomContextUrls[0].description ||
                      this.state.roomContextUrls[0].location;
@@ -144,14 +144,14 @@ loop.standaloneRoomViews = (function(mozL10n) {
     /**
      * Handles when the retry button is pressed.
      */
-    handleRetryButton: function() {
+    handleRetryButton() {
       this.props.dispatcher.dispatch(new sharedActions.RetryAfterRoomFailure());
     },
 
     /**
      * @return String An appropriate string according to the failureReason.
      */
-    getFailureString: function() {
+    getFailureString() {
       switch (this.props.failureReason) {
         case FAILURE_DETAILS.MEDIA_DENIED:
         // Falls through - we use the same message.
@@ -175,7 +175,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
     /**
      * This renders a retry button if one is necessary.
      */
-    renderRetryButton: function() {
+    renderRetryButton() {
       if (this.props.failureReason === FAILURE_DETAILS.EXPIRED_OR_INVALID ||
           this.props.failureReason === FAILURE_DETAILS.TOS_FAILURE) {
         return null;
@@ -189,7 +189,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       return (
         <div className="room-inner-info-area">
           <p className="failed-room-message">
@@ -217,7 +217,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       screenSharingPaused: React.PropTypes.bool
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return { waitToRenderWaiting: true };
     },
 
@@ -225,7 +225,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * Change state to allow for the waiting message to be shown and send an
      * event to record that fact.
      */
-    _allowRenderWaiting: function() {
+    _allowRenderWaiting() {
       delete this._waitTimer;
 
       // Only update state if we're still showing a waiting message.
@@ -239,7 +239,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       // Start a timer once from the earliest waiting state or from the state
       // after someone else leaves if we need to wait before showing a message.
       if ((this.props.roomState === ROOM_STATES.JOINING ||
@@ -251,7 +251,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
       switch (nextProps.roomState) {
         // Reset waiting for the next time the user joins.
         case ROOM_STATES.ENDED:
@@ -267,7 +267,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    _renderCallToActionLink: function() {
+    _renderCallToActionLink() {
       if (this.props.isFirefox) {
         return (
           <a className="btn btn-info" href={loop.config.learnMoreUrl}>
@@ -287,7 +287,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
     },
 
 
-    _renderPromoteFirefoxView: function() {
+    _renderPromoteFirefoxView() {
       return (
         <div className="promote-firefox">
           <h2>{mozL10n.get("rooms_promote_firefox_label")}</h2>
@@ -301,7 +301,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    _renderScreenSharingPausedView: function() {
+    _renderScreenSharingPausedView() {
       return (
         <div className="room-inner-info-area">
           <div className="remote-stream-paused">
@@ -313,7 +313,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       switch (this.props.roomState) {
         case ROOM_STATES.ENDED: {
           return (
@@ -437,7 +437,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       video: React.PropTypes.object.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
       return {
         video: { enabled: true, visible: true },
         audio: { enabled: true, visible: true },
@@ -446,7 +446,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       };
     },
 
-    handleClick: function(event) {
+    handleClick(event) {
       event.stopPropagation();
       event.preventDefault();
       if (event.currentTarget.href) {
@@ -454,7 +454,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    renderButtons: function() {
+    renderButtons() {
       var showButtons = this.props.video.visible || this.props.audio.visible;
       if (!showButtons) {
         return (
@@ -482,7 +482,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       return (
         <div className="standalone-info-bar">
           <div className="hello-logo"></div>
@@ -503,7 +503,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       room: React.PropTypes.object.isRequired
     },
 
-    renderContext: function() {
+    renderContext() {
       var urlData = {};
       var roomContextUrls = this.props.room.roomContextUrls || [];
       if (roomContextUrls.length > 0) {
@@ -530,7 +530,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    renderWelcomeMessage: function() {
+    renderWelcomeMessage() {
       var roomName = this.props.room.roomName ? this.props.room.roomName :
             mozL10n.get("clientShortname2");
 
@@ -541,7 +541,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       switch (this.props.room.roomState) {
         case ROOM_STATES.ENDED:
         case ROOM_STATES.READY:
@@ -593,7 +593,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
       roomState: React.PropTypes.string,
       screenSharePosterUrl: React.PropTypes.string
     },
-    getInitialState: function() {
+    getInitialState() {
       // Uncomment this line to see the slideshow every time while developing:
       // localStorage.removeItem("introSeen");
 
@@ -611,21 +611,21 @@ loop.standaloneRoomViews = (function(mozL10n) {
       return _.extend({}, storeState, {
         // Used by the UI showcase.
         roomState: this.props.roomState || storeState.roomState,
-        introSeen: introSeen
+        introSeen
       });
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       this.props.activeRoomStore.on("change", function() {
         this.setState(this.props.activeRoomStore.getStoreState());
       }, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.props.activeRoomStore.off("change", null, this);
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
       // Adding a class to the document body element from here to ease styling it.
       document.body.classList.add("is-standalone-room");
     },
@@ -637,7 +637,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * @param  {Object} nextProps (Unused)
      * @param  {Object} nextState Next state object.
      */
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
       if (this.state.roomState !== ROOM_STATES.READY &&
           nextState.roomState === ROOM_STATES.READY) {
         var roomName = nextState.roomName;
@@ -649,7 +649,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
           this.setTitle(mozL10n.get("clientShortname2"));
         } else {
           this.setTitle(mozL10n.get("standalone_title_with_room_name", {
-            roomName: roomName,
+            roomName,
             clientShortname: mozL10n.get("clientShortname2")
           }));
         }
@@ -675,15 +675,15 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
-    joinRoom: function() {
+    joinRoom() {
       this.props.dispatcher.dispatch(new sharedActions.JoinRoom());
     },
 
-    leaveRoom: function() {
+    leaveRoom() {
       this.props.dispatcher.dispatch(new sharedActions.LeaveRoom());
     },
 
-    closeIntroOverlay: function() {
+    closeIntroOverlay() {
       localStorage.setItem("introSeen", "true");
       this.setState({ introSeen: true });
       this.joinRoom();
@@ -694,7 +694,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      *
      * @return {Boolean}
      */
-    _roomIsActive: function() {
+    _roomIsActive() {
       return this.state.roomState === ROOM_STATES.JOINED ||
              this.state.roomState === ROOM_STATES.SESSION_CONNECTED ||
              this.state.roomState === ROOM_STATES.HAS_PARTICIPANTS;
@@ -709,7 +709,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * XXX Refactor shouldRenderRemoteVideo & shouldRenderLoading to remove
      *     overlapping cases.
      */
-    shouldRenderRemoteVideo: function() {
+    shouldRenderRemoteVideo() {
       switch (this.state.roomState) {
         case ROOM_STATES.HAS_PARTICIPANTS:
           if (this.state.remoteVideoEnabled) {
@@ -757,7 +757,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _isLocalLoading: function() {
+    _isLocalLoading() {
       return this.state.roomState === ROOM_STATES.MEDIA_WAIT &&
              !this.state.localSrcMediaElement;
     },
@@ -769,7 +769,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _isRemoteLoading: function() {
+    _isRemoteLoading() {
       return !!(this.state.roomState === ROOM_STATES.HAS_PARTICIPANTS &&
                 !this.state.remoteSrcMediaElement &&
                 !this.state.mediaConnected);
@@ -782,7 +782,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _isScreenShareLoading: function() {
+    _isScreenShareLoading() {
       return this.state.receivingScreenShare &&
              !this.state.screenShareMediaElement &&
              !this.props.screenSharePosterUrl &&
@@ -795,13 +795,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * @returns {boolean}
      * @private
      */
-    _shouldRenderTile: function() {
+    _shouldRenderTile() {
       return this.state.roomState === ROOM_STATES.JOINED ||
              this.state.roomState === ROOM_STATES.SESSION_CONNECTED &&
              this.state.roomState !== ROOM_STATES.HAS_PARTICIPANTS;
     },
 
-    render: function() {
+    render() {
       var displayScreenShare = !!(this.state.receivingScreenShare ||
         this.props.screenSharePosterUrl);
 
@@ -857,13 +857,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired
     },
 
-    generalSupportUrlClick: function() {
+    generalSupportUrlClick() {
       this.props.dispatcher.dispatch(new sharedActions.RecordClick({
         linkInfo: "Support link click"
       }));
     },
 
-    render: function() {
+    render() {
       return (
         <a className="general-support-url"
           href={loop.config.generalSupportUrl}
@@ -887,13 +887,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
       title: React.PropTypes.string.isRequired
     },
 
-    handleGotItClick: function(event) {
+    handleGotItClick(event) {
       event.stopPropagation();
       event.preventDefault();
       this.props.closeCallback();
     },
 
-    render: function() {
+    render() {
       return (
         <div className="slide">
           <div className={this.props.indexClass}>
@@ -917,13 +917,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
       joinRoom: React.PropTypes.func.isRequired
     },
 
-    handleCloseClick: function(event) {
+    handleCloseClick(event) {
       event.stopPropagation();
       event.preventDefault();
       this.props.closeCallback();
     },
 
-    render: function() {
+    render() {
       var slideNode = {
         id: "slide1",
         imageClass: "slide1-image",
@@ -963,11 +963,11 @@ loop.standaloneRoomViews = (function(mozL10n) {
       isFirefox: React.PropTypes.bool.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.getStoreState();
     },
 
-    render: function() {
+    render() {
       // If we don't know yet, don't display anything.
       if (this.state.userAgentHandlesRoom === undefined) {
         return null;
@@ -991,13 +991,13 @@ loop.standaloneRoomViews = (function(mozL10n) {
   });
 
   return {
-    StandaloneHandleUserAgentView: StandaloneHandleUserAgentView,
-    StandaloneInfoBar: StandaloneInfoBar,
-    StandaloneInfoView: StandaloneInfoView,
-    StandaloneRoomControllerView: StandaloneRoomControllerView,
-    StandaloneRoomFailureView: StandaloneRoomFailureView,
-    StandaloneRoomInfoArea: StandaloneRoomInfoArea,
-    StandaloneRoomView: StandaloneRoomView,
-    ToSView: ToSView
+    StandaloneHandleUserAgentView,
+    StandaloneInfoBar,
+    StandaloneInfoView,
+    StandaloneRoomControllerView,
+    StandaloneRoomFailureView,
+    StandaloneRoomInfoArea,
+    StandaloneRoomView,
+    ToSView
   };
 })(navigator.mozL10n);

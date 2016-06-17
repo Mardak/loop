@@ -31,7 +31,7 @@ loop.Dispatcher = (function() {
      * @param {Object} store The store object to register
      * @param {Array} eventTypes An array of action names
      */
-    register: function(store, eventTypes) {
+    register(store, eventTypes) {
       eventTypes.forEach(function(type) {
         if (this._eventData.hasOwnProperty(type)) {
           this._eventData[type].push(store);
@@ -47,7 +47,7 @@ loop.Dispatcher = (function() {
      * @param {Object} store The store object to unregister
      * @param {Array} eventTypes An array of action names
      */
-    unregister: function(store, eventTypes) {
+    unregister(store, eventTypes) {
       eventTypes.forEach(function(type) {
         if (!this._eventData.hasOwnProperty(type)) {
           return;
@@ -66,7 +66,7 @@ loop.Dispatcher = (function() {
     /**
      * Dispatches an action to all registered stores.
      */
-    dispatch: function(action) {
+    dispatch(action) {
       // Always put it on the queue, to make it simpler.
       this._actionQueue.push(action);
       this._dispatchNextAction();
@@ -75,7 +75,7 @@ loop.Dispatcher = (function() {
     /**
      * Dispatches the next action in the queue if one is not already active.
      */
-    _dispatchNextAction: function() {
+    _dispatchNextAction() {
       if (!this._actionQueue.length || this._active) {
         return;
       }

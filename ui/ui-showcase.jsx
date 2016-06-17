@@ -75,11 +75,11 @@
   };
 
   MockSDK.prototype = {
-    setupStreamElements: function() {
+    setupStreamElements() {
       // Dummy function to stop warnings.
     },
 
-    sendTextChatMessage: function(actionData) {
+    sendTextChatMessage(actionData) {
       dispatcher.dispatch(new loop.shared.actions.ReceivedTextChatMessage({
         contentType: loop.shared.utils.CHAT_CONTENT_TYPES.TEXT,
         message: actionData.message,
@@ -271,7 +271,7 @@
     activeRoomStore: makeActiveRoomStore({
       roomState: ROOM_STATES.HAS_PARTICIPANTS
     }),
-    IsMultiProcessEnabled: function() { return true; }
+    IsMultiProcessEnabled() { return true; }
   });
 
   var desktopRoomStoreLoading = new loop.store.RoomStore(dispatcher, {
@@ -399,8 +399,8 @@
   }));
 
   loop.store.StoreMixin.register({
-    activeRoomStore: activeRoomStore,
-    textChatStore: textChatStore
+    activeRoomStore,
+    textChatStore
   });
 
   // Local mocks
@@ -474,7 +474,7 @@
       size: React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render() {
       var sizeUnit = this.props.size.split("x");
       return (
         <img className="svg-icon"
@@ -519,7 +519,7 @@
       ]
     },
 
-    render: function() {
+    render() {
       var icons = this.shapes[this.props.size].map(function(shapeId, i) {
         return (
           <div className="svg-icon-list-item" key={this.props.size + "-" + i}>
@@ -550,19 +550,19 @@
       width: React.PropTypes.number
     },
 
-    makeId: function(prefix) {
+    makeId(prefix) {
       return (prefix || "") + this.props.summary.toLowerCase().replace(/\s/g, "-");
     },
 
     /* Need to wait until the content is loaded and rendered before we can get
       the Height of the content and set the iFrame to that height */
-    componentDidMount: function() {
+    componentDidMount() {
       this._checkFrameContentLoaded();
     },
 
     /* Check to see if content has been rendered, use timeout to run check again if
     rendering content not complete */
-    _checkFrameContentLoaded: function() {
+    _checkFrameContentLoaded() {
       if (this.props.height) {
         return;
       }
@@ -580,7 +580,7 @@
       }
     },
 
-    _resizeFrame: function() {
+    _resizeFrame() {
       if (this.props.height) {
         return;
       }
@@ -596,7 +596,7 @@
       }.bind(this), 2000);
     },
 
-    render: function() {
+    render() {
       var height = this.props.height;
       var width = this.props.width;
 
@@ -638,7 +638,7 @@
       name: React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render() {
       return (
         <section className={this.props.className} id={this.props.name}>
           <h1>{this.props.name}</h1>
@@ -653,7 +653,7 @@
       children: React.PropTypes.arrayOf(React.PropTypes.element).isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       // We assume for now that rtl is the only query parameter.
       //
       // Note: this check is repeated in react-frame-component to save passing
@@ -661,11 +661,11 @@
       var rtlMode = document.location.search === "?rtl=1";
 
       return {
-        rtlMode: rtlMode
+        rtlMode
       };
     },
 
-    _handleCheckboxChange: function(newState) {
+    _handleCheckboxChange(newState) {
       var newLocation = "";
       if (newState.checked) {
         newLocation = document.location.href.split("#")[0];
@@ -677,7 +677,7 @@
       document.location = newLocation;
     },
 
-    render: function() {
+    render() {
       if (this.state.rtlMode) {
         document.documentElement.setAttribute("lang", "ar");
         document.documentElement.setAttribute("dir", "rtl");
@@ -707,7 +707,7 @@
 
   var App = React.createClass({
 
-    render: function() {
+    render() {
       return (
         <ShowCase>
           <Section name="PanelView">
@@ -1430,7 +1430,7 @@
       summary: React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render() {
       // if no errors, return blank
       return !this.props.errorDetected ? null :
       (<li className="test fail">
@@ -1452,7 +1452,7 @@
       warnings: React.PropTypes.array
     },
 
-    render: function() {
+    render() {
       var warningsDetected = this.props.warnings.length !== 0;
       var totalFailures = warningsDetected + !!this.props.error;
 

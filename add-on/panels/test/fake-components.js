@@ -8,10 +8,10 @@
   // Create fake Components to test chrome-privileged React components.
   window.Components = {
     utils: {
-      import: function() {
+      import() {
         return {
           LoopAPI: {
-            sendMessageToHandler: function({ name }, callback) {
+            sendMessageToHandler({ name }, callback) {
               switch (name) {
                 case "GetLocale":
                   return callback("en-US");

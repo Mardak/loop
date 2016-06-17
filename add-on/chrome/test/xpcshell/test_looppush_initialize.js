@@ -24,7 +24,7 @@ add_test(function test_initalize_missing_notifycallback() {
 });
 
 add_test(function test_initalize_websocket() {
-  MozLoopPushHandler.initialize({ mockWebSocket: mockWebSocket });
+  MozLoopPushHandler.initialize({ mockWebSocket });
   MozLoopPushHandler.register(
     "chan-1",
     function(err, url, id) {
@@ -104,7 +104,7 @@ add_test(function test_retry_registration() {
 add_test(function test_reconnect_no_registration() {
   let regCnt = 0;
   MozLoopPushHandler.shutdown();
-  MozLoopPushHandler.initialize({ mockWebSocket: mockWebSocket });
+  MozLoopPushHandler.initialize({ mockWebSocket });
   MozLoopPushHandler.register(
     "test-chan",
     function(err, url, id) {
@@ -131,7 +131,7 @@ add_test(function test_ping_websocket() {
   };
 
   MozLoopPushHandler.shutdown();
-  MozLoopPushHandler.initialize({ mockWebSocket: mockWebSocket });
+  MozLoopPushHandler.initialize({ mockWebSocket });
   MozLoopPushHandler.register(
     "test-chan",
     function(err) {

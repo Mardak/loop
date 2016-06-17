@@ -88,9 +88,9 @@ describe("loop.OTSdkDriver", function() {
     };
 
     driver = new loop.OTSdkDriver({
-      constants: constants,
-      dispatcher: dispatcher,
-      sdk: sdk,
+      constants,
+      dispatcher,
+      sdk,
       isDesktop: true
     });
   });
@@ -103,27 +103,27 @@ describe("loop.OTSdkDriver", function() {
   describe("Constructor", function() {
     it("should throw an error if the constants are missing", function() {
       expect(function() {
-        new loop.OTSdkDriver({ dispatcher: dispatcher, sdk: sdk });
+        new loop.OTSdkDriver({ dispatcher, sdk });
       }).to.Throw(/constants/);
     });
 
     it("should throw an error if the dispatcher is missing", function() {
       expect(function() {
-        new loop.OTSdkDriver({ constants: constants, sdk: sdk });
+        new loop.OTSdkDriver({ constants, sdk });
       }).to.Throw(/dispatcher/);
     });
 
     it("should throw an error if the sdk is missing", function() {
       expect(function() {
-        new loop.OTSdkDriver({ constants: constants, dispatcher: dispatcher });
+        new loop.OTSdkDriver({ constants, dispatcher });
       }).to.Throw(/sdk/);
     });
 
     it("should set the metrics to zero", function() {
       driver = new loop.OTSdkDriver({
-        constants: constants,
-        dispatcher: dispatcher,
-        sdk: sdk
+        constants,
+        dispatcher,
+        sdk
       });
 
       expect(driver._metrics).eql({
@@ -142,9 +142,9 @@ describe("loop.OTSdkDriver", function() {
       });
 
       driver = new loop.OTSdkDriver({
-        constants: constants,
-        dispatcher: dispatcher,
-        sdk: sdk
+        constants,
+        dispatcher,
+        sdk
       });
 
       sinon.assert.calledOnce(sdk.setLogLevel);
@@ -156,7 +156,7 @@ describe("loop.OTSdkDriver", function() {
     beforeEach(function() {
       sandbox.stub(publisher, "off");
       driver.setupStreamElements(new sharedActions.SetupStreamElements({
-        publisherConfig: publisherConfig
+        publisherConfig
       }));
     });
 
@@ -208,7 +208,7 @@ describe("loop.OTSdkDriver", function() {
       sdk.initPublisher.returns(publisher);
 
       driver.setupStreamElements(new sharedActions.SetupStreamElements({
-        publisherConfig: publisherConfig
+        publisherConfig
       }));
     });
 
@@ -498,7 +498,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       driver.setupStreamElements(new sharedActions.SetupStreamElements({
-        publisherConfig: publisherConfig
+        publisherConfig
       }));
 
       // Now disconnect, checking for any unexpected unsubscribes, or any missed
@@ -735,7 +735,7 @@ describe("loop.OTSdkDriver", function() {
       driver.connectSession(sessionData);
 
       driver.setupStreamElements(new sharedActions.SetupStreamElements({
-        publisherConfig: publisherConfig
+        publisherConfig
       }));
     });
 
@@ -846,7 +846,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       it("should dispatch a VideoDimensionsChanged action", function() {
-        publisher.trigger("streamCreated", { stream: stream });
+        publisher.trigger("streamCreated", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -858,7 +858,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       it("should dispatch a MediaStreamCreated action", function() {
-        publisher.trigger("streamCreated", { stream: stream });
+        publisher.trigger("streamCreated", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -872,7 +872,7 @@ describe("loop.OTSdkDriver", function() {
 
       it("should dispatch a MediaStreamCreated action with hasVideo false for audio-only streams", function() {
         stream.hasVideo = false;
-        publisher.trigger("streamCreated", { stream: stream });
+        publisher.trigger("streamCreated", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -888,7 +888,7 @@ describe("loop.OTSdkDriver", function() {
         driver._metrics.recvStreams = 1;
         driver._metrics.connections = 2;
 
-        publisher.trigger("streamCreated", { stream: stream });
+        publisher.trigger("streamCreated", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -1101,7 +1101,7 @@ describe("loop.OTSdkDriver", function() {
 
             // Now send the message.
             fakeChannel.trigger("message", {
-              data: data
+              data
             });
 
             sinon.assert.called(dispatcher.dispatch);
@@ -1222,7 +1222,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       it("should dispatch a ReceivingScreenShare action", function() {
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -1236,7 +1236,7 @@ describe("loop.OTSdkDriver", function() {
         driver._metrics.sendStreams = 1;
         driver._metrics.recvStreams = 1;
 
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.called(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -1252,7 +1252,7 @@ describe("loop.OTSdkDriver", function() {
       it("should not dispatch a ConnectionStatus action if the videoType is camera", function() {
         stream.videoType = "camera";
 
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.neverCalledWithMatch(dispatcher.dispatch,
           sinon.match.hasOwn("name", "receivingScreenShare"));
@@ -1261,7 +1261,7 @@ describe("loop.OTSdkDriver", function() {
       it("should dispatch a DataChannelsAvailable action for videoType = camera", function() {
         stream.videoType = "camera";
 
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.calledThrice(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -1271,7 +1271,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       it("should not dispatch a DataChannelsAvailable action for videoType = screen", function() {
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.neverCalledWithMatch(dispatcher.dispatch,
           sinon.match.hasOwn("name", "dataChannelsAvailable"));
@@ -1280,7 +1280,7 @@ describe("loop.OTSdkDriver", function() {
       it("should dispatch a MediaStreamDestroyed action for videoType = camera", function() {
         stream.videoType = "camera";
 
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.calledThrice(dispatcher.dispatch);
         sinon.assert.calledWithExactly(dispatcher.dispatch,
@@ -1290,7 +1290,7 @@ describe("loop.OTSdkDriver", function() {
       });
 
       it("should not dispatch a MediaStreamDestroyed action for videoType = screen", function() {
-        session.trigger("streamDestroyed", { stream: stream });
+        session.trigger("streamDestroyed", { stream });
 
         sinon.assert.neverCalledWithMatch(dispatcher.dispatch,
           new sharedActions.MediaStreamDestroyed({
@@ -1314,7 +1314,7 @@ describe("loop.OTSdkDriver", function() {
           id: "localUser"
         };
         session.trigger("streamPropertyChanged", {
-          stream: stream,
+          stream,
           changedProperty: STREAM_PROPERTIES.VIDEO_DIMENSIONS
         });
 
@@ -1328,7 +1328,7 @@ describe("loop.OTSdkDriver", function() {
           id: "localUser"
         };
         session.trigger("streamPropertyChanged", {
-          stream: stream,
+          stream,
           oldValue: false,
           newValue: true,
           changedProperty: STREAM_PROPERTIES.HAS_VIDEO

@@ -20,7 +20,7 @@ describe("loop.shared.views", function() {
     });
 
     LoopMochaUtils.stubLoopRequest({
-      GetLoopPref: function() {}
+      GetLoopPref() {}
     });
 
     dispatcher = new loop.Dispatcher();
@@ -53,7 +53,7 @@ describe("loop.shared.views", function() {
         React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "audio",
-          action: function() {},
+          action() {},
           muted: false
         }));
 
@@ -65,7 +65,7 @@ describe("loop.shared.views", function() {
           React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "audio",
-          action: function() {},
+          action() {},
           muted: true
         }));
 
@@ -77,7 +77,7 @@ describe("loop.shared.views", function() {
           React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "video",
-          action: function() {},
+          action() {},
           muted: false
         }));
 
@@ -89,7 +89,7 @@ describe("loop.shared.views", function() {
         React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "video",
-          action: function() {},
+          action() {},
           muted: true
         }));
 
@@ -101,7 +101,7 @@ describe("loop.shared.views", function() {
         React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "video",
-          action: function() {},
+          action() {},
           disabled: true,
           muted: true
         }));
@@ -115,7 +115,7 @@ describe("loop.shared.views", function() {
         React.createElement(sharedViews.MediaControlButton, {
           scope: "local",
           type: "audio",
-          action: function() {},
+          action() {},
           disabled: true,
           muted: true
         }));
@@ -150,7 +150,7 @@ describe("loop.shared.views", function() {
       function() {
         var comp = TestUtils.renderIntoDocument(
           React.createElement(sharedViews.AudioMuteButton, {
-            dispatcher: dispatcher,
+            dispatcher,
             muted: false
           }));
 
@@ -166,7 +166,7 @@ describe("loop.shared.views", function() {
       function() {
         var comp = TestUtils.renderIntoDocument(
           React.createElement(sharedViews.AudioMuteButton, {
-            dispatcher: dispatcher,
+            dispatcher,
             muted: true
           }));
 
@@ -204,7 +204,7 @@ describe("loop.shared.views", function() {
       function() {
         var comp = TestUtils.renderIntoDocument(
           React.createElement(sharedViews.VideoMuteButton, {
-            dispatcher: dispatcher,
+            dispatcher,
             muted: false
           }));
 
@@ -220,7 +220,7 @@ describe("loop.shared.views", function() {
       function() {
         var comp = TestUtils.renderIntoDocument(
           React.createElement(sharedViews.VideoMuteButton, {
-            dispatcher: dispatcher,
+            dispatcher,
             muted: true
           }));
 
@@ -238,7 +238,7 @@ describe("loop.shared.views", function() {
 
     function mountTestComponent(props) {
       props = _.extend({
-        dispatcher: dispatcher
+        dispatcher
       }, props || {});
       return TestUtils.renderIntoDocument(
         React.createElement(sharedViews.ConversationToolbar, props));
@@ -251,7 +251,7 @@ describe("loop.shared.views", function() {
     it("should start no idle", function() {
       var comp = mountTestComponent({
         hangupButtonLabel: "foo",
-        hangup: hangup
+        hangup
       });
       expect(ReactDOM.findDOMNode(comp).classList.contains("idle")).eql(false);
     });
@@ -259,7 +259,7 @@ describe("loop.shared.views", function() {
     it("should be on idle state after 6 seconds", function() {
       var comp = mountTestComponent({
         hangupButtonLabel: "foo",
-        hangup: hangup
+        hangup
       });
       expect(ReactDOM.findDOMNode(comp).classList.contains("idle")).eql(false);
 
@@ -270,7 +270,7 @@ describe("loop.shared.views", function() {
     it("should remove idle state when the user moves the mouse", function() {
       var comp = mountTestComponent({
         hangupButtonLabel: "foo",
-        hangup: hangup
+        hangup
       });
 
       clock.tick(6001);
@@ -284,7 +284,7 @@ describe("loop.shared.views", function() {
     it("should accept a showHangup optional prop", function() {
       var comp = mountTestComponent({
         showHangup: false,
-        hangup: hangup
+        hangup
       });
 
       expect(ReactDOM.findDOMNode(comp).querySelector(".btn-hangup-entry")).to.eql(null);
@@ -292,7 +292,7 @@ describe("loop.shared.views", function() {
 
     it("should hangup when hangup button is clicked", function() {
       var comp = mountTestComponent({
-        hangup: hangup,
+        hangup,
         audio: { enabled: true }
       });
 
@@ -312,7 +312,7 @@ describe("loop.shared.views", function() {
     });
 
     function mountTestComponent(props) {
-      props = _.extend({ onChange: function() {} }, props);
+      props = _.extend({ onChange() {} }, props);
       return TestUtils.renderIntoDocument(
         React.createElement(sharedViews.Checkbox, props));
     }
@@ -397,7 +397,7 @@ describe("loop.shared.views", function() {
       });
 
       it("should invoke the `onChange` function on click", function() {
-        view = mountTestComponent({ onChange: onChange });
+        view = mountTestComponent({ onChange });
 
         expect(view.state.checked).to.eql(false);
 
@@ -414,7 +414,7 @@ describe("loop.shared.views", function() {
 
       it("should signal a value change on click", function() {
         view = mountTestComponent({
-          onChange: onChange,
+          onChange,
           value: "some-value"
         });
 
@@ -464,7 +464,7 @@ describe("loop.shared.views", function() {
       var props = _.extend({
         allowClick: false,
         description: "test",
-        dispatcher: dispatcher,
+        dispatcher,
         showContextTitle: false
       }, extraProps);
       return TestUtils.renderIntoDocument(
@@ -617,7 +617,7 @@ describe("loop.shared.views", function() {
       remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
         sdkDriver: {}
       });
-      loop.store.StoreMixin.register({ remoteCursorStore: remoteCursorStore });
+      loop.store.StoreMixin.register({ remoteCursorStore });
     });
 
     it("should display an avatar view", function() {
@@ -685,7 +685,7 @@ describe("loop.shared.views", function() {
 
         fakeViewElement = {
           tagName: "DIV",
-          querySelector: function() {
+          querySelector() {
             return fakeVideoElement;
           }
         };
@@ -710,7 +710,7 @@ describe("loop.shared.views", function() {
       it("should not throw if the element is not a video object", function() {
         sandbox.stub(ReactDOM, "findDOMNode").returns({
           tagName: "DIV",
-          querySelector: function() {
+          querySelector() {
             return {
               tagName: "DIV",
               addEventListener: sinon.stub()
@@ -787,7 +787,7 @@ describe("loop.shared.views", function() {
 
         fakeViewElement = {
           tagName: "DIV",
-          querySelector: function() {
+          querySelector() {
             return fakeVideoElement;
           }
         };
@@ -816,7 +816,7 @@ describe("loop.shared.views", function() {
     describe("handleMouseClick", function() {
       beforeEach(function() {
         view = mountTestComponent({
-          dispatcher: dispatcher,
+          dispatcher,
           displayAvatar: false,
           mediaType: "local",
           srcMediaElement: {
@@ -840,7 +840,7 @@ describe("loop.shared.views", function() {
     function mountTestComponent(extraProps) {
       var defaultProps = {
         cursorStore: remoteCursorStore,
-        dispatcher: dispatcher,
+        dispatcher,
         displayScreenShare: false,
         isLocalLoading: false,
         isRemoteLoading: false,
@@ -870,7 +870,7 @@ describe("loop.shared.views", function() {
         sdkDriver: {}
       });
 
-      loop.store.StoreMixin.register({ textChatStore: textChatStore });
+      loop.store.StoreMixin.register({ textChatStore });
 
       // Need to stub these methods because when mounting the AdsTileView we are
       // attaching listeners to the window object and "AdsTileView" tests will failed
@@ -1027,7 +1027,7 @@ describe("loop.shared.views", function() {
         sdkDriver: {}
       });
 
-      loop.store.StoreMixin.register({ remoteCursorStore: remoteCursorStore });
+      loop.store.StoreMixin.register({ remoteCursorStore });
 
       remoteCursorStore.setStoreState({
         realVideoSize: {
@@ -1177,7 +1177,7 @@ describe("loop.shared.views", function() {
       // Render the iframe into the fixture to cause it to load
       ReactDOM.render(React.createElement(
         sharedViews.AdsTileView, {
-          dispatcher: dispatcher,
+          dispatcher,
           showTile: true
         }), document.querySelector("#fixtures"));
 
@@ -1199,7 +1199,7 @@ describe("loop.shared.views", function() {
     it("should dispatch a RecordClick action when the support button is clicked", function() {
       var view = TestUtils.renderIntoDocument(
         React.createElement(sharedViews.AdsTileView, {
-          dispatcher: dispatcher,
+          dispatcher,
           showTile: true
         }));
 

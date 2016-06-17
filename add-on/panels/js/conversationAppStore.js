@@ -19,7 +19,7 @@ loop.store.ConversationAppStore = (function() {
    *                         activeRoomStore and dispatcher objects.
    */
   var ConversationAppStore = loop.store.createStore({
-    initialize: function(options) {
+    initialize(options) {
       if (!options.activeRoomStore) {
         throw new Error("Missing option activeRoomStore");
       }
@@ -52,7 +52,7 @@ loop.store.ConversationAppStore = (function() {
       ]);
     },
 
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         chatWindowDetached: false,
         facebookEnabled: this._facebookEnabled,
@@ -69,7 +69,7 @@ loop.store.ConversationAppStore = (function() {
      *
      * @return {Object}
      */
-    getStoreState: function() {
+    getStoreState() {
       return this._storeState;
     },
 
@@ -78,7 +78,7 @@ loop.store.ConversationAppStore = (function() {
      *
      * @param {Object} state The new store state.
      */
-    setStoreState: function(state) {
+    setStoreState(state) {
       this._storeState = _.extend({}, this._storeState, state);
       this.trigger("change");
     },
@@ -87,7 +87,7 @@ loop.store.ConversationAppStore = (function() {
      * Sets store state which will result in the feedback form rendered.
      * Saves a timestamp of when the feedback was last rendered.
      */
-    showFeedbackForm: function() {
+    showFeedbackForm() {
       var timestamp = Math.floor(new Date().getTime() / 1000);
 
       loop.request("SetLoopPref", "feedback.dateLastSeenSec", timestamp);
@@ -103,7 +103,7 @@ loop.store.ConversationAppStore = (function() {
      *
      * @param {sharedActions.GetWindowData} actionData The action data
      */
-    getWindowData: function(actionData) {
+    getWindowData(actionData) {
       var windowData = loop.getStoredRequest(["GetConversationWindowData",
         actionData.windowId]);
 
@@ -125,7 +125,7 @@ loop.store.ConversationAppStore = (function() {
      * It will dispatch a 'WindowUnload' action that other stores may listen to
      * and will remove all event handlers attached to the window object.
      */
-    unloadHandler: function() {
+    unloadHandler() {
       this.dispatcher.dispatch(new loop.shared.actions.WindowUnload());
 
       // Unregister event handlers.
@@ -142,7 +142,7 @@ loop.store.ConversationAppStore = (function() {
      * It'll attempt to gracefully disconnect from an active session, or close
      * the window when no session is currently active.
      */
-    LoopHangupNowHandler: function() {
+    LoopHangupNowHandler() {
       this.dispatcher.dispatch(new loop.shared.actions.LeaveConversation());
     },
 
@@ -150,7 +150,7 @@ loop.store.ConversationAppStore = (function() {
      * Handles leaving the conversation, displaying the feedback form if it
      * is time to.
      */
-    leaveConversation: function() {
+    leaveConversation() {
       if (this.getStoreState().windowType !== "room" ||
           !this._activeRoomStore.getStoreState().used ||
           this.getStoreState().showFeedbackForm) {
@@ -179,7 +179,7 @@ loop.store.ConversationAppStore = (function() {
      * the window object.
      * It'll attempt to pause or resume the screen share as appropriate.
      */
-    ToggleBrowserSharingHandler: function(actionData) {
+    ToggleBrowserSharingHandler(actionData) {
       this.dispatcher.dispatch(new loop.shared.actions.ToggleBrowserSharing({
         enabled: !actionData.detail
       }));
@@ -189,7 +189,7 @@ loop.store.ConversationAppStore = (function() {
      * Event handler; invoked when the 'socialFrameAttached' event is dispatched
      * from the window object.
      */
-    socialFrameAttachedHandler: function() {
+    socialFrameAttachedHandler() {
       this.setStoreState({ chatWindowDetached: false });
     },
 
@@ -197,7 +197,7 @@ loop.store.ConversationAppStore = (function() {
      * Event handler; invoked when the 'socialFrameDetached' event is dispatched
      * from the window object.
      */
-    socialFrameDetachedHandler: function() {
+    socialFrameDetachedHandler() {
       this.setStoreState({ chatWindowDetached: true });
     }
   });

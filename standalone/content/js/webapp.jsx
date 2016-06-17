@@ -17,7 +17,7 @@ loop.webapp = (function(_, OT, mozL10n) {
    * Homepage view.
    */
   var HomeView = React.createClass({
-    render: function() {
+    render() {
       return (
         <p>{mozL10n.get("welcome", { clientShortname: mozL10n.get("clientShortname2") })}</p>
       );
@@ -32,7 +32,7 @@ loop.webapp = (function(_, OT, mozL10n) {
       isFirefox: React.PropTypes.bool.isRequired
     },
 
-    render: function() {
+    render() {
       return (
         <div className="highlight-issue-box">
           <div className="info-panel">
@@ -54,7 +54,7 @@ loop.webapp = (function(_, OT, mozL10n) {
       platform: React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render() {
       return (
         <div className="issue-box issue-unsupported-platform">
           <div className="issue-box-content">
@@ -75,7 +75,7 @@ loop.webapp = (function(_, OT, mozL10n) {
       isFirefox: React.PropTypes.bool.isRequired
     },
 
-    render: function() {
+    render() {
       if (this.props.isFirefox) {
         return null;
       }
@@ -113,25 +113,25 @@ loop.webapp = (function(_, OT, mozL10n) {
         loop.store.StandaloneAppStore).isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.props.standaloneAppStore.getStoreState();
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
       this.listenTo(this.props.standaloneAppStore, "change", function() {
         this.setState(this.props.standaloneAppStore.getStoreState());
       }, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
       this.stopListening(this.props.standaloneAppStore);
     },
 
-    onUrlHashChange: function() {
+    onUrlHashChange() {
       this.locationReload();
     },
 
-    render: function() {
+    render() {
       switch (this.state.windowType) {
         case "unsupportedDevice": {
           return <UnsupportedDeviceView platform={this.state.unsupportedPlatform} />;
@@ -175,12 +175,12 @@ loop.webapp = (function(_, OT, mozL10n) {
       // we won't display the UI.
       constants: {},
       useDataChannels: true,
-      dispatcher: dispatcher,
+      dispatcher,
       sdk: OT
     });
 
     var activeRoomStore = new loop.store.ActiveRoomStore(dispatcher, {
-      sdkDriver: sdkDriver
+      sdkDriver
     });
 
     // Stores
@@ -188,22 +188,22 @@ loop.webapp = (function(_, OT, mozL10n) {
       sdk: OT
     });
     var standaloneMetricsStore = new loop.store.StandaloneMetricsStore(dispatcher, {
-      activeRoomStore: activeRoomStore
+      activeRoomStore
     });
     var textChatStore = new loop.store.TextChatStore(dispatcher, {
-      sdkDriver: sdkDriver
+      sdkDriver
     });
     var remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
-      sdkDriver: sdkDriver
+      sdkDriver
     });
 
     loop.store.StoreMixin.register({
-      activeRoomStore: activeRoomStore,
-      remoteCursorStore: remoteCursorStore,
+      activeRoomStore,
+      remoteCursorStore,
       // This isn't used in any views, but is saved here to ensure it
       // is kept alive.
-      standaloneMetricsStore: standaloneMetricsStore,
-      textChatStore: textChatStore
+      standaloneMetricsStore,
+      textChatStore
     });
 
     window.addEventListener("unload", function() {
@@ -230,12 +230,12 @@ loop.webapp = (function(_, OT, mozL10n) {
   }
 
   return {
-    HomeView: HomeView,
-    UnsupportedBrowserView: UnsupportedBrowserView,
-    UnsupportedDeviceView: UnsupportedDeviceView,
-    init: init,
-    PromoteFirefoxView: PromoteFirefoxView,
-    WebappRootView: WebappRootView
+    HomeView,
+    UnsupportedBrowserView,
+    UnsupportedDeviceView,
+    init,
+    PromoteFirefoxView,
+    WebappRootView
   };
 })(_, window.OT, navigator.mozL10n);
 

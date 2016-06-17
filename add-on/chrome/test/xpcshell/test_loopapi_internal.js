@@ -76,7 +76,7 @@ add_test(function test_sendMessageToHandler() {
   // Testing correct flow branches.
   let hangupNowCalls = [];
   LoopAPI.stubMessageHandlers({
-    HangupNow: function(message, reply) {
+    HangupNow(message, reply) {
       hangupNowCalls.push(message);
       reply();
     }

@@ -35,7 +35,7 @@ loop.shared.views.chat = (function(mozL10n) {
      * (or L10N equivalent).
      *
      */
-    _renderTimestamp: function() {
+    _renderTimestamp() {
       var date = new Date(this.props.timestamp);
 
       return (
@@ -47,7 +47,7 @@ loop.shared.views.chat = (function(mozL10n) {
       );
     },
 
-    render: function() {
+    render() {
       var classes = classNames({
         "text-chat-entry": this.props.contentType !== CHAT_CONTENT_TYPES.NOTIFICATION,
         "received": this.props.type === CHAT_MESSAGE_TYPES.RECEIVED,
@@ -113,7 +113,7 @@ loop.shared.views.chat = (function(mozL10n) {
       chatHeaderName: React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render() {
       return (
         <div className="text-chat-header special">
           <p>{mozL10n.get("room_you_have_joined_title", { chatHeaderName: this.props.chatHeaderName })}</p>
@@ -144,19 +144,19 @@ loop.shared.views.chat = (function(mozL10n) {
       showInitialContext: React.PropTypes.bool.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         receivedMessageCount: 0
       };
     },
 
-    _hasChatMessages: function() {
+    _hasChatMessages() {
       return this.props.messageList.some(function(message) {
         return message.contentType !== CHAT_CONTENT_TYPES.CONTEXT;
       });
     },
 
-    componentWillUpdate: function() {
+    componentWillUpdate() {
       var node = ReactDOM.findDOMNode(this);
       if (!node) {
         return;
@@ -167,7 +167,7 @@ loop.shared.views.chat = (function(mozL10n) {
         node.scrollHeight === node.scrollTop + node.clientHeight;
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
       var receivedMessageCount = nextProps.messageList.filter(function(message) {
         return message.type === CHAT_MESSAGE_TYPES.RECEIVED;
       }).length;
@@ -175,11 +175,11 @@ loop.shared.views.chat = (function(mozL10n) {
       // If the number of received messages has increased, we play a sound.
       if (receivedMessageCount > this.state.receivedMessageCount) {
         this.play("message");
-        this.setState({ receivedMessageCount: receivedMessageCount });
+        this.setState({ receivedMessageCount });
       }
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
       // Don't scroll if we haven't got any chat messages yet - e.g. for context
       // display, we want to display starting at the top.
       if (this.shouldScroll && this._hasChatMessages()) {
@@ -195,7 +195,7 @@ loop.shared.views.chat = (function(mozL10n) {
       }
     },
 
-    render: function() {
+    render() {
       /* Keep track of the last printed timestamp. */
       var lastTimestamp = 0;
 
@@ -277,7 +277,7 @@ loop.shared.views.chat = (function(mozL10n) {
      * @param {boolean} timeDiff If difference between consecutive messages is
      *                           bigger than one minute.
      */
-    _shouldShowTimestamp: function(idx, timeDiff) {
+    _shouldShowTimestamp(idx, timeDiff) {
       if (!idx) {
         return true;
       }
@@ -300,7 +300,7 @@ loop.shared.views.chat = (function(mozL10n) {
      * @param {string} currTime Timestamp of message yet to be rendered.
      * @param {string} prevTime Last timestamp printed in the chat view.
      */
-    _isOneMinDelta: function(currTime, prevTime) {
+    _isOneMinDelta(currTime, prevTime) {
       var date1 = new Date(currTime);
       var date2 = new Date(prevTime);
       var delta = date1 - date2;
@@ -332,13 +332,13 @@ loop.shared.views.chat = (function(mozL10n) {
       textChatEnabled: React.PropTypes.bool.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         messageDetail: ""
       };
     },
 
-    handleChange: function(event) {
+    handleChange(event) {
       this.setState({ messageDetail: event.target.value });
     },
 
@@ -348,7 +348,7 @@ loop.shared.views.chat = (function(mozL10n) {
      *
      * @param {Object} event The DOM event.
      */
-    handleKeyDown: function(event) {
+    handleKeyDown(event) {
       if (event.which === 13) {
         this.handleFormSubmit(event);
       }
@@ -359,7 +359,7 @@ loop.shared.views.chat = (function(mozL10n) {
      *
      * @param {Object} event The DOM event.
      */
-    handleFormSubmit: function(event) {
+    handleFormSubmit(event) {
       event.preventDefault();
 
       // Don't send empty messages.
@@ -377,7 +377,7 @@ loop.shared.views.chat = (function(mozL10n) {
       this.setState({ messageDetail: "" });
     },
 
-    render: function() {
+    render() {
       if (!this.props.textChatEnabled) {
         return null;
       }
@@ -416,11 +416,11 @@ loop.shared.views.chat = (function(mozL10n) {
       showTile: React.PropTypes.bool.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return this.getStoreState();
     },
 
-    render: function() {
+    render() {
       var messageList = this.state.messageList;
 
       // Filter out items not displayed when showing initial context.
@@ -463,8 +463,8 @@ loop.shared.views.chat = (function(mozL10n) {
   });
 
   return {
-    TextChatEntriesView: TextChatEntriesView,
-    TextChatEntry: TextChatEntry,
-    TextChatView: TextChatView
+    TextChatEntriesView,
+    TextChatEntry,
+    TextChatView
   };
 })(navigator.mozL10n || document.mozL10n);

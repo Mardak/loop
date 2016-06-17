@@ -181,7 +181,7 @@ var LoopRoomsInternal = {
   encryptionQueue: {
     queue: [],
     timer: null,
-    reset: function() {
+    reset() {
       this.queue = [];
       this.timer = null;
     }
@@ -190,7 +190,7 @@ var LoopRoomsInternal = {
   /**
    * Initialises the rooms, sets up the link clicker listener.
    */
-  init: function() {
+  init() {
     Services.prefs.addObserver(LINKCLICKER_URL_PREFNAME,
       this.setupLinkClickerListener.bind(this), false);
 
@@ -201,7 +201,7 @@ var LoopRoomsInternal = {
    * Sets up a WebChannel listener for the link clicker so that we can open
    * rooms in the Firefox UI.
    */
-  setupLinkClickerListener: function() {
+  setupLinkClickerListener() {
     // Ensure any existing channel is tidied up.
     if (gLinkClickerChannel) {
       gLinkClickerChannel.stopListening();
@@ -284,7 +284,7 @@ var LoopRoomsInternal = {
    *
    * @param {String} roomToken The token for the room that needs encrypting.
    */
-  queueForEncryption: function(roomToken) {
+  queueForEncryption(roomToken) {
     if (this.encryptionQueue.queue.indexOf(roomToken) == -1) {
       this.encryptionQueue.queue.push(roomToken);
     }
@@ -353,7 +353,7 @@ var LoopRoomsInternal = {
    * @param  {String} roomKey The new key to put on the url.
    * @return {String}         The revised url.
    */
-  refreshRoomUrlWithNewKey: function(roomUrl, roomKey) {
+  refreshRoomUrlWithNewKey(roomUrl, roomKey) {
     // Strip any existing key from the url.
     roomUrl = roomUrl.split("#")[0];
     // Now add the key to the url.
@@ -474,7 +474,7 @@ var LoopRoomsInternal = {
    * @param {Object}  roomData The new room data to save.
    * @param {Boolean} isUpdate true if this is an update, false if its an add.
    */
-  saveAndNotifyUpdate: function(roomData, isUpdate) {
+  saveAndNotifyUpdate(roomData, isUpdate) {
     this.rooms.set(roomData.roomToken, roomData);
 
     let eventName = isUpdate ? "update" : "add";
@@ -535,7 +535,7 @@ var LoopRoomsInternal = {
    * @return {Promise}           A promise that is resolved with a list of rooms
    *                             on success, or rejected with an error if it fails.
    */
-  getAll: function(version) {
+  getAll(version) {
     if (gGetAllPromise && !version) {
       return gGetAllPromise;
     }
@@ -601,7 +601,7 @@ var LoopRoomsInternal = {
    * @param {String}  roomToken Room identifier
    * @return {Number} Count of participants in the room.
    */
-  getNumParticipants: function(roomToken) {
+  getNumParticipants(roomToken) {
     try {
       if (this.rooms && this.rooms.has(roomToken)) {
         return this.rooms.get(roomToken).participants.length;
@@ -625,7 +625,7 @@ var LoopRoomsInternal = {
    *                             `Error` object or `null`. The second argument will
    *                             be the list of rooms, if it was fetched successfully.
    */
-  get: function(roomToken, callback) {
+  get(roomToken, callback) {
     let room = this.rooms.has(roomToken) ? this.rooms.get(roomToken) : {};
     // Check if we need to make a request to the server to collect more room data.
     let needsUpdate = !("participants" in room);
@@ -668,7 +668,7 @@ var LoopRoomsInternal = {
    *                            `Error` object or `null`. The second argument will
    *                            be the room, if it was created successfully.
    */
-  create: function(room, callback) {
+  create(room, callback) {
     if (!("decryptedContext" in room) || !("maxSize" in room)) {
       callback(new Error("Missing required property to create a room"));
       return;
@@ -711,7 +711,7 @@ var LoopRoomsInternal = {
    *
    * @param {Boolean} created If the user has created the room.
    */
-  setGuestCreatedRoom: function(created) {
+  setGuestCreatedRoom(created) {
     if (created) {
       Services.prefs.setBoolPref("loop.createdRoom", created);
     } else {
@@ -722,7 +722,7 @@ var LoopRoomsInternal = {
   /**
    * Returns true if the user has a created room in guest mode.
    */
-  getGuestCreatedRoom: function() {
+  getGuestCreatedRoom() {
     try {
       return Services.prefs.getBoolPref("loop.createdRoom");
     } catch (x) {
@@ -730,9 +730,9 @@ var LoopRoomsInternal = {
     }
   },
 
-  open: function(roomToken) {
+  open(roomToken) {
     let windowData = {
-      roomToken: roomToken,
+      roomToken,
       type: "room"
     };
 
@@ -751,7 +751,7 @@ var LoopRoomsInternal = {
    *                             finished. The first argument passed will be an
    *                             `Error` object or `null`.
    */
-  delete: function(roomToken, callback) {
+  delete(roomToken, callback) {
     // XXX bug 1092954: Before deleting a room, the client should check room
     //     membership and forceDisconnect() all current participants.
     let room = this.rooms.get(roomToken);
@@ -797,10 +797,10 @@ var LoopRoomsInternal = {
    *                             finished. The first argument passed will be an
    *                             `Error` object or `null`.
    */
-  join: function(roomToken, displayName, callback) {
+  join(roomToken, displayName, callback) {
     this._postToRoom(roomToken, {
       action: "join",
-      displayName: displayName,
+      displayName,
       clientMaxSize: CLIENT_MAX_SIZE
     }, callback);
   },
@@ -815,10 +815,10 @@ var LoopRoomsInternal = {
    *                              finished. The first argument passed will be an
    *                              `Error` object or `null`.
    */
-  refreshMembership: function(roomToken, sessionToken, callback) {
+  refreshMembership(roomToken, sessionToken, callback) {
     this._postToRoom(roomToken, {
       action: "refresh",
-      sessionToken: sessionToken
+      sessionToken
     }, callback);
   },
 
@@ -833,7 +833,7 @@ var LoopRoomsInternal = {
    *                              finished. The first argument passed will be an
    *                              `Error` object or `null`.
    */
-  leave: function(roomToken, sessionToken, callback) {
+  leave(roomToken, sessionToken, callback) {
     if (!callback) {
       callback = function(error) {
         if (error) {
@@ -851,7 +851,7 @@ var LoopRoomsInternal = {
     }
     this._postToRoom(roomToken, {
       action: "leave",
-      sessionToken: sessionToken
+      sessionToken
     }, callback);
   },
 
@@ -867,7 +867,7 @@ var LoopRoomsInternal = {
    *                            the operation finished. The first argument
    *                            passed will be an `Error` object or `null`.
    */
-  sendConnectionStatus: function(roomToken, sessionToken, status, callback) {
+  sendConnectionStatus(roomToken, sessionToken, status, callback) {
     if (!callback) {
       callback = function(error) {
         if (error) {
@@ -882,7 +882,7 @@ var LoopRoomsInternal = {
       connections: status.connections,
       sendStreams: status.sendStreams,
       recvStreams: status.recvStreams,
-      sessionToken: sessionToken
+      sessionToken
     }, callback);
   },
 
@@ -973,7 +973,7 @@ var LoopRoomsInternal = {
    *                            finished. The first argument passed will be an
    *                            `Error` object or `null`.
    */
-  update: function(roomToken, roomData, callback) {
+  update(roomToken, roomData, callback) {
     let room = this.rooms.get(roomToken);
     let url = "/rooms/" + encodeURIComponent(roomToken);
     if (!room.decryptedContext) {
@@ -1027,7 +1027,7 @@ var LoopRoomsInternal = {
    * @param {String} version   Version number assigned to this change set.
    * @param {String} channelID Notification channel identifier.
    */
-  onNotification: function(version, channelID) {
+  onNotification(version, channelID) {
     // See if we received a notification for the channel that's currently active:
     let channelIDs = MozLoopService.channelIDs;
     if ((this.sessionType == LOOP_SESSION_TYPE.GUEST && channelID != channelIDs.roomsGuest) ||
@@ -1050,7 +1050,7 @@ var LoopRoomsInternal = {
    *
    * @param {String|null} user The FxA userID or NULL
    */
-  maybeRefresh: function(user = null) {
+  maybeRefresh(user = null) {
     if (gCurrentUser == user) {
       return;
     }
@@ -1071,15 +1071,15 @@ var LoopRoomsInternal = {
    * @param {Object} message         The message received.
    * @param {Object} sendingContext  The context for the sending location.
    */
-  _handleLinkClickerMessage: function(id, message, sendingContext) {
+  _handleLinkClickerMessage(id, message, sendingContext) {
     if (!message) {
       return;
     }
 
     let sendResponse = (response, alreadyOpen) => {
       gLinkClickerChannel.send({
-        response: response,
-        alreadyOpen: alreadyOpen
+        response,
+        alreadyOpen
       }, sendingContext);
     };
 
@@ -1126,7 +1126,7 @@ Object.freeze(LoopRoomsInternal);
  * See the internal code for the API documentation.
  */
 this.LoopRooms = {
-  init: function() {
+  init() {
     LoopRoomsInternal.init();
   },
 
@@ -1134,7 +1134,7 @@ this.LoopRooms = {
     return LoopRoomsInternal.participantsCount;
   },
 
-  getAll: function(version, callback) {
+  getAll(version, callback) {
     if (!callback) {
       callback = version;
       version = null;
@@ -1144,36 +1144,36 @@ this.LoopRooms = {
       .catch(error => callback(error));
   },
 
-  get: function(roomToken, callback) {
+  get(roomToken, callback) {
     return LoopRoomsInternal.get(roomToken, callback);
   },
 
-  create: function(options, callback) {
+  create(options, callback) {
     return LoopRoomsInternal.create(options, callback);
   },
 
-  open: function(roomToken) {
+  open(roomToken) {
     return LoopRoomsInternal.open(roomToken);
   },
 
-  delete: function(roomToken, callback) {
+  delete(roomToken, callback) {
     return LoopRoomsInternal.delete(roomToken, callback);
   },
 
-  join: function(roomToken, displayName, callback) {
+  join(roomToken, displayName, callback) {
     return LoopRoomsInternal.join(roomToken, displayName, callback);
   },
 
-  refreshMembership: function(roomToken, sessionToken, callback) {
+  refreshMembership(roomToken, sessionToken, callback) {
     return LoopRoomsInternal.refreshMembership(roomToken, sessionToken,
       callback);
   },
 
-  leave: function(roomToken, sessionToken, callback) {
+  leave(roomToken, sessionToken, callback) {
     return LoopRoomsInternal.leave(roomToken, sessionToken, callback);
   },
 
-  sendConnectionStatus: function(roomToken, sessionToken, status, callback) {
+  sendConnectionStatus(roomToken, sessionToken, status, callback) {
     return LoopRoomsInternal.sendConnectionStatus(roomToken, sessionToken, status, callback);
   },
 
@@ -1181,19 +1181,19 @@ this.LoopRooms = {
     return LoopRoomsInternal.logDomains(roomToken, callback);
   },
 
-  update: function(roomToken, roomData, callback) {
+  update(roomToken, roomData, callback) {
     return LoopRoomsInternal.update(roomToken, roomData, callback);
   },
 
-  getGuestCreatedRoom: function() {
+  getGuestCreatedRoom() {
     return LoopRoomsInternal.getGuestCreatedRoom();
   },
 
-  maybeRefresh: function(user) {
+  maybeRefresh(user) {
     return LoopRoomsInternal.maybeRefresh(user);
   },
 
-  getNumParticipants: function(roomToken) {
+  getNumParticipants(roomToken) {
     return LoopRoomsInternal.getNumParticipants(roomToken);
   },
 
@@ -1203,7 +1203,7 @@ this.LoopRooms = {
    *
    * @param {Map} stub Stub cache containing fake rooms data
    */
-  stubCache: function(stub) {
+  stubCache(stub) {
     LoopRoomsInternal.rooms.clear();
     if (stub) {
       // Fill up the rooms cache with room objects provided in the `stub` Map.
@@ -1218,7 +1218,7 @@ this.LoopRooms = {
     }
   },
 
-  promise: function(method, ...params) {
+  promise(method, ...params) {
     if (method == "getAll") {
       return LoopRoomsInternal.getAll(...params);
     }
@@ -1247,7 +1247,7 @@ this.LoopRooms = {
    * @param {Map} roomsCache The new cache data to set for testing purposes. If
    *                         not specified, it will reset the cache.
    */
-  _setRoomsCache: function(roomsCache, orig) {
+  _setRoomsCache(roomsCache, orig) {
     LoopRoomsInternal.rooms.clear();
     gDirty = true;
 

@@ -27,7 +27,7 @@ describe("loop.store.RoomStore", function() {
     sandbox = LoopMochaUtils.createSandbox();
 
     LoopMochaUtils.stubLoopRequest(requestStubs = {
-      GetAllConstants: function() {
+      GetAllConstants() {
         return {
           SHARING_ROOM_URL: {
             COPY_FROM_PANEL: 0,
@@ -52,13 +52,13 @@ describe("loop.store.RoomStore", function() {
       },
       CopyString: sinon.stub(),
       ComposeEmail: sinon.stub(),
-      GetLoopPref: function(prefName) {
+      GetLoopPref(prefName) {
         if (prefName === "debug.dispatcher") {
           return false;
         }
         return true;
       },
-      NotifyUITour: function() {},
+      NotifyUITour() {},
       OpenURL: sinon.stub(),
       "Rooms:Create": sinon.stub().returns({
         decryptedContext: [],
@@ -144,7 +144,7 @@ describe("loop.store.RoomStore", function() {
     describe("MozLoop rooms event listeners", function() {
       beforeEach(function() {
         LoopMochaUtils.stubLoopRequest({
-          "Rooms:GetAll": function() {
+          "Rooms:GetAll"() {
             return fakeRoomList;
           }
         });
@@ -706,7 +706,7 @@ describe("loop.store.RoomStore", function() {
         });
         fakeStore = new loop.store.RoomStore(dispatcher, {
           constants: requestStubs.GetAllConstants(),
-          activeRoomStore: activeRoomStore
+          activeRoomStore
         });
       });
 
@@ -789,7 +789,7 @@ describe("loop.store.RoomStore", function() {
       expect(store.getStoreState().savingContext).to.eql(false);
 
       LoopMochaUtils.stubLoopRequest({
-        "Rooms:Update": function() {
+        "Rooms:Update"() {
           expect(store.getStoreState().savingContext).to.eql(true);
         }
       });
@@ -807,7 +807,7 @@ describe("loop.store.RoomStore", function() {
       err.isError = true;
 
       LoopMochaUtils.stubLoopRequest({
-        "Rooms:Update": function() {
+        "Rooms:Update"() {
           expect(store.getStoreState().savingContext).to.eql(true);
           return err;
         }

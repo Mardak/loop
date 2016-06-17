@@ -147,13 +147,13 @@ var fakeRooms = [
    * @type {Object}
    */
   LoopMochaUtils.stubLoopRequest({
-    EnsureRegistered: function() {},
-    GetAudioBlob: function() {
+    EnsureRegistered() {},
+    GetAudioBlob() {
       return new Blob([new ArrayBuffer(10)], { type: "audio/ogg" });
     },
-    GetDoNotDisturb: function() { return true; },
-    GetErrors: function() {},
-    GetLoopPref: function(pref) {
+    GetDoNotDisturb() { return true; },
+    GetErrors() {},
+    GetLoopPref(pref) {
       switch (pref) {
         // Ensure we skip FTE completely if FTU_VERSION = 1.
         case "gettingStarted.latestFTUVersion":
@@ -164,20 +164,20 @@ var fakeRooms = [
       return null;
     },
     HasEncryptionKey: true,
-    SetLoopPref: function() {},
-    CopyString: function() {},
-    GetSelectedTabMetadata: function() {
+    SetLoopPref() {},
+    CopyString() {},
+    GetSelectedTabMetadata() {
       return {
         previews: ["chrome://branding/content/about-logo.png"],
         description: "sample webpage description",
         url: "https://www.example.com"
       };
     },
-    "Rooms:GetAll": function() {
+    "Rooms:GetAll"() {
       return [].concat(fakeRooms);
     },
-    GetUserProfile: function() { return null; },
-    "Rooms:PushSubscription": function() {}
+    GetUserProfile() { return null; },
+    "Rooms:PushSubscription"() {}
   });
 
   loop.storedRequests = {

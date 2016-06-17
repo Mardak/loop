@@ -25,7 +25,7 @@ describe("document.mozL10n", function() {
     it("should correctly set the plural form", function() {
       l10nOptions = {
         locale: "en-US",
-        getStrings: function(key) {
+        getStrings(key) {
           if (key === "plural") {
             return '{"textContent":"{{num}} form;{{num}} forms;{{num}} form 2"}';
           }
@@ -43,7 +43,7 @@ describe("document.mozL10n", function() {
     it("should log an error if the rule number is invalid", function() {
       l10nOptions = {
         locale: "en-US",
-        getStrings: function(key) {
+        getStrings(key) {
           if (key === "plural") {
             return '{"textContent":"{{num}} form;{{num}} forms;{{num}} form 2"}';
           }
@@ -61,7 +61,7 @@ describe("document.mozL10n", function() {
     it("should use rule 0 if the rule number is invalid", function() {
       l10nOptions = {
         locale: "en-US",
-        getStrings: function(key) {
+        getStrings(key) {
           if (key === "plural") {
             return '{"textContent":"{{num}} form;{{num}} forms;{{num}} form 2"}';
           }
@@ -81,14 +81,14 @@ describe("document.mozL10n", function() {
     beforeEach(function() {
       l10nOptions = {
         locale: "en-US",
-        getStrings: function(key) {
+        getStrings(key) {
           if (key === "plural") {
             return '{"textContent":"{{num}} plural form;{{num}} plural forms"}';
           }
 
           return '{"textContent":"' + key + '"}';
         },
-        getPluralForm: function(num, string) {
+        getPluralForm(num, string) {
           return string.split(";")[num === 0 ? 0 : 1];
         }
       };

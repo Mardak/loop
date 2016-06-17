@@ -41,17 +41,17 @@ describe("loop.standaloneRoomViews", function() {
     });
     loop.store.StoreMixin.register({
       cursorStore: remoteCursorStore,
-      activeRoomStore: activeRoomStore,
-      textChatStore: textChatStore
+      activeRoomStore,
+      textChatStore
     });
 
     clock = sandbox.useFakeTimers();
     fakeWindow = {
       close: sandbox.stub(),
-      addEventListener: function() {},
-      document: { addEventListener: function() {} },
-      removeEventListener: function() {},
-      setTimeout: function(callback) { callback(); }
+      addEventListener() {},
+      document: { addEventListener() {} },
+      removeEventListener() {},
+      setTimeout(callback) { callback(); }
     };
     loop.shared.mixins.setRootObject(fakeWindow);
 
@@ -92,7 +92,7 @@ describe("loop.standaloneRoomViews", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.standaloneRoomViews.ToSView, {
-            dispatcher: dispatcher
+            dispatcher
           }));
     }
 
@@ -149,7 +149,7 @@ describe("loop.standaloneRoomViews", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.standaloneRoomViews.StandaloneHandleUserAgentView, {
-            dispatcher: dispatcher
+            dispatcher
           }));
     }
 
@@ -285,7 +285,7 @@ describe("loop.standaloneRoomViews", function() {
   describe("StandaloneRoomFailureView", function() {
     function mountTestComponent(extraProps) {
       var props = _.extend({
-        dispatcher: dispatcher
+        dispatcher
       }, extraProps);
       return TestUtils.renderIntoDocument(
         React.createElement(
@@ -386,8 +386,8 @@ describe("loop.standaloneRoomViews", function() {
           enabled: true,
           visible: true
         },
-        dispatcher: dispatcher,
-        leaveRoom: function() {},
+        dispatcher,
+        leaveRoom() {},
         room: {
           roomName: "fakeName",
           roomContextUrls: []
@@ -556,9 +556,9 @@ describe("loop.standaloneRoomViews", function() {
     function mountTestComponent(props) {
       props = _.extend({
         cursorStore: remoteCursorStore,
-        dispatcher: dispatcher,
+        dispatcher,
         introSeen: true,
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         isFirefox: true
       }, props);
 
@@ -1404,7 +1404,7 @@ describe("loop.standaloneRoomViews", function() {
         React.createElement(
           loop.standaloneRoomViews.StandaloneRoomControllerView, {
             cursorStore: remoteCursorStore,
-            dispatcher: dispatcher,
+            dispatcher,
             isFirefox: true
           }
         )

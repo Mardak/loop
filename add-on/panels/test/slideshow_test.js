@@ -15,16 +15,16 @@ describe("loop.slideshow", function() {
     sandbox = LoopMochaUtils.createSandbox();
 
     LoopMochaUtils.stubLoopRequest({
-      GetAllStrings: function() {
+      GetAllStrings() {
         return JSON.stringify({ textContent: "fakeText" });
       },
-      GetLocale: function() {
+      GetLocale() {
         return "en-US";
       },
-      GetPluralRule: function() {
+      GetPluralRule() {
         return 1;
       },
-      GetPluralForm: function() {
+      GetPluralForm() {
         return "fakeText";
       }
     });
@@ -57,7 +57,7 @@ describe("loop.slideshow", function() {
     ];
 
     document.mozL10n.initialize({
-      getStrings: function() {
+      getStrings() {
         return JSON.stringify({ textContent: "fakeText" });
       },
       locale: "en-US"

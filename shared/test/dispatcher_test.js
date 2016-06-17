@@ -89,7 +89,7 @@ describe("loop.Dispatcher", function() {
         gotMediaPermission: sinon.stub()
       };
       mediaConnectedStore1 = {
-        mediaConnected: function() {}
+        mediaConnected() {}
       };
 
       dispatcher.register(getDataStore1, ["getWindowData"]);

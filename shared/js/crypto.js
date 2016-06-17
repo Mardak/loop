@@ -16,7 +16,7 @@ var inChrome = typeof Components != "undefined" && "utils" in Components;
     var Cu = Components.utils;
     Cu.importGlobalProperties(["crypto"]);
     rootObject = {
-      crypto: crypto
+      crypto
     };
     sharedUtils = Cu.import("chrome://loop/content/shared/js/utils.js", {}).utils;
   } else {
@@ -123,7 +123,7 @@ var inChrome = typeof Components != "undefined" && "utils" in Components;
 
         return rootObject.crypto.subtle.encrypt({
             name: ALGORITHM,
-            iv: iv,
+            iv,
             tagLength: ENCRYPT_TAG_LENGTH
           }, cryptoKey,
           dataBuffer);
@@ -228,16 +228,16 @@ var inChrome = typeof Components != "undefined" && "utils" in Components;
                                               encryptedDataArray.length);
 
     return {
-      iv: iv,
-      cipherText: cipherText
+      iv,
+      cipherText
     };
   }
 
   this[inChrome ? "LoopCrypto" : "crypto"] = {
-    decryptBytes: decryptBytes,
-    encryptBytes: encryptBytes,
-    generateKey: generateKey,
-    isSupported: isSupported,
-    setRootObject: setRootObject
+    decryptBytes,
+    encryptBytes,
+    generateKey,
+    isSupported,
+    setRootObject
   };
 }).call(inChrome ? this : loop, this);

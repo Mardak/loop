@@ -33,34 +33,34 @@ describe("loop.panel", function() {
 
     fakeWindow = {
       close: sandbox.stub(),
-      addEventListener: function() {},
-      removeEventListener: function() {},
+      addEventListener() {},
+      removeEventListener() {},
       document: {
-        addEventListener: function() {},
-        removeEventListener: function() {}
+        addEventListener() {},
+        removeEventListener() {}
       },
-      setTimeout: function(callback) { callback(); }
+      setTimeout(callback) { callback(); }
     };
     loop.shared.mixins.setRootObject(fakeWindow);
 
     notifications = new loop.panel.models.NotificationCollection();
 
     LoopMochaUtils.stubLoopRequest(requestStubs = {
-      GetDoNotDisturb: function() { return true; },
+      GetDoNotDisturb() { return true; },
       SetDoNotDisturb: sinon.stub(),
-      GetErrors: function() { return null; },
-      GetAllStrings: function() {
+      GetErrors() { return null; },
+      GetAllStrings() {
         return JSON.stringify({ textContent: "fakeText" });
       },
-      GetAllConstants: function() { return {}; },
-      GetLocale: function() {
+      GetAllConstants() { return {}; },
+      GetLocale() {
         return "en-US";
       },
-      GetPluralRule: function() {
+      GetPluralRule() {
         return 1;
       },
       SetLoopPref: sinon.stub(),
-      GetLoopPref: function(prefName) {
+      GetLoopPref(prefName) {
         if (prefName === "debug.dispatcher") {
           return false;
         } else if (prefName === "facebook.enabled") {
@@ -69,17 +69,17 @@ describe("loop.panel", function() {
 
         return 1;
       },
-      SetPanelHeight: function() { return null; },
-      GetPluralForm: function() {
+      SetPanelHeight() { return null; },
+      GetPluralForm() {
         return "fakeText";
       },
-      "Rooms:GetAll": function() {
+      "Rooms:GetAll"() {
         return [];
       },
       "Rooms:PushSubscription": sinon.stub(),
       Confirm: sinon.stub(),
-      GetHasEncryptionKey: function() { return true; },
-      HangupAllChatWindows: function() {},
+      GetHasEncryptionKey() { return true; },
+      HangupAllChatWindows() {},
       IsMultiProcessActive: sinon.stub(),
       IsTabShareable: sinon.stub(),
       LoginToFxA: sinon.stub(),
@@ -89,7 +89,7 @@ describe("loop.panel", function() {
       GettingStartedURL: sinon.stub().returns("http://fakeFTUUrl.com"),
       OpenGettingStartedTour: sinon.stub(),
       GetSelectedTabMetadata: sinon.stub().returns({}),
-      GetUserProfile: function() { return null; }
+      GetUserProfile() { return null; }
     });
 
     loop.storedRequests = {
@@ -111,7 +111,7 @@ describe("loop.panel", function() {
       roomToken: "QzBbvGmIZWU",
       roomUrl: "http://sample/QzBbvGmIZWU",
       decryptedContext: {
-        roomName: roomName,
+        roomName,
         urls: [{
           location: "http://testurl.com"
         }]
@@ -221,7 +221,7 @@ describe("loop.panel", function() {
     roomList = [new loop.store.Room(roomData), new loop.store.Room(roomData2)];
 
     document.mozL10n.initialize({
-      getStrings: function() {
+      getStrings() {
         return JSON.stringify({ textContent: "fakeText" });
       },
       locale: "en-US"
@@ -287,15 +287,15 @@ describe("loop.panel", function() {
     function createTestPanelView() {
       return TestUtils.renderIntoDocument(
         React.createElement(loop.panel.PanelView, {
-          notifications: notifications,
-          dispatcher: dispatcher,
-          roomStore: roomStore
+          notifications,
+          dispatcher,
+          roomStore
         }));
     }
 
     it("should hide the account entry when FxA is not enabled", function() {
       LoopMochaUtils.stubLoopRequest({
-        GetUserProfile: function() { return { email: "test@example.com" }; }
+        GetUserProfile() { return { email: "test@example.com" }; }
       });
 
       var view = TestUtils.renderIntoDocument(
@@ -402,7 +402,7 @@ describe("loop.panel", function() {
       describe("UserLoggedOut", function() {
         beforeEach(function() {
           LoopMochaUtils.stubLoopRequest({
-            GetUserProfile: function() { return null; }
+            GetUserProfile() { return null; }
           });
         });
 
@@ -489,7 +489,7 @@ describe("loop.panel", function() {
 
         it("should close the dropdown menu on clicking sign out", function() {
           LoopMochaUtils.stubLoopRequest({
-            GetUserProfile: function() { return { email: "test@example.com" }; }
+            GetUserProfile() { return { email: "test@example.com" }; }
           });
 
           view.setState({ showMenu: true });
@@ -517,7 +517,7 @@ describe("loop.panel", function() {
 
         it("should show a message to turn notifications off when they are on", function() {
           LoopMochaUtils.stubLoopRequest({
-            GetDoNotDisturb: function() { return false; }
+            GetDoNotDisturb() { return false; }
           });
 
           view.showDropdownMenu();
@@ -543,7 +543,7 @@ describe("loop.panel", function() {
 
         it("should show a message to turn notifications on when they are off", function() {
           LoopMochaUtils.stubLoopRequest({
-            GetDoNotDisturb: function() { return true; }
+            GetDoNotDisturb() { return true; }
           });
 
           view.showDropdownMenu();
@@ -556,7 +556,7 @@ describe("loop.panel", function() {
         it("should toggle mozLoop.doNotDisturb to true", function() {
           var stub = sinon.stub();
           LoopMochaUtils.stubLoopRequest({
-            GetDoNotDisturb: function() { return false; },
+            GetDoNotDisturb() { return false; },
             SetDoNotDisturb: stub
           });
           var toggleNotificationsMenuOption = ReactDOM.findDOMNode(view)
@@ -592,7 +592,7 @@ describe("loop.panel", function() {
       beforeEach(function() {
         supportUrl = "https://example.com";
         LoopMochaUtils.stubLoopRequest({
-          GetLoopPref: function(pref) {
+          GetLoopPref(pref) {
             if (pref === "support_url") {
               return supportUrl;
             }
@@ -633,7 +633,7 @@ describe("loop.panel", function() {
       beforeEach(function() {
         feedbackUrl = "https://example.com";
         LoopMochaUtils.stubLoopRequest({
-          GetLoopPref: function(pref) {
+          GetLoopPref(pref) {
             if (pref === "feedback.manualFormURL") {
               return feedbackUrl;
             }
@@ -804,7 +804,7 @@ describe("loop.panel", function() {
 
     function mountRoomEntry(props) {
       props = _.extend({
-        dispatcher: dispatcher
+        dispatcher
       }, props);
       return TestUtils.renderIntoDocument(
         React.createElement(loop.panel.RoomEntry, props));
@@ -863,7 +863,7 @@ describe("loop.panel", function() {
         openURLStub = sinon.stub();
 
         LoopMochaUtils.stubLoopRequest({
-          GetSelectedTabMetadata: function() {
+          GetSelectedTabMetadata() {
             return {
               url: "http://invalid.com",
               description: "fakeSite"
@@ -929,7 +929,7 @@ describe("loop.panel", function() {
             roomToken: "QzBbvGmIZWU",
             roomUrl: "http://sample/QzBbvGmIZWU",
             decryptedContext: {
-              roomName: roomName,
+              roomName,
               urls: [{
                 location: ""
               }]
@@ -960,7 +960,7 @@ describe("loop.panel", function() {
 
         it("should not open a new tab if the context is the same as the currently open tab", function() {
           LoopMochaUtils.stubLoopRequest({
-            GetSelectedTabMetadata: function() {
+            GetSelectedTabMetadata() {
               return {
                 url: "http://testurl.com",
                 description: "fakeSite"
@@ -1043,7 +1043,7 @@ describe("loop.panel", function() {
 
       beforeEach(function() {
         roomEntry = mountRoomEntry({
-          dispatcher: dispatcher,
+          dispatcher,
           isOpenedRoom: false,
           room: new loop.store.Room(roomData)
         });
@@ -1112,14 +1112,14 @@ describe("loop.panel", function() {
 
       function mountRoomEntryWithData(decryptedContext) {
         let room = new loop.store.Room(_.extend({}, roomData, {
-          decryptedContext: decryptedContext,
+          decryptedContext,
           ctime: new Date().getTime()
         }));
 
         return mountRoomEntry({
-          dispatcher: dispatcher,
+          dispatcher,
           isOpenedRoom: false,
-          room: room
+          room
         });
       }
 
@@ -1271,7 +1271,7 @@ describe("loop.panel", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(loop.panel.RoomList, {
           store: roomStore,
-          dispatcher: dispatcher,
+          dispatcher,
           userDisplayName: fakeEmail,
           userProfile: null
         }));
@@ -1507,7 +1507,7 @@ describe("loop.panel", function() {
     function createTestComponent(extraProps) {
       return TestUtils.renderIntoDocument(
         React.createElement(loop.panel.NewRoomView, _.extend({
-          dispatcher: dispatcher,
+          dispatcher,
           userDisplayName: fakeEmail
         }, extraProps)));
     }
@@ -1515,7 +1515,7 @@ describe("loop.panel", function() {
     it("should open new tab when Starting Conversation on a non-remote tab",
        function() {
       LoopMochaUtils.stubLoopRequest({
-        IsTabShareable: function() {
+        IsTabShareable() {
           return false;
         }
       });
@@ -1537,7 +1537,7 @@ describe("loop.panel", function() {
     it("should stay in same tab when Starting Conversation on a remote tab",
        function() {
       LoopMochaUtils.stubLoopRequest({
-        IsTabShareable: function() {
+        IsTabShareable() {
           return true;
         }
       });
@@ -1559,12 +1559,12 @@ describe("loop.panel", function() {
        "Start a conversation button", function() {
       var favicon = "data:image/x-icon;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
       LoopMochaUtils.stubLoopRequest({
-        GetUserProfile: function() { return { email: fakeEmail }; },
-        GetSelectedTabMetadata: function() {
+        GetUserProfile() { return { email: fakeEmail }; },
+        GetSelectedTabMetadata() {
           return {
             url: "http://invalid.com",
             description: "fakeSite",
-            favicon: favicon,
+            favicon,
             previews: ["fakeimage.png"]
           };
         }
@@ -1718,7 +1718,7 @@ describe("loop.panel", function() {
 
     function createTestComponent(extraProps) {
       var props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         eventPosY: 0,
         showMenu: false,
         room: roomData,
@@ -1790,7 +1790,7 @@ describe("loop.panel", function() {
 
     function createTestComponent(extraProps) {
       var props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         onSharePanelDisplayChange: sinon.stub(),
         store: roomStore
       }, extraProps);
@@ -1941,7 +1941,7 @@ describe("loop.panel", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(
           loop.panel.RenameRoomView, {
-            dispatcher: dispatcher,
+            dispatcher,
             roomName: name,
             roomToken: token
           }

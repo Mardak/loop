@@ -129,7 +129,7 @@ add_task(function* setup_server() {
 
   function returnRoomDetails(res, roomName) {
     var roomDetail = {
-      roomName: roomName
+      roomName
     };
     res.setStatusLine(null, 200, "OK");
     res.write(JSON.stringify(roomDetail));

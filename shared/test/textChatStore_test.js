@@ -70,7 +70,7 @@ describe("loop.store.TextChatStore", function() {
 
       store.receivedTextChatMessage({
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: message,
+        message,
         extraData: undefined,
         sentTimestamp: "2015-06-24T23:58:53.848Z",
         receivedTimestamp: "1970-01-01T00:00:00.000Z"
@@ -79,7 +79,7 @@ describe("loop.store.TextChatStore", function() {
       expect(store.getStoreState("messageList")).eql([{
         type: CHAT_MESSAGE_TYPES.RECEIVED,
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: message,
+        message,
         extraData: undefined,
         sentTimestamp: "2015-06-24T23:58:53.848Z",
         receivedTimestamp: "1970-01-01T00:00:00.000Z"

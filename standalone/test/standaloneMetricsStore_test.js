@@ -20,7 +20,7 @@ describe("loop.store.StandaloneMetricsStore", function() {
     window.ga = sinon.stub();
 
     var fakeStore = loop.store.createStore({
-      getInitialStoreState: function() {
+      getInitialStoreState() {
         return {
           audioMuted: false,
           roomState: ROOM_STATES.INIT,

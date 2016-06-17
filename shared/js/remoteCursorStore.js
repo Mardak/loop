@@ -32,7 +32,7 @@ loop.store.RemoteCursorStore = (function() {
      *                          - sdkDriver: The sdkDriver to use for sending
      *                                       the cursor events.
      */
-    initialize: function(options) {
+    initialize(options) {
       options = options || {};
 
       if (!options.sdkDriver) {
@@ -49,7 +49,7 @@ loop.store.RemoteCursorStore = (function() {
     /**
      * Returns initial state data for this active room.
      */
-    getInitialStoreState: function() {
+    getInitialStoreState() {
       return {
         realVideoSize: null,
         remoteCursorClick: null,
@@ -60,7 +60,7 @@ loop.store.RemoteCursorStore = (function() {
     /**
      * Sends cursor click position through the sdk.
      */
-    _cursorClickListener: function() {
+    _cursorClickListener() {
       this.sendCursorData({
         type: CURSOR_MESSAGE_TYPES.CLICK
       });
@@ -74,7 +74,7 @@ loop.store.RemoteCursorStore = (function() {
      *                       - ratioX: Left position. Number between 0 and 1.
      *                       - ratioY: Top position. Number between 0 and 1.
      */
-    _cursorPositionChangeListener: function(event) {
+    _cursorPositionChangeListener(event) {
       this.sendCursorData({
         ratioX: event.ratioX,
         ratioY: event.ratioY,
@@ -95,7 +95,7 @@ loop.store.RemoteCursorStore = (function() {
      *                | CURSOR_MESSAGE_TYPES.CLICK
      *      }
      */
-    sendCursorData: function(actionData) {
+    sendCursorData(actionData) {
       switch (actionData.type) {
         case CURSOR_MESSAGE_TYPES.POSITION:
         case CURSOR_MESSAGE_TYPES.CLICK:
@@ -109,7 +109,7 @@ loop.store.RemoteCursorStore = (function() {
      *
      * @param {sharedActions.receivedCursorData} actionData
      */
-    receivedCursorData: function(actionData) {
+    receivedCursorData(actionData) {
       switch (actionData.type) {
         case CURSOR_MESSAGE_TYPES.POSITION:
           this.setStoreState({
@@ -132,7 +132,7 @@ loop.store.RemoteCursorStore = (function() {
      *
      * @param {sharedActions.VideoDimensionsChanged} actionData
      */
-    videoDimensionsChanged: function(actionData) {
+    videoDimensionsChanged(actionData) {
       if (actionData.videoType !== "screen") {
         return;
       }
@@ -152,7 +152,7 @@ loop.store.RemoteCursorStore = (function() {
 
      * @param {sharedActions.VideoScreenStreamChanged} actionData
      */
-    videoScreenStreamChanged: function(actionData) {
+    videoScreenStreamChanged(actionData) {
       if (actionData.hasVideo) {
         return;
       }

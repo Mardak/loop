@@ -9,7 +9,7 @@ loop.store.createStore = (function() {
   "use strict";
 
   var baseStorePrototype = {
-    __registerActions: function(actions) {
+    __registerActions(actions) {
       // check that store methods are implemented
       actions.forEach(function(handler) {
         if (typeof this[handler] !== "function") {
@@ -25,7 +25,7 @@ loop.store.createStore = (function() {
      *
      * @param  {sharedAction.Action} action The action to dispatch.
      */
-    dispatchAction: function(action) {
+    dispatchAction(action) {
       this.dispatcher.dispatch(action);
     },
 
@@ -36,7 +36,7 @@ loop.store.createStore = (function() {
      * @param  {String|undefined} key An optional state property name.
      * @return {Mixed}
      */
-    getStoreState: function(key) {
+    getStoreState(key) {
       return key ? this._storeState[key] : this._storeState;
     },
 
@@ -46,7 +46,7 @@ loop.store.createStore = (function() {
      *
      * @param {Object} newState The new store state object.
      */
-    setStoreState: function(newState) {
+    setStoreState(newState) {
       Object.keys(newState).forEach(function(key) {
         this._storeState[key] = newState[key];
         this.trigger("change:" + key);
@@ -57,7 +57,7 @@ loop.store.createStore = (function() {
     /**
      * Resets the store state to the initially defined state.
      */
-    resetStoreState: function() {
+    resetStoreState() {
       if (typeof this.getInitialStoreState === "function") {
         this._storeState = this.getInitialStoreState();
       } else {
@@ -118,7 +118,7 @@ loop.store.StoreMixin = (function() {
   var _stores = {};
   function StoreMixin(id) {
     return {
-      getStore: function() {
+      getStore() {
         // Allows the ui-showcase to override the specified store.
         if (id in this.props) {
           return this.props[id];
@@ -128,15 +128,15 @@ loop.store.StoreMixin = (function() {
         }
         return _stores[id];
       },
-      getStoreState: function() {
+      getStoreState() {
         return this.getStore().getStoreState();
       },
-      componentWillMount: function() {
+      componentWillMount() {
         this.getStore().on("change", function() {
           this.setState(this.getStoreState());
         }, this);
       },
-      componentWillUnmount: function() {
+      componentWillUnmount() {
         this.getStore().off("change", null, this);
       }
     };

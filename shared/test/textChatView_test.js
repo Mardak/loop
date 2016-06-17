@@ -62,7 +62,7 @@ describe("loop.shared.views.TextChatView", function() {
 
     function mountTestComponent(extraProps) {
       var basicProps = {
-        dispatcher: dispatcher,
+        dispatcher,
         messageList: [],
         showInitialContext: true
       };
@@ -78,19 +78,19 @@ describe("loop.shared.views.TextChatView", function() {
 
     function createWithFakeParent(extraProps) {
       return React.createElement(React.createClass({
-        getInitialState: function() {
+        getInitialState() {
           return _.extend({
-            dispatcher: dispatcher,
+            dispatcher,
             messageList: [],
             showInitialContext: true
           }, extraProps);
         },
 
-        componentWillReceiveProps: function(nextProps) {
+        componentWillReceiveProps(nextProps) {
           this.setState(nextProps);
         },
 
-        render: function() {
+        render() {
           return React.createElement(loop.shared.views.chat.TextChatEntriesView,
             this.state);
         }
@@ -287,7 +287,7 @@ describe("loop.shared.views.TextChatView", function() {
           receivedTimestamp: "2015-06-25T17:53:55.357Z"
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         node = ReactDOM.findDOMNode(view);
 
@@ -302,7 +302,7 @@ describe("loop.shared.views.TextChatView", function() {
           receivedTimestamp: "2015-06-25T17:53:55.357Z"
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         node = ReactDOM.findDOMNode(view);
 
@@ -321,7 +321,7 @@ describe("loop.shared.views.TextChatView", function() {
           receivedTimestamp: "2015-06-25T17:53:55.357Z"
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         node = ReactDOM.findDOMNode(view);
 
@@ -338,7 +338,7 @@ describe("loop.shared.views.TextChatView", function() {
           }
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         node = ReactDOM.findDOMNode(view);
 
@@ -356,7 +356,7 @@ describe("loop.shared.views.TextChatView", function() {
           }
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         // Now add a message. Don't use the same list as this is a shared object,
         // that messes with React.
@@ -387,7 +387,7 @@ describe("loop.shared.views.TextChatView", function() {
           receivedTimestamp: "2015-06-25T17:53:55.357Z"
         }];
 
-        view.componentWillReceiveProps({ messageList: messageList });
+        view.componentWillReceiveProps({ messageList });
 
         node.scrollTop = 0;
 
@@ -414,7 +414,7 @@ describe("loop.shared.views.TextChatView", function() {
     function mountTestComponent(extraProps) {
       var props = _.extend({
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        dispatcher: dispatcher,
+        dispatcher,
         message: "test",
         type: CHAT_MESSAGE_TYPES.RECEIVED,
         timestamp: "2015-06-23T22:48:39.738Z"
@@ -470,7 +470,7 @@ describe("loop.shared.views.TextChatView", function() {
 
     function mountTestComponent(extraProps) {
       var props = _.extend({
-        dispatcher: dispatcher,
+        dispatcher,
         showInitialContext: true,
         showAlways: true,
         showTile: false

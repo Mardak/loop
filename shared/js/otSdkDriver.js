@@ -111,7 +111,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Resets the metrics for the driver.
      */
-    _resetMetrics: function() {
+    _resetMetrics() {
       this._metrics = {
         connections: 0,
         sendStreams: 0,
@@ -126,7 +126,7 @@ loop.OTSdkDriver = (function() {
      * @param {sharedActions.SetupStreamElements} actionData The data associated
      *   with the action. See action.js.
      */
-    setupStreamElements: function(actionData) {
+    setupStreamElements(actionData) {
       this.publisherConfig = actionData.publisherConfig;
 
       this.sdk.on("exception", this._onOTException.bind(this));
@@ -157,7 +157,7 @@ loop.OTSdkDriver = (function() {
      * @param {sharedActions.SetMute} actionData The data associated with the
      *                                           action. See action.js.
      */
-    setMute: function(actionData) {
+    setMute(actionData) {
       if (actionData.type === "audio") {
         this.publisher.publishAudio(actionData.enabled);
       } else {
@@ -180,7 +180,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Object} options Hash containing options for the SDK
      */
-    startScreenShare: function(options) {
+    startScreenShare(options) {
       // For browser sharing, we store the window Id so that we can avoid unnecessary
       // re-triggers.
       if (options.videoSource === "browser") {
@@ -203,7 +203,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Integer} windowId  The windowId of the browser.
      */
-    switchAcquiredWindow: function(windowId) {
+    switchAcquiredWindow(windowId) {
       if (windowId === this._windowId) {
         return;
       }
@@ -218,7 +218,7 @@ loop.OTSdkDriver = (function() {
      *
      * @returns {Boolean}
      */
-    endScreenShare: function() {
+    endScreenShare() {
       if (!this.screenshare) {
         return false;
       }
@@ -240,7 +240,7 @@ loop.OTSdkDriver = (function() {
      * @param {sharedActions.ToggleBrowserSharing} actionData The data associated with the
      *                                             action. See action.js.
      */
-    toggleBrowserSharing: function(actionData) {
+    toggleBrowserSharing(actionData) {
       this.screenshare.publishVideo(actionData.enabled);
     },
 
@@ -254,7 +254,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Object} sessionData The session data for setting up the OT session.
      */
-    connectSession: function(sessionData) {
+    connectSession(sessionData) {
       this.session = this.sdk.initSession(sessionData.sessionId);
 
       this.session.on("sessionDisconnected",
@@ -275,7 +275,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Disconnects the sdk session.
      */
-    disconnectSession: function() {
+    disconnectSession() {
       this.endScreenShare();
 
       this.dispatcher.dispatch(new sharedActions.DataChannelsAvailable({
@@ -325,7 +325,7 @@ loop.OTSdkDriver = (function() {
      * @param {Function} callback Function to be invoked once all connections are
      *                            ousted
      */
-    forceDisconnectAll: function(callback) {
+    forceDisconnectAll(callback) {
       if (!this._sessionConnected) {
         callback();
         return;
@@ -354,7 +354,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Error} error An OT error object, null if there was no error.
      */
-    _onSessionConnectionCompleted: function(error) {
+    _onSessionConnectionCompleted(error) {
       if (error) {
         console.error("Failed to complete connection", error);
         // We log this here before the connection failure to ensure the metrics
@@ -379,7 +379,7 @@ loop.OTSdkDriver = (function() {
      * @param {ConnectionEvent} event The event details
      * https://tokbox.com/opentok/libraries/client/js/reference/ConnectionEvent.html
      */
-    _onConnectionDestroyed: function(event) {
+    _onConnectionDestroyed(event) {
       var connection = event.connection;
       if (connection && (connection.id in this.connections)) {
         delete this.connections[connection.id];
@@ -399,7 +399,7 @@ loop.OTSdkDriver = (function() {
      * @param {SessionDisconnectEvent} event The event details:
      * https://tokbox.com/opentok/libraries/client/js/reference/SessionDisconnectEvent.html
      */
-    _onSessionDisconnected: function(event) {
+    _onSessionDisconnected(event) {
       var reason;
       switch (event.reason) {
         case "networkDisconnected":
@@ -415,7 +415,7 @@ loop.OTSdkDriver = (function() {
 
       this._notifyMetricsEvent("Session." + event.reason);
       this.dispatcher.dispatch(new sharedActions.ConnectionFailure({
-        reason: reason
+        reason
       }));
     },
 
@@ -425,7 +425,7 @@ loop.OTSdkDriver = (function() {
      * @param {ConnectionEvent} event The event details
      * https://tokbox.com/opentok/libraries/client/js/reference/ConnectionEvent.html
      */
-    _onConnectionCreated: function(event) {
+    _onConnectionCreated(event) {
       var connection = event.connection;
       if (this.session.connection.id === connection.id) {
         // This is the connection event for our connection.
@@ -441,7 +441,7 @@ loop.OTSdkDriver = (function() {
      * Works out the current connection state based on the streams being
      * sent or received.
      */
-    _getConnectionState: function() {
+    _getConnectionState() {
       if (this._metrics.sendStreams) {
         return this._metrics.recvStreams ? "sendrecv" : "sending";
       }
@@ -461,7 +461,7 @@ loop.OTSdkDriver = (function() {
      * @param {String} clientType Used for connection created/destoryed. Indicates
      *                            if it is for the "peer" or the "local" client.
      */
-    _notifyMetricsEvent: function(eventName, clientType) {
+    _notifyMetricsEvent(eventName, clientType) {
       if (!eventName) {
         return;
       }
@@ -517,7 +517,7 @@ loop.OTSdkDriver = (function() {
 
       this.dispatcher.dispatch(new sharedActions.ConnectionStatus({
         event: eventName,
-        state: state,
+        state,
         connections: this._metrics.connections,
         sendStreams: this._metrics.sendStreams,
         recvStreams: this._metrics.recvStreams
@@ -532,7 +532,7 @@ loop.OTSdkDriver = (function() {
      * @param {Stream} stream The SDK Stream:
      * https://tokbox.com/opentok/libraries/client/js/reference/Stream.html
      */
-    _handleRemoteScreenShareCreated: function(stream) {
+    _handleRemoteScreenShareCreated(stream) {
       // Let the stores know first if the screen sharing is paused or not so
       // they can update the display properly
       if (!stream[STREAM_PROPERTIES.HAS_VIDEO]) {
@@ -559,7 +559,7 @@ loop.OTSdkDriver = (function() {
      * @param {StreamEvent} event The event details:
      * https://tokbox.com/opentok/libraries/client/js/reference/StreamEvent.html
      */
-    _onRemoteStreamCreated: function(event) {
+    _onRemoteStreamCreated(event) {
       this._notifyMetricsEvent("Session.streamCreated");
 
       if (event.stream[STREAM_PROPERTIES.HAS_VIDEO]) {
@@ -599,7 +599,7 @@ loop.OTSdkDriver = (function() {
      * @param sdkSubscriberObject {OT.Subscriber} - undocumented; returned on success
      * @param subscriberVideo {HTMLVideoElement} - used for unit testing
      */
-    _onSubscribeCompleted: function(err, sdkSubscriberObject, subscriberVideo) {
+    _onSubscribeCompleted(err, sdkSubscriberObject, subscriberVideo) {
       // XXX test for and handle errors better (bug 1172140)
       if (err) {
         console.log("subscribe error:", err);
@@ -638,7 +638,7 @@ loop.OTSdkDriver = (function() {
      * @param sdkSubscriberObject {OT.Subscriber} - undocumented; returned on success
      * @param subscriberVideo {HTMLVideoElement} - used for unit testing
      */
-    _onScreenShareSubscribeCompleted: function(err, sdkSubscriberObject, subscriberVideo) {
+    _onScreenShareSubscribeCompleted(err, sdkSubscriberObject, subscriberVideo) {
       // XXX test for and handle errors better
       if (err) {
         console.log("subscribe error:", err);
@@ -665,7 +665,7 @@ loop.OTSdkDriver = (function() {
      * @param {OT.Subscriber} sdkSubscriberObject The subscriber object for the stream.
      *
      */
-    _setupDataChannelIfNeeded: function(sdkSubscriberObject) {
+    _setupDataChannelIfNeeded(sdkSubscriberObject) {
       if (!this._useDataChannels) {
         return;
       }
@@ -713,7 +713,7 @@ loop.OTSdkDriver = (function() {
           }
 
           channel.on({
-            message: function(ev) {
+            message(ev) {
               try {
                 var message = JSON.parse(ev.data);
                 onMessage(message);
@@ -722,7 +722,7 @@ loop.OTSdkDriver = (function() {
               }
             },
 
-            close: function() {
+            close() {
               // XXX We probably want to dispatch and handle this somehow.
               console.log("Subscribed " + type + " data channel closed!");
             }
@@ -741,7 +741,7 @@ loop.OTSdkDriver = (function() {
      * channels. Getting the data channel for the subscriber is handled
      * separately when the subscription completes.
      */
-    _onReadyForDataChannel: function() {
+    _onReadyForDataChannel() {
       // If we don't want data channels, just ignore the message. We haven't
       // send the other side a message, so it won't display anything.
       if (!this._useDataChannels) {
@@ -773,7 +773,7 @@ loop.OTSdkDriver = (function() {
           }
 
           channel.on({
-            close: function() {
+            close() {
               // XXX We probably want to dispatch and handle this somehow.
               console.log("Published " + type + " data channel closed!");
             }
@@ -787,7 +787,7 @@ loop.OTSdkDriver = (function() {
      * Checks to see if all channels have been obtained, and if so it dispatches
      * a notification to the stores to inform them.
      */
-    _checkDataChannelsAvailable: function() {
+    _checkDataChannelsAvailable() {
       if (this._publisherChannel && this._subscriberChannel) {
         this.dispatcher.dispatch(new sharedActions.DataChannelsAvailable({
           available: true
@@ -800,7 +800,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {String} message The message to send.
      */
-    sendTextChatMessage: function(message) {
+    sendTextChatMessage(message) {
       this._publisherChannel.send(JSON.stringify(message));
     },
 
@@ -809,7 +809,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {String} message The message to send.
      */
-    sendCursorMessage: function(message) {
+    sendCursorMessage(message) {
       if (!this._publisherCursorChannel || !this._subscriberCursorChannel) {
         return;
       }
@@ -824,7 +824,7 @@ loop.OTSdkDriver = (function() {
      * @param {StreamEvent} event The event details:
      * https://tokbox.com/opentok/libraries/client/js/reference/StreamEvent.html
      */
-    _onLocalStreamCreated: function(event) {
+    _onLocalStreamCreated(event) {
       this._notifyMetricsEvent("Publisher.streamCreated");
 
       var sdkLocalVideo = this._mockPublisherEl.querySelector("video");
@@ -832,8 +832,8 @@ loop.OTSdkDriver = (function() {
       var hasAudio = event.stream[STREAM_PROPERTIES.HAS_AUDIO];
 
       this.dispatcher.dispatch(new sharedActions.MediaStreamCreated({
-        hasAudio: hasAudio,
-        hasVideo: hasVideo,
+        hasAudio,
+        hasVideo,
         isLocal: true,
         srcMediaElement: sdkLocalVideo
       }));
@@ -854,7 +854,7 @@ loop.OTSdkDriver = (function() {
      * @param {StreamEvent} event The event details:
      * https://tokbox.com/opentok/libraries/client/js/reference/StreamEvent.html
      */
-    _onRemoteStreamDestroyed: function(event) {
+    _onRemoteStreamDestroyed(event) {
       this._notifyMetricsEvent("Session.streamDestroyed");
 
       if (event.stream.videoType !== "screen") {
@@ -880,7 +880,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Handles the event when the remote stream is destroyed.
      */
-    _onLocalStreamDestroyed: function() {
+    _onLocalStreamDestroyed() {
       this._notifyMetricsEvent("Publisher.streamDestroyed");
       this.dispatcher.dispatch(new sharedActions.DataChannelsAvailable({
         available: false
@@ -899,7 +899,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {OT.Event} event
      */
-    _onAccessDialogOpened: function(event) {
+    _onAccessDialogOpened(event) {
       event.preventDefault();
     },
 
@@ -908,7 +908,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {OT.Event} event
      */
-    _onPublishAllowed: function(event) {
+    _onPublishAllowed(event) {
       event.preventDefault();
       this._publisherReady = true;
 
@@ -923,7 +923,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Error} error An OT error object, null if there was no error.
      */
-    _onPublishComplete: function(error) {
+    _onPublishComplete(error) {
       if (!error) {
         // Nothing to do for the success case.
         return;
@@ -957,7 +957,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {OT.Event} event
      */
-    _onPublishDenied: function(event) {
+    _onPublishDenied(event) {
       // This prevents the SDK's "access denied" dialog showing.
       event.preventDefault();
 
@@ -973,7 +973,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param  {OT.Event} event
      */
-    _onOTException: function(event) {
+    _onOTException(event) {
       switch (event.code) {
         case OT.ExceptionCodes.PUBLISHER_ICE_WORKFLOW_FAILED:
         case OT.ExceptionCodes.SUBSCRIBER_ICE_WORKFLOW_FAILED:
@@ -1010,7 +1010,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Handles publishing of property changes to a stream.
      */
-    _onStreamPropertyChanged: function(event) {
+    _onStreamPropertyChanged(event) {
       switch (event.changedProperty) {
         case STREAM_PROPERTIES.VIDEO_DIMENSIONS:
           this.dispatcher.dispatch(new sharedActions.VideoDimensionsChanged({
@@ -1038,7 +1038,7 @@ loop.OTSdkDriver = (function() {
      * @see https://tokbox.com/opentok/libraries/client/js/reference/VideoEnabledChangedEvent.html
      * @private
      */
-    _onVideoEnabled: function() {
+    _onVideoEnabled() {
       var sdkSubscriberVideo = this._mockSubscribeEl.querySelector("video");
       if (!sdkSubscriberVideo) {
         console.error("sdkSubscriberVideo unexpectedly falsy!");
@@ -1056,7 +1056,7 @@ loop.OTSdkDriver = (function() {
      * @see https://tokbox.com/opentok/libraries/client/js/reference/VideoEnabledChangedEvent.html
      * @private
      */
-    _onVideoDisabled: function() {
+    _onVideoDisabled() {
       this.dispatcher.dispatch(new sharedActions.RemoteVideoStatus({
         videoEnabled: false
       }));
@@ -1066,7 +1066,7 @@ loop.OTSdkDriver = (function() {
      * Publishes the local stream if the session is connected
      * and the publisher is ready.
      */
-    _maybePublishLocalStream: function() {
+    _maybePublishLocalStream() {
       if (this._sessionConnected && this._publisherReady) {
         // We are clear to publish the stream to the session.
         this.session.publish(this.publisher);
@@ -1083,7 +1083,7 @@ loop.OTSdkDriver = (function() {
      * Used to check if both local and remote streams are available
      * and send an action if they are.
      */
-    _checkAllStreamsConnected: function() {
+    _checkAllStreamsConnected() {
       return this._publishedLocalStream &&
         this._subscribedRemoteStream;
     },
@@ -1091,7 +1091,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Called when a screenshare is complete, publishes it to the session.
      */
-    _onScreenShareGranted: function() {
+    _onScreenShareGranted() {
       this.session.publish(this.screenshare);
       this.dispatcher.dispatch(new sharedActions.ScreenSharingState({
         state: SCREEN_SHARE_STATES.ACTIVE
@@ -1103,7 +1103,7 @@ loop.OTSdkDriver = (function() {
      *
      * @param {Error} error An OT error object, null if there was no error.
      */
-    _onScreenSharePublishComplete: function(error) {
+    _onScreenSharePublishComplete(error) {
       if (!error) {
         // Nothing to do for the success case.
         return;
@@ -1124,7 +1124,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Called when a screenshare is denied. Notifies the other stores.
      */
-    _onScreenSharePublishError: function() {
+    _onScreenSharePublishError() {
       this.dispatcher.dispatch(new sharedActions.ScreenSharingState({
         state: SCREEN_SHARE_STATES.INACTIVE
       }));
@@ -1137,7 +1137,7 @@ loop.OTSdkDriver = (function() {
     /**
      * Called when a screenshare stream is published.
      */
-    _onScreenShareStreamCreated: function() {
+    _onScreenShareStreamCreated() {
       this._notifyMetricsEvent("Publisher.streamCreated");
     }
   };

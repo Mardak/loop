@@ -47,7 +47,7 @@ PushSocket.prototype = {
    *                   aReason is any string returned on close
    */
 
-  connect: function(pushUri, onMsg, onStart, onClose) {
+  connect(pushUri, onMsg, onStart, onClose) {
     if (!pushUri || !onMsg || !onStart || !onClose) {
       throw new Error("PushSocket: missing required parameter(s):" +
                       (pushUri ? "" : " pushUri") +
@@ -80,7 +80,7 @@ PushSocket.prototype = {
    *
    * @param {nsISupports} aContext Not used
    */
-  onStart: function() {
+  onStart() {
     this._socketOpen = true;
     this._onStart();
   },
@@ -91,7 +91,7 @@ PushSocket.prototype = {
    * @param {nsISupports} aContext Not used
    * @param {nsresult} aStatusCode
    */
-  onStop: function(aContext, aStatusCode) {
+  onStop(aContext, aStatusCode) {
     this._socketOpen = false;
     this._onClose(aStatusCode, "websocket onStop");
   },
@@ -104,7 +104,7 @@ PushSocket.prototype = {
    * @param {integer} aCode the websocket closing handshake close code
    * @param {String} aReason the websocket closing handshake close reason
    */
-  onServerClose: function(aContext, aCode, aReason) {
+  onServerClose(aContext, aCode, aReason) {
     this._socketOpen = false;
     this._onClose(aCode, aReason);
   },
@@ -116,7 +116,7 @@ PushSocket.prototype = {
    * @param {nsISupports} aContext Not used
    * @param {String} aMsg The message data
    */
-  onMessageAvailable: function(aContext, aMsg) {
+  onMessageAvailable(aContext, aMsg) {
     consoleLog.log("PushSocket: Message received: ", aMsg);
     if (!this._socketOpen) {
       consoleLog.error("Message received in Winsocket closed state");
@@ -139,7 +139,7 @@ PushSocket.prototype = {
    * @param {nsISupports} aContext Not used
    * @param {String} aMsg The message data
    */
-  onBinaryMessageAvailable: function(aContext, aMsg) {
+  onBinaryMessageAvailable(aContext, aMsg) {
     consoleLog.log("PushSocket: Binary message received: ", aMsg);
     if (!this._socketOpen) {
       consoleLog.error("PushSocket: message receive in Winsocket closed state");
@@ -161,7 +161,7 @@ PushSocket.prototype = {
    *
    * @returns {Boolean} true if message has been sent, false otherwise
    */
-  send: function(aMsg) {
+  send(aMsg) {
     if (!this._socketOpen) {
       consoleLog.error("PushSocket: attempt to send before websocket is open");
       return false;
@@ -192,7 +192,7 @@ PushSocket.prototype = {
   /**
    * Close the websocket.
    */
-  close: function() {
+  close() {
     if (!this._socketOpen) {
       return;
     }
@@ -242,7 +242,7 @@ RetryManager.prototype = {
    *
    * @param {Function} delayedOp Function to call after current delay is satisfied
    */
-  retry: function(delayedOp) {
+  retry(delayedOp) {
     if (!this._timeoutID) {
       this._retryDelay = this._startDelay;
     } else {
@@ -259,7 +259,7 @@ RetryManager.prototype = {
    * Method used to reset the delay back-off logic and clear any currently
    * running delay timeout.
    */
-  reset: function() {
+  reset() {
     if (this._timeoutID) {
       clearTimeout(this._timeoutID);
       this._timeoutID = null;
@@ -297,7 +297,7 @@ PingMonitor.prototype = {
   /**
    * Function to restart the ping timeout and cancel any current timeout operation.
    */
-  restart: function() {
+  restart() {
     consoleLog.info("PushHandler: ping timeout restart");
     this.stop();
     this._pingTimerID = setTimeout(() => this._pingSend(), this._pingInterval);
@@ -306,14 +306,14 @@ PingMonitor.prototype = {
   /**
    * Function to stop the PingMonitor.
    */
-  stop: function() {
+  stop() {
     if (this._pingTimerID) {
       clearTimeout(this._pingTimerID);
       this._pingTimerID = undefined;
     }
   },
 
-  _pingSend: function() {
+  _pingSend() {
     consoleLog.info("PushHandler: ping sent");
     this._pingTimerID = setTimeout(this._onTimeout, this._pingTimeout);
     this._pingFunc();
@@ -387,7 +387,7 @@ var MozLoopPushHandler = {
     *                 the only option is mocketWebSocket which will be
     *                 used for testing.
     */
-  initialize: function(options = {}) {
+  initialize(options = {}) {
     consoleLog.info("PushHandler: initialize options = ", options);
 
     if (this._initDone) {
@@ -417,7 +417,7 @@ var MozLoopPushHandler = {
    * Reset and clear PushServer connection.
    * Returns MozLoopPushHandler to pre-initialized state.
    */
-  shutdown: function() {
+  shutdown() {
     consoleLog.info("PushHandler: shutdown");
     if (!this._initDone) {
       return;
@@ -478,7 +478,7 @@ var MozLoopPushHandler = {
     *                   push notification is received (may be called multiple
     *                   times).
     */
-  register: function(channelID, onRegistered, onNotification) {
+  register(channelID, onRegistered, onNotification) {
     if (!channelID || !onRegistered || !onNotification) {
       throw new Error("missing required parameter(s):" +
                       (channelID ? "" : " channelID") +
@@ -494,13 +494,13 @@ var MozLoopPushHandler = {
         onRegistered(null, this.registeredChannels[channelID], channelID);
       }
       // Update the channel record.
-      this.channels.set(channelID, { onRegistered: onRegistered,
-                        onNotification: onNotification });
+      this.channels.set(channelID, { onRegistered,
+                        onNotification });
       return;
     }
 
-    this.channels.set(channelID, { onRegistered: onRegistered,
-                                  onNotification: onNotification });
+    this.channels.set(channelID, { onRegistered,
+                                  onNotification });
     this._channelsToRegister.push(channelID);
     this._registerChannels();
   },
@@ -510,7 +510,7 @@ var MozLoopPushHandler = {
    *
    * @param {String} channelID Notification channel ID.
    */
-  unregister: function(channelID) {
+  unregister(channelID) {
     consoleLog.info("MozLoopPushHandler: un-register channel ", channelID);
     if (!this.channels.has(channelID)) {
       return;
@@ -522,7 +522,7 @@ var MozLoopPushHandler = {
       delete this.registeredChannels[channelID];
       if (this.connectionState === CONNECTION_STATE_OPEN) {
         this._pushSocket.send({ messageType: "unregister",
-                               channelID: channelID });
+                               channelID });
       }
     }
   },
@@ -532,7 +532,7 @@ var MozLoopPushHandler = {
    * Sends a hello message to the server.
    *
    */
-  _onStart: function() {
+  _onStart() {
     consoleLog.info("PushHandler: websocket open, sending 'hello' to PushServer");
     this.connectionState = CONNECTION_STATE_OPEN;
     // If a uaID has already been assigned, assume this is a re-connect;
@@ -560,7 +560,7 @@ var MozLoopPushHandler = {
    * This method will continually try to re-establish a connection
    * to the PushServer unless shutdown has been called.
    */
-  _onClose: function(aCode) {
+  _onClose(aCode) {
     this._pingMonitor.stop();
 
     switch (this.connectionState) {
@@ -585,7 +585,7 @@ var MozLoopPushHandler = {
    *
    * @param {Object} aMsg The message data
    */
-  _onMsg: function(aMsg) {
+  _onMsg(aMsg) {
     // If an error property exists in the message object ignore the other
     // properties.
     if (aMsg.error) {
@@ -632,7 +632,7 @@ var MozLoopPushHandler = {
    *
    * @param {aMsg} hello message body
    */
-  _onHello: function(aMsg) {
+  _onHello(aMsg) {
     if (this.serviceState !== SERVICE_STATE_PENDING) {
       consoleLog.error("PushHandler: extra 'hello' response received from PushServer");
       return;
@@ -667,7 +667,7 @@ var MozLoopPushHandler = {
    *
    * @param {aMsg} notification message body
    */
-  _onNotification: function(aMsg) {
+  _onNotification(aMsg) {
     if (this.serviceState !== SERVICE_STATE_ACTIVE ||
        this.registeredChannels.length === 0) {
       // Treat reception of a notification before handshake and registration
@@ -704,7 +704,7 @@ var MozLoopPushHandler = {
    *
    * @param {Object} msg PushServer to UserAgent registration response (parsed from JSON).
    */
-  _onRegister: function(msg) {
+  _onRegister(msg) {
     if (this.serviceState !== SERVICE_STATE_ACTIVE ||
         msg.channelID != this._pendingChannelID) {
       // Treat reception of a register response outside of a completed handshake
@@ -761,7 +761,7 @@ var MozLoopPushHandler = {
    * trigger an "already open socket" exception even though the channel
    * is logically closed.
    */
-  _openSocket: function() {
+  _openSocket() {
     this.connectionState = CONNECTION_STATE_CONNECTING;
     // For tests, use the mock instance.
     this._pushSocket = new PushSocket(this._mockWebSocket);
@@ -777,7 +777,7 @@ var MozLoopPushHandler = {
   /**
     * Closes websocket and begins re-establishing a connection with the PushServer
     */
-  _restartConnection: function() {
+  _restartConnection() {
     this._retryManager.reset();
     this._pingMonitor.stop();
     this.serviceState = SERVICE_STATE_OFFLINE;
@@ -795,7 +795,7 @@ var MozLoopPushHandler = {
   /**
    * Begins registering the channelIDs with the PushServer
    */
-  _registerChannels: function() {
+  _registerChannels() {
     // Hold off registration operation until handshake is complete.
     // If a registration cycle is in progress, do nothing.
     if (this.serviceState !== SERVICE_STATE_ACTIVE ||
@@ -808,7 +808,7 @@ var MozLoopPushHandler = {
   /**
    * Gets the next channel to register from the worklist and kicks of its registration
    */
-  _registerNext: function() {
+  _registerNext() {
     this._pendingChannelID = this._channelsToRegister.pop();
     this._sendRegistration(this._pendingChannelID);
   },
@@ -818,10 +818,10 @@ var MozLoopPushHandler = {
    *
    * @param {string} channelID - identification token to use in registration for this channel.
    */
-  _sendRegistration: function(channelID) {
+  _sendRegistration(channelID) {
     if (channelID) {
       this._pushSocket.send({ messageType: "register",
-                             channelID: channelID });
+                             channelID });
     }
   }
 };

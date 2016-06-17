@@ -52,7 +52,7 @@ if (inChrome) {
   var mozL10n;
   if (inChrome) {
     this.EXPORTED_SYMBOLS = ["utils"];
-    mozL10n = { get: function() {
+    mozL10n = { get() {
       throw new Error("mozL10n.get not availabled from chrome!");
     } };
   } else {
@@ -475,13 +475,13 @@ if (inChrome) {
     if (contextDescription) {
       subject = mozL10n.get("share_email_subject7");
       body = mozL10n.get("share_email_body_context3", {
-        callUrl: callUrl,
+        callUrl,
         title: contextDescription
       });
     } else {
       subject = mozL10n.get("share_email_subject7");
       body = mozL10n.get("share_email_body7", {
-        callUrl: callUrl
+        callUrl
       });
     }
     var bodyFooter = body + footer;
@@ -812,36 +812,36 @@ if (inChrome) {
   }
 
   this.utils = {
-    CALL_TYPES: CALL_TYPES,
-    CHAT_CONTENT_TYPES: CHAT_CONTENT_TYPES,
-    CURSOR_MESSAGE_TYPES: CURSOR_MESSAGE_TYPES,
-    FAILURE_DETAILS: FAILURE_DETAILS,
-    REST_ERRNOS: REST_ERRNOS,
-    STREAM_PROPERTIES: STREAM_PROPERTIES,
-    SCREEN_SHARE_STATES: SCREEN_SHARE_STATES,
-    ROOM_INFO_FAILURES: ROOM_INFO_FAILURES,
-    setRootObjects: setRootObjects,
-    composeCallUrlEmail: composeCallUrlEmail,
-    findParentNode: findParentNode,
-    formatDate: formatDate,
-    formatSanitizedContextURL: formatSanitizedContextURL,
-    formatURL: formatURL,
-    getBoolPreference: getBoolPreference,
-    getOS: getOS,
-    getOSVersion: getOSVersion,
-    getPlatform: getPlatform,
-    isChrome: isChrome,
-    isDesktop: isDesktop,
-    isFirefox: isFirefox,
-    isOpera: isOpera,
-    getUnsupportedPlatform: getUnsupportedPlatform,
-    hasAudioOrVideoDevices: hasAudioOrVideoDevices,
-    locationData: locationData,
-    atob: atob,
-    btoa: btoa,
-    strToUint8Array: strToUint8Array,
-    Uint8ArrayToStr: Uint8ArrayToStr,
-    objectDiff: objectDiff,
-    stripFalsyValues: stripFalsyValues
+    CALL_TYPES,
+    CHAT_CONTENT_TYPES,
+    CURSOR_MESSAGE_TYPES,
+    FAILURE_DETAILS,
+    REST_ERRNOS,
+    STREAM_PROPERTIES,
+    SCREEN_SHARE_STATES,
+    ROOM_INFO_FAILURES,
+    setRootObjects,
+    composeCallUrlEmail,
+    findParentNode,
+    formatDate,
+    formatSanitizedContextURL,
+    formatURL,
+    getBoolPreference,
+    getOS,
+    getOSVersion,
+    getPlatform,
+    isChrome,
+    isDesktop,
+    isFirefox,
+    isOpera,
+    getUnsupportedPlatform,
+    hasAudioOrVideoDevices,
+    locationData,
+    atob,
+    btoa,
+    strToUint8Array,
+    Uint8ArrayToStr,
+    objectDiff,
+    stripFalsyValues
   };
 }).call(inChrome ? this : loop.shared);

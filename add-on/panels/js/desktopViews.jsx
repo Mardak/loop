@@ -25,13 +25,13 @@ loop.shared.desktopViews = (function(mozL10n) {
       roomData: React.PropTypes.object.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
       return {
         copiedUrl: false
       };
     },
 
-    handleCopyButtonClick: function(event) {
+    handleCopyButtonClick(event) {
       event.preventDefault();
 
       this.props.dispatcher.dispatch(new sharedActions.CopyRoomUrl({
@@ -46,14 +46,14 @@ loop.shared.desktopViews = (function(mozL10n) {
     /**
      * Reset state of triggered buttons if necessary
      */
-    resetTriggeredButtons: function() {
+    resetTriggeredButtons() {
       if (this.state.copiedUrl) {
         this.setState({ copiedUrl: false });
         this.props.callback && this.props.callback();
       }
     },
 
-    render: function() {
+    render() {
       var cx = classNames;
       return (
         <div className={cx({
@@ -80,7 +80,7 @@ loop.shared.desktopViews = (function(mozL10n) {
       roomData: React.PropTypes.object.isRequired
     },
 
-    handleEmailButtonClick: function(event) {
+    handleEmailButtonClick(event) {
       event.preventDefault();
 
       var roomData = this.props.roomData;
@@ -103,7 +103,7 @@ loop.shared.desktopViews = (function(mozL10n) {
       this.props.callback && this.props.callback();
     },
 
-    render: function() {
+    render() {
       return (
         <div className="btn-email invite-button"
           onClick={this.handleEmailButtonClick}>
@@ -124,7 +124,7 @@ loop.shared.desktopViews = (function(mozL10n) {
       roomData: React.PropTypes.object.isRequired
     },
 
-    handleFacebookButtonClick: function(event) {
+    handleFacebookButtonClick(event) {
       event.preventDefault();
 
       this.props.dispatcher.dispatch(new sharedActions.FacebookShareRoomUrl({
@@ -135,7 +135,7 @@ loop.shared.desktopViews = (function(mozL10n) {
       this.props.callback && this.props.callback();
     },
 
-    render: function() {
+    render() {
       return (
         <div className="btn-facebook invite-button"
           onClick={this.handleFacebookButtonClick}>
@@ -160,7 +160,7 @@ loop.shared.desktopViews = (function(mozL10n) {
       show: React.PropTypes.bool.isRequired
     },
 
-    render: function() {
+    render() {
       if (!this.props.show || !this.props.roomData.roomUrl) {
         return null;
       }
@@ -212,9 +212,9 @@ loop.shared.desktopViews = (function(mozL10n) {
   });
 
   return {
-    CopyLinkButton: CopyLinkButton,
-    EmailLinkButton: EmailLinkButton,
-    FacebookShareButton: FacebookShareButton,
-    SharePanelView: SharePanelView
+    CopyLinkButton,
+    EmailLinkButton,
+    FacebookShareButton,
+    SharePanelView
   };
 })(navigator.mozL10n || document.mozL10n);

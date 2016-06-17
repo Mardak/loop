@@ -20,15 +20,15 @@ describe("loop.conversation", function() {
     setLoopPrefStub = sandbox.stub();
 
     LoopMochaUtils.stubLoopRequest(requestStubs = {
-      GetDoNotDisturb: function() { return true; },
-      GetAllStrings: function() {
+      GetDoNotDisturb() { return true; },
+      GetAllStrings() {
         return JSON.stringify({ textContent: "fakeText" });
       },
-      GetLocale: function() {
+      GetLocale() {
         return "en-US";
       },
       SetLoopPref: setLoopPrefStub,
-      GetLoopPref: function(prefName) {
+      GetLoopPref(prefName) {
         switch (prefName) {
           case "debug.sdk":
           case "debug.dispatcher":
@@ -37,7 +37,7 @@ describe("loop.conversation", function() {
             return "http://fake";
         }
       },
-      GetAllConstants: function() {
+      GetAllConstants() {
         return {
           LOOP_SESSION_TYPE: {
             GUEST: 1,
@@ -53,7 +53,7 @@ describe("loop.conversation", function() {
         };
       },
       EnsureRegistered: sinon.stub(),
-      GetAppVersionInfo: function() {
+      GetAppVersionInfo() {
         return {
           version: "42",
           channel: "test",
@@ -63,10 +63,10 @@ describe("loop.conversation", function() {
       GetAudioBlob: sinon.spy(function() {
         return new Blob([new ArrayBuffer(10)], { type: "audio/ogg" });
       }),
-      GetSelectedTabMetadata: function() {
+      GetSelectedTabMetadata() {
         return {};
       },
-      GetConversationWindowData: function() {
+      GetConversationWindowData() {
         return {};
       },
       TelemetryAddValue: sinon.stub()
@@ -75,8 +75,8 @@ describe("loop.conversation", function() {
     fakeWindow = {
       close: sinon.stub(),
       document: {},
-      addEventListener: function() {},
-      removeEventListener: function() {}
+      addEventListener() {},
+      removeEventListener() {}
     };
     loop.shared.mixins.setRootObject(fakeWindow);
 
@@ -86,7 +86,7 @@ describe("loop.conversation", function() {
       return x;
     });
     document.mozL10n.initialize({
-      getStrings: function() { return JSON.stringify({ textContent: "fakeText" }); },
+      getStrings() { return JSON.stringify({ textContent: "fakeText" }); },
       locale: "en_US"
     });
 
@@ -96,7 +96,7 @@ describe("loop.conversation", function() {
       sdkDriver: {}
     });
 
-    loop.store.StoreMixin.register({ remoteCursorStore: remoteCursorStore });
+    loop.store.StoreMixin.register({ remoteCursorStore });
   });
 
   afterEach(function() {
@@ -181,8 +181,8 @@ describe("loop.conversation", function() {
       return TestUtils.renderIntoDocument(
         React.createElement(loop.conversation.AppControllerView, {
           cursorStore: remoteCursorStore,
-          dispatcher: dispatcher,
-          roomStore: roomStore
+          dispatcher,
+          roomStore
         }));
     }
 
@@ -192,21 +192,21 @@ describe("loop.conversation", function() {
         sdkDriver: {}
       });
       roomStore = new loop.store.RoomStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         constants: {}
       });
       remoteCursorStore = new loop.store.RemoteCursorStore(dispatcher, {
         sdkDriver: {}
       });
       conversationAppStore = new loop.store.ConversationAppStore(dispatcher, {
-        activeRoomStore: activeRoomStore,
+        activeRoomStore,
         feedbackPeriod: 42,
         feedbackTimestamp: 42,
         facebookEnabled: false
       });
 
       loop.store.StoreMixin.register({
-        conversationAppStore: conversationAppStore
+        conversationAppStore
       });
 
       addRemoteCursorStub = sandbox.stub();
