@@ -1254,7 +1254,6 @@ this.LoopRooms = {
     if (roomsCache) {
       // Need a clone as the internal map is read-only.
       for (let [key, value] of roomsCache) {
-
         LoopRoomsInternal.rooms.set(key, value);
         if (orig) {
           checkForParticipantsUpdate(orig, value);

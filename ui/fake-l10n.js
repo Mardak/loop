@@ -25,7 +25,6 @@
     },
 
     get(stringId, vars) {
-
       // upcase the first letter
       var readableStringId = stringId.replace(/^./, function(match) {
         return match.toUpperCase();

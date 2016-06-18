@@ -122,5 +122,4 @@ loop.shared.views.LinkifiedTextView = (function() {
   });
 
   return LinkifiedTextView;
-
 })();

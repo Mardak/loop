@@ -313,7 +313,6 @@ describe("loop.store.TextChatStore", function() {
   });
 
   describe("#remotePeerDisconnected", function() {
-
     it("should append the right message when peer disconnected cleanly", function() {
       store.remotePeerDisconnected(new sharedActions.RemotePeerDisconnected({
         peerHungup: true

@@ -387,5 +387,4 @@ loop.roomViews = (function(mozL10n) {
     RoomFailureView,
     DesktopRoomConversationView
   };
-
 })(document.mozL10n || navigator.mozL10n);

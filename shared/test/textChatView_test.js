@@ -374,7 +374,6 @@ describe("loop.shared.views.TextChatView", function() {
         node = ReactDOM.findDOMNode(view);
 
         expect(node.scrollTop).eql(node.scrollHeight - node.clientHeight);
-
       });
 
       it("should not scroll when receiving a message and the scroll is not at the bottom", function() {

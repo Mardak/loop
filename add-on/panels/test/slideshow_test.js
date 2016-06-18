@@ -100,5 +100,4 @@ describe("loop.slideshow", function() {
       expect(document.body.getAttribute("platform")).to.eql("other");
     });
   });
-
 });

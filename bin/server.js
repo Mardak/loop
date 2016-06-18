@@ -116,7 +116,6 @@ function shutdown(cb) {
         cb();
       }
     });
-
   } catch (ex) {
     console.log(ex + " while calling server.close)");
   }

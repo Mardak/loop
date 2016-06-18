@@ -113,7 +113,6 @@ describe("loop.store.RemoteCursorStore", function() {
   });
 
   describe("#receivedCursorData", function() {
-
     it("should do nothing if not a proper event", function() {
       sandbox.stub(store, "setStoreState");
 

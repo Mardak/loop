@@ -106,5 +106,4 @@ describe("loop.crypto", function() {
       });
     });
   });
-
 });

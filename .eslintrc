@@ -156,6 +156,7 @@
     "object-shorthand": [2, "always"],
     "one-var-declaration-per-line": [2, "initializations"],
     "operator-assignment": [2, "always"],
+    "padded-blocks": [2, "never"],
     "quotes": [2, "double", "avoid-escape"],
     "radix": [2, "always"],
     "require-yield": 2,

@@ -229,7 +229,6 @@ describe("loop.conversation", function() {
     });
 
     it("should request AddRemoteCursorOverlay when cursor position changes", function() {
-
       mountTestComponent();
       remoteCursorStore.setStoreState({
         "remoteCursorPosition": {
@@ -242,7 +241,6 @@ describe("loop.conversation", function() {
     });
 
     it("should NOT request AddRemoteCursorOverlay when cursor position DOES NOT changes", function() {
-
       mountTestComponent();
       remoteCursorStore.setStoreState({
         "realVideoSize": {
@@ -255,7 +253,6 @@ describe("loop.conversation", function() {
     });
 
     it("should request ClickRemoteCursor when click event detected", function() {
-
       mountTestComponent();
       remoteCursorStore.setStoreState({
         "remoteCursorClick": true
@@ -265,7 +262,6 @@ describe("loop.conversation", function() {
     });
 
     it("should NOT request ClickRemoteCursor when reset click on store", function() {
-
       mountTestComponent();
       remoteCursorStore.setStoreState({
         "remoteCursorClick": false

@@ -654,7 +654,6 @@ loop.OTSdkDriver = (function() {
       this.dispatcher.dispatch(new sharedActions.ReceivingScreenShare({
         receiving: true, srcMediaElement: sdkSubscriberVideo
       }));
-
     },
 
     /**
@@ -1143,5 +1142,4 @@ loop.OTSdkDriver = (function() {
   };
 
   return OTSdkDriver;
-
 })();

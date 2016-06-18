@@ -1517,5 +1517,4 @@
       location.hash = location.hash;
     }, 5000);
   });
-
 })();

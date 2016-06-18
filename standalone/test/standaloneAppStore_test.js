@@ -183,5 +183,4 @@ describe("loop.store.StandaloneAppStore", function() {
         }));
     });
   });
-
 });

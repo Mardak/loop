@@ -203,5 +203,4 @@ loop.store.ConversationAppStore = (function() {
   });
 
   return ConversationAppStore;
-
 })();

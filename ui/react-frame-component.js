@@ -72,7 +72,6 @@ window.queuedFrames = [];
         var parentHeadChildren = document.querySelector("head").children;
 
         [].forEach.call(parentHeadChildren, function(parentHeadNode) {
-
           // if this node is a CSS stylesheet...
           if (isStyleSheet(parentHeadNode)) {
             // and it has a class different from the one that this frame does,
@@ -156,7 +155,6 @@ window.queuedFrames = [];
         if (!contentWindow) {
           throw new Error("no content window returned");
         }
-
       } catch (ex) {
         console.error("exception getting content window", ex);
       }

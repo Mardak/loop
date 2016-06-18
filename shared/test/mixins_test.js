@@ -248,7 +248,6 @@ describe("loop.shared.mixins", function() {
           return React.DOM.div();
         }
       });
-
     });
 
     afterEach(function() {

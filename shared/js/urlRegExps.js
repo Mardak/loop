@@ -33,7 +33,6 @@
 var loop = loop || {};
 loop.shared = loop.shared || {};
 loop.shared.urlRegExps = (function() {
-
   "use strict";
 
   // Some https://wiki.mozilla.org/Loop/Development/RegExpDebugging for tools
@@ -68,5 +67,4 @@ loop.shared.urlRegExps = (function() {
   return {
     fullUrlMatch
   };
-
 })();

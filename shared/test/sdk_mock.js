@@ -19,6 +19,5 @@
   };
 
   window.OT.setLogLevel = function() {};
-
 })(window);
 

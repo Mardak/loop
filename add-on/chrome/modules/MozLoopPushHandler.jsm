@@ -771,7 +771,6 @@ var MozLoopPushHandler = {
                              (aMsg) => this._onMsg(aMsg),
                              () => this._onStart(),
                              (aCode, aReason) => this._onClose(aCode, aReason));
-
   },
 
   /**

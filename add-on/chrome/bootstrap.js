@@ -854,7 +854,6 @@ var WindowListener = {
           message = this._getString(
             sharePaused ? "infobar_screenshare_stop_sharing_message2" :
                           "infobar_screenshare_browser_message3");
-
         } else {
           // Just the owner in the room.
           message = this._getString(
@@ -1000,7 +999,6 @@ var WindowListener = {
        * Handles events from gBrowser.
        */
       handleEvent(event) {
-
         switch (event.type) {
           case "TabSelect": {
             let wasVisible = false;

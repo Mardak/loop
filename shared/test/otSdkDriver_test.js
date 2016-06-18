@@ -903,7 +903,6 @@ describe("loop.OTSdkDriver", function() {
     });
 
     describe("streamCreated: session/remote", function() {
-
       it("should dispatch a VideoDimensionsChanged action", function() {
         session.trigger("streamCreated", { stream: fakeStream });
 
@@ -1421,7 +1420,6 @@ describe("loop.OTSdkDriver", function() {
             sendStreams: 0
           }));
       });
-
     });
 
     describe("accessAllowed", function() {

@@ -615,7 +615,6 @@ const kMessageHandlers = {
 
     win.messageManager.addMessageListener("PageMetadata:PageDataResult",
                                           function onPageDataResult(msg) {
-
       win.messageManager.removeMessageListener("PageMetadata:PageDataResult",
                                                onPageDataResult);
       let pageData = msg.json;

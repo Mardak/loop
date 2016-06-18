@@ -386,7 +386,6 @@ describe("loop.shared.views.LinkifiedTextView", function() {
       // see https://bugzilla.mozilla.org/show_bug.cgi?id=1186254
 
       skippedTests.forEach(testSkip);
-
     });
   });
 });

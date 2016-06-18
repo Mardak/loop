@@ -15,7 +15,6 @@ var inChrome = typeof Components != "undefined" &&
 if (inChrome) {
   if (typeof window != "undefined" &&
     window.location.href === "chrome://loop/content/panels/slideshow.html") {
-
     inChrome = false;
   }
 }
