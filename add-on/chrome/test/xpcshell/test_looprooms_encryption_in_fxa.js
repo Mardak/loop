@@ -183,7 +183,6 @@ add_task(function* setup_server() {
   yield MozLoopService.promiseRegisteredWithServers();
 });
 
-
 // Test if getting rooms saves unknown keys correctly.
 add_task(function* test_get_rooms_saves_unknown_keys() {
   yield LoopRooms.promise("getAll");

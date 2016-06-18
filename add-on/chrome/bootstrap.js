@@ -1387,7 +1387,6 @@ function startup(data) {
     "chrome://loop/skin/platform.css"
   ];
 
-
   for (let sheet of sheets) {
     let styleSheetURI = Services.io.newURI(sheet, null, null);
     styleSheetService.loadAndRegisterSheet(styleSheetURI,

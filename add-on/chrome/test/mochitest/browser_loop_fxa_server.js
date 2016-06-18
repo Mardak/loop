@@ -88,7 +88,6 @@ add_task(function* token_request_invalid_state() {
   is(request.response, null, "Check token response body");
 });
 
-
 // Helper methods
 
 function promiseParams() {

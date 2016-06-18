@@ -13,7 +13,6 @@ var LoopMochaUtils = (function(global, _) {
   var gUncaughtError;
   var gCaughtIssues = [];
 
-
   /**
    * The messaging between chrome and content (pubsub.js) is using Promises which
    * are inherently async - i.e. resume and resolve on the next tick at the earliest.

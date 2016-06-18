@@ -214,7 +214,6 @@ PushSocket.prototype = {
   }
 };
 
-
 /**
  * Create a RetryManager object. Class to handle retrying a UserAgent
  * to PushServer request following a retry back-off scheme managed by
@@ -319,7 +318,6 @@ PingMonitor.prototype = {
     this._pingFunc();
   }
 };
-
 
 /**
  * We don't have push notifications on desktop currently, so this is a

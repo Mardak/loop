@@ -223,7 +223,6 @@ loop.store.TextChatStore = (function() {
       this._appendContextTileMessage(actionData);
     },
 
-
     /**
      * Handles a remote peer disconnecting from the session.
      * With specific to text chat area, we will put a notification

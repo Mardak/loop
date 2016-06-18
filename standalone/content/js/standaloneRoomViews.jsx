@@ -286,7 +286,6 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     },
 
-
     _renderPromoteFirefoxView() {
       return (
         <div className="promote-firefox">
@@ -950,7 +949,6 @@ loop.standaloneRoomViews = (function(mozL10n) {
       );
     }
   });
-
 
   var StandaloneRoomControllerView = React.createClass({
     mixins: [

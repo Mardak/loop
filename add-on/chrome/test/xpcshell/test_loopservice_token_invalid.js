@@ -46,7 +46,6 @@ add_test(function test_registration_invalid_token() {
   });
 });
 
-
 function run_test() {
   setupFakeLoopServer();
 

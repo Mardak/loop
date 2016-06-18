@@ -69,7 +69,6 @@ function test_setLoopPref_non_coercible_type()
   Assert.ok(true, "Setting non-coercible type should not fail");
 }
 
-
 function test_getLoopPref_bool()
 {
   Services.prefs.setBoolPref("loop." + fakeBoolPrefName, true);
@@ -88,7 +87,6 @@ function test_getLoopPref_not_found_bool()
   Assert.equal(returnedPref, null,
     "Should return null if a preference is not found");
 }
-
 
 function run_test()
 {

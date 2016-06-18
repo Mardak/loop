@@ -55,7 +55,6 @@ describe("loop.standaloneRoomViews", function() {
     };
     loop.shared.mixins.setRootObject(fakeWindow);
 
-
     sandbox.stub(navigator.mozL10n, "get", function(key, args) {
       switch (key) {
         case "standalone_title_with_room_name":
@@ -83,7 +82,6 @@ describe("loop.standaloneRoomViews", function() {
     ReactDOM.unmountComponentAtNode(fixtures);
     view = null;
   });
-
 
   describe("TosView", function() {
     var origConfig, node;

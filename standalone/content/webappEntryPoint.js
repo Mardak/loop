@@ -47,7 +47,6 @@ if (typeof __PROD__ !== "undefined") {
   require("shared/vendor/classnames.js");
 }
 
-
 // Someday, these will be real modules.  For now, we're chaining loaders
 // to teach webpack how to treat them like modules anyway.
 //

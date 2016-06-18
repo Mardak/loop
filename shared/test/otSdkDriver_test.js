@@ -1489,7 +1489,6 @@ describe("loop.OTSdkDriver", function() {
           videoElement).returns(this.fakeSubscriberObject);
         session.trigger("streamCreated", { stream: fakeSubscriberObject.stream });
 
-
         fakeSubscriberObject.trigger("videoDisabled");
 
         sinon.assert.called(dispatcher.dispatch);

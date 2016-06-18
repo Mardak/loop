@@ -115,7 +115,6 @@ describe("loop.shared.mixins", function() {
     });
   });
 
-
   describe("loop.shared.mixins.WindowCloseMixin", function() {
     var TestComp, rootObject;
 

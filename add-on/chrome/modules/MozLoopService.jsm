@@ -1259,7 +1259,6 @@ var MozLoopServiceInternal = {
 };
 Object.freeze(MozLoopServiceInternal);
 
-
 var gInitializeTimerFunc = (deferredInitialization) => {
   // Kick off the push notification service into registering after a timeout.
   // This ensures we're not doing too much straight after the browser's finished

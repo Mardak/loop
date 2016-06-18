@@ -423,7 +423,6 @@ if (inChrome) {
     }
   }
 
-
   /**
    * Formats a url for context url links.
    *
